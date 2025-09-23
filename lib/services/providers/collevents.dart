@@ -13,7 +13,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'collevents.g.dart';
 
 const String collEventMethodPrefKey = 'collEventMethods';
+const String collEventMethodFmtPrefKey = 'collEventMethodFmt';
 const String collPersonnelRolePrefKey = 'collPersonnelRoles';
+const String collPersonnelRoleFmtPrefKey = 'collPersonnelRoleFmt';
 
 @riverpod
 class CollEventEntry extends _$CollEventEntry {
