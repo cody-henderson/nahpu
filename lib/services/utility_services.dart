@@ -46,12 +46,51 @@ bool isListContains(List<String> list, String value) {
   return list.any((e) => e.toLowerCase() == value.toLowerCase());
 }
 
+enum TextCaseFmt {
+  anyCase,
+  sentenceCase,
+  titleCase,
+  upperCase,
+  lowerCase,
+}
+
+Map<TextCaseFmt, String> textCaseFmtMap = {
+  TextCaseFmt.anyCase: 'Any Case',
+  TextCaseFmt.sentenceCase: 'Sentence Case',
+  TextCaseFmt.titleCase: 'Title Case',
+  TextCaseFmt.upperCase: 'Upper Case',
+  TextCaseFmt.lowerCase: 'Lower Case',
+};
+
 extension StringExtension on String {
   String toSentenceCase() {
     try {
       return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
     } catch (e) {
       return '';
+    }
+  }
+
+  String toTitleCase() {
+    try {
+      return split(' ').map((word) => word.toSentenceCase()).join(' ');
+    } catch (e) {
+      return '';
+    }
+  }
+
+  String toTextCaseFmt(TextCaseFmt textCaseFmt) {
+    switch (textCaseFmt) {
+      case TextCaseFmt.anyCase:
+        return this;
+      case TextCaseFmt.sentenceCase:
+        return toSentenceCase();
+      case TextCaseFmt.titleCase:
+        return toTitleCase();
+      case TextCaseFmt.lowerCase:
+        return toLowerCase();
+      case TextCaseFmt.upperCase:
+        return toUpperCase();
     }
   }
 }
