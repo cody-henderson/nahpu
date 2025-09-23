@@ -25,7 +25,7 @@ class _CollEventSelectionState extends State<CollEventSelection> {
           bool isMobile = constraints.maxWidth < 600;
           return CommonSettingList(
             sections: [
-              SpecimenFormats(
+              EventFormats(
                 isMobile: isMobile,
               ),
               CollMethodSettings(),
@@ -36,8 +36,8 @@ class _CollEventSelectionState extends State<CollEventSelection> {
   }
 }
 
-class SpecimenFormats extends ConsumerWidget {
-  const SpecimenFormats({super.key, required this.isMobile});
+class EventFormats extends ConsumerWidget {
+  const EventFormats({super.key, required this.isMobile});
 
   final bool isMobile;
 
