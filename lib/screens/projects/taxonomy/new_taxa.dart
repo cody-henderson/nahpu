@@ -13,36 +13,16 @@ import 'package:drift/drift.dart' as db;
 import 'package:nahpu/services/utility_services.dart';
 
 class TaxonRegistryLayout extends StatelessWidget {
-  const TaxonRegistryLayout({
-    super.key,
-    required this.children,
-  });
+  const TaxonRegistryLayout({super.key, required this.children});
+
   final List<Widget> children;
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      bool viewRow = constraints.maxWidth > 400;
-      return viewRow
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: children,
-            )
-          : SliderView(items: children);
-    });
-  }
-}
-
-class SliderView extends StatelessWidget {
-  const SliderView({super.key, required this.items});
-
-  final List<Widget> items;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       scrollDirection: Axis.horizontal,
       itemExtent: 340,
-      children: items,
+      children: children,
     );
   }
 }

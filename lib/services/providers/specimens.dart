@@ -12,7 +12,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'specimens.g.dart';
 
 const String specimenTypePrefKey = 'specimenTypes';
+const String specimenTypeFmtPrefKey = 'specimenTypeFmt';
 const String treatmentPrefKey = 'specimenTreatment';
+const String treatmentFmtPrefKey = 'treatmentFmt';
 const String catalogFmtPrefKey = 'catalogFmt';
 
 @riverpod

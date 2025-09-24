@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:nahpu/services/utility_services.dart';
 
 part 'settings.g.dart';
 
@@ -64,5 +65,42 @@ class ThemeSetting extends _$ThemeSetting {
       case ThemeMode.system:
         return 'system';
     }
+  }
+}
+
+@riverpod
+class TextCaseFmtNotifier extends _$TextCaseFmtNotifier {
+  Future<TextCaseFmt> _fetchSettings(String prefKey) async {
+    final prefs = ref.watch(settingProvider);
+    final fmtString = prefs.getString(prefKey);
+
+    TextCaseFmt fmt =
+        TextCaseFmt.values.byName(fmtString ?? TextCaseFmt.anyCase.name);
+
+    if (fmtString == null) {
+      await prefs.setString(prefKey, fmt.name);
+    }
+
+    return fmt;
+  }
+
+  @override
+  FutureOr<TextCaseFmt> build(String prefKey) async {
+    return await _fetchSettings(prefKey);
+  }
+
+  Future<void> set(String prefKey, TextCaseFmt fmt) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final prefs = ref.watch(settingProvider);
+      final fmtString = prefs.getString(prefKey);
+      final setFmt =
+          TextCaseFmt.values.byName(fmtString ?? TextCaseFmt.anyCase.name);
+
+      if (setFmt == fmt) return fmt;
+
+      await prefs.setString(prefKey, fmt.name);
+      return fmt;
+    });
   }
 }
