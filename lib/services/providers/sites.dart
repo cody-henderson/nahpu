@@ -14,6 +14,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'sites.g.dart';
 
 const String habitatTypePrefKey = 'habitatTypes';
+const String habitatTypeFmtPrefKey = 'habitatTypeFmt';
+
 const List<String> defaultHabitatTypes = [
   'Forest / Woodland',
   'Grassland / Savanna',

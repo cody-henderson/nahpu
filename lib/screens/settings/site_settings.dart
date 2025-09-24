@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/screens/settings/common.dart';
 import 'package:nahpu/screens/shared/common.dart';
+import 'package:nahpu/screens/shared/layout.dart';
 import 'package:nahpu/services/site_services.dart';
 import 'package:nahpu/services/providers/sites.dart';
 
@@ -16,17 +17,44 @@ class _SiteSelectionState extends State<SiteSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Site Settings'),
-      ),
-      body: const SafeArea(
-        child: CommonSettingList(
-          sections: [
-            HabitatTypeSettings(),
-          ],
+        appBar: AppBar(
+          title: const Text('Site Settings'),
         ),
-      ),
-    );
+        body: SafeArea(child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          bool isMobile = constraints.maxWidth < 600;
+          return CommonSettingList(
+            sections: [
+              HabitatFormats(
+                isMobile: isMobile,
+              ),
+              HabitatTypeSettings(),
+            ],
+          );
+        })));
+  }
+}
+
+class HabitatFormats extends ConsumerWidget {
+  const HabitatFormats({super.key, required this.isMobile});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CommonSettingSection(title: 'Formats', children: [
+      Padding(
+          padding: const EdgeInsets.all(16),
+          child: AdaptiveLayout(
+            useHorizontalLayout: !isMobile,
+            children: [
+              TextCaseFmtDropDown(
+                  ref: ref,
+                  label: 'Habitat types',
+                  textCasePrefString: habitatTypeFmtPrefKey),
+            ],
+          ))
+    ]);
   }
 }
 
@@ -39,6 +67,8 @@ class HabitatTypeSettings extends ConsumerWidget {
     return SettingChips(
       title: 'Habitat types',
       controller: controller,
+      ref: ref,
+      textCasePrefString: habitatTypeFmtPrefKey,
       chipList: ref.watch(habitatTypeProvider).when(
             data: (data) {
               return data.map((e) {
@@ -63,16 +93,15 @@ class HabitatTypeSettings extends ConsumerWidget {
       resetLabel: 'Match database habitat types',
       onReset: () {
         showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CommonAlertDialog(
-              titleText: 'Match database habitat types?',
-              descText: 'Matching database types will'
-                ' delete all unused habitat types',
-              confirmFunction: HabitatServices(ref: ref).getAllHabitats,
-            );
-          }
-        );
+            context: context,
+            builder: (BuildContext context) {
+              return CommonAlertDialog(
+                titleText: 'Match database habitat types?',
+                descText: 'Matching database types will'
+                    ' delete all unused habitat types',
+                confirmFunction: HabitatServices(ref: ref).getAllHabitats,
+              );
+            });
       },
     );
   }
