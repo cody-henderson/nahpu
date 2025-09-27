@@ -15,12 +15,12 @@ part 'sites.g.dart';
 
 const String habitatTypePrefKey = 'habitatTypes';
 const List<String> defaultHabitatTypes = [
-  'Forest / Woodland',
-  'Grassland / Savanna',
-  'Wetland / Aquatic (rivers, lakes, marshes)',
-  'Desert / Arid',
-  'Urban / Built-up',
-];
+  'Urban',
+  'Riverbank',
+  'Desert',
+  'Grassland'
+  'Montane Forest'
+ ];
 
 @riverpod
 class SiteEntry extends _$SiteEntry {
