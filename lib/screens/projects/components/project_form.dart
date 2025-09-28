@@ -278,7 +278,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       location: db.Value(widget.projectCtr.locationCtr.text),
       startDate: db.Value(dateDisplayToDateStd(widget.projectCtr.startDateCtr.text)),
       endDate: db.Value(dateDisplayToDateStd(widget.projectCtr.endDateCtr.text)),
-      created: db.Value(getSystemDateTime()),
+      created: db.Value(widget.projectCtr.createdCtr),
       lastAccessed: db.Value(getSystemDateTime()),
     );
 

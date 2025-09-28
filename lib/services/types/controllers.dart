@@ -11,6 +11,7 @@ class ProjectFormCtrModel {
     required this.locationCtr,
     required this.startDateCtr,
     required this.endDateCtr,
+    required this.createdCtr,
   });
 
   TextEditingController projectNameCtr;
@@ -19,6 +20,7 @@ class ProjectFormCtrModel {
   TextEditingController locationCtr;
   TextEditingController startDateCtr;
   TextEditingController endDateCtr;
+  String? createdCtr;
 
   factory ProjectFormCtrModel.empty() => ProjectFormCtrModel(
         projectNameCtr: TextEditingController(),
@@ -27,6 +29,7 @@ class ProjectFormCtrModel {
         locationCtr: TextEditingController(),
         startDateCtr: TextEditingController(),
         endDateCtr: TextEditingController(),
+        createdCtr: null,
       );
 
   factory ProjectFormCtrModel.fromData(ProjectData? data) =>
@@ -37,6 +40,7 @@ class ProjectFormCtrModel {
         locationCtr: TextEditingController(text: data?.location ?? ''),
         startDateCtr: TextEditingController(text: dateStdToDateDisplay(data?.startDate)),
         endDateCtr: TextEditingController(text: dateStdToDateDisplay(data?.endDate)),
+        createdCtr: data?.created,
       );
 
   void updateData(ProjectData data) {
@@ -46,6 +50,7 @@ class ProjectFormCtrModel {
     locationCtr.text = data.location ?? '';
     startDateCtr.text = data.startDate ?? '';
     endDateCtr.text = data.endDate ?? '';
+    createdCtr = data.created ?? '';
   }
 
   void dispose() {
