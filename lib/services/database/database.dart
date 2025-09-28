@@ -153,27 +153,7 @@ class Database extends _$Database {
     await m.deleteTable('bird_measurement');
     await m.createTable(avianMeasurement);
 
-    _castMammalType(m);
-  }
-
-  Future<void> _castMammalType(Migrator m) async {
-    await m.alterTable(TableMigration(mammalMeasurement, columnTransformer: {
-      mammalMeasurement.totalLength:
-          mammalMeasurement.totalLength.cast<double>(),
-      mammalMeasurement.tailLength: mammalMeasurement.tailLength.cast<double>(),
-      mammalMeasurement.hindFootLength:
-          mammalMeasurement.hindFootLength.cast<double>(),
-      mammalMeasurement.earLength: mammalMeasurement.earLength.cast<double>(),
-      mammalMeasurement.forearm: mammalMeasurement.forearm.cast<double>(),
-      mammalMeasurement.testisLength:
-          mammalMeasurement.testisLength.cast<double>(),
-      mammalMeasurement.testisWidth:
-          mammalMeasurement.testisWidth.cast<double>(),
-    }));
-  }
-
-  Future<void> addColumnToTable(String tableName, String columnName) async {
-    await customStatement('ALTER TABLE $tableName ADD COLUMN $columnName');
+    castMammalType(m);
   }
 
   Future<void> exportInto(File file) async {

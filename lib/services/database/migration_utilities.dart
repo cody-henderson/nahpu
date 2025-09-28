@@ -3,6 +3,22 @@ import 'package:nahpu/services/database/database.dart';
 import 'package:nahpu/services/database/project_queries.dart';
 import 'package:intl/intl.dart';
 
+Future<void> castMammalType(Migrator m) async {
+  final mammalMeasurement = (m.database as Database).mammalMeasurement;
+
+  await m.alterTable(TableMigration(mammalMeasurement, columnTransformer: {
+    mammalMeasurement.totalLength: mammalMeasurement.totalLength.cast<double>(),
+    mammalMeasurement.tailLength: mammalMeasurement.tailLength.cast<double>(),
+    mammalMeasurement.hindFootLength:
+        mammalMeasurement.hindFootLength.cast<double>(),
+    mammalMeasurement.earLength: mammalMeasurement.earLength.cast<double>(),
+    mammalMeasurement.forearm: mammalMeasurement.forearm.cast<double>(),
+    mammalMeasurement.testisLength:
+        mammalMeasurement.testisLength.cast<double>(),
+    mammalMeasurement.testisWidth: mammalMeasurement.testisWidth.cast<double>(),
+  }));
+}
+
 String convertDateString(String inputDateString) {
   DateTime? parsedDate = DateFormat.yMMMd().tryParse(inputDateString);
   if (parsedDate == null) return inputDateString;
