@@ -35,8 +35,8 @@ class ProjectFormCtrModel {
         descriptionCtr: TextEditingController(text: data?.description ?? ''),
         pICtr: TextEditingController(text: data?.principalInvestigator ?? ''),
         locationCtr: TextEditingController(text: data?.location ?? ''),
-        startDateCtr: TextEditingController(text: data?.startDate ?? ''),
-        endDateCtr: TextEditingController(text: data?.endDate ?? ''),
+        startDateCtr: TextEditingController(text: dateStdToDateDisplay(data?.startDate)),
+        endDateCtr: TextEditingController(text: dateStdToDateDisplay(data?.endDate)),
       );
 
   void updateData(ProjectData data) {

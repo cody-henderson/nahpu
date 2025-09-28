@@ -29,6 +29,38 @@ String getSystemDateTime() {
   return (date: formattedDate, time: formattedTime);
 }
 
+// Given a datetime, format it for display to the user (yMMMd)
+String dateTimeToDateDisplay(DateTime inputDateTime) {
+  return DateFormat.yMMMd().format(inputDateTime);
+}
+
+// Given a datetime, format it for storage (yyyy-MM-dd)
+String dateTimeToDateStd(DateTime inputDateTime) {
+  return DateFormat('yyyy-MM-dd').format(inputDateTime);
+}
+
+// Given a date string in the standard storage format (yyyy-MM-dd)
+// return a string in the standard display format (yMMMd)
+String dateStdToDateDisplay(String? inputDateString) {
+  if (inputDateString == null) return '';
+
+  DateTime? parsedDate = DateFormat('yyyy-MM-dd').tryParse(inputDateString);
+  if (parsedDate == null) return '';
+
+  return DateFormat.yMMMd().format(parsedDate);
+}
+
+// Given a displayed date string (yMMMd format), format it for DB storage (yyyy-MM-dd)
+String dateDisplayToDateStd(String? inputDateString) {
+  if (inputDateString == null) return '';
+
+  DateTime? parsedDate = DateFormat.yMMMd().tryParse(inputDateString);
+
+  if (parsedDate == null) return '';
+
+  return DateFormat('yyyy-MM-dd').format(parsedDate);
+}
+
 // Insert only unique values
 List<String> getDistinctList(List<String?> list) {
   // Get unique value and remove empty string

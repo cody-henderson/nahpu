@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:drift/drift.dart' as db;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/services/types/controllers.dart';
 import 'package:nahpu/services/project_services.dart';
@@ -151,7 +150,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                       );
                       if (selectedDate != null) {
                         widget.projectCtr.startDateCtr.text =
-                            DateFormat.yMMMd().format(selectedDate);
+                            dateTimeToDateDisplay(selectedDate);
                       }
                       _validateEditing();
                     },
@@ -172,7 +171,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                       );
                       if (selectedDate != null) {
                         widget.projectCtr.endDateCtr.text =
-                            DateFormat.yMMMd().format(selectedDate);
+                            dateTimeToDateDisplay(selectedDate);
                       }
                       _validateEditing();
                     },
@@ -262,8 +261,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
-      startDate: db.Value(widget.projectCtr.startDateCtr.text),
-      endDate: db.Value(widget.projectCtr.endDateCtr.text),
+      startDate: db.Value(dateDisplayToDateStd(widget.projectCtr.startDateCtr.text)),
+      endDate: db.Value(dateDisplayToDateStd(widget.projectCtr.endDateCtr.text)),
       created: db.Value(getSystemDateTime()),
       lastAccessed: db.Value(getSystemDateTime()),
     );
@@ -277,8 +276,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
-      startDate: db.Value(widget.projectCtr.startDateCtr.text),
-      endDate: db.Value(widget.projectCtr.endDateCtr.text),
+      startDate: db.Value(dateDisplayToDateStd(widget.projectCtr.startDateCtr.text)),
+      endDate: db.Value(dateDisplayToDateStd(widget.projectCtr.endDateCtr.text)),
       created: db.Value(getSystemDateTime()),
       lastAccessed: db.Value(getSystemDateTime()),
     );
