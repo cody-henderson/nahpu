@@ -30,24 +30,38 @@ String getSystemDateTime() {
 }
 
 // Given a datetime, format it for display to the user (yMMMd)
-String dateTimeToDateDisplay(DateTime inputDateTime) {
+String dateTimeToDateDisplay(DateTime? inputDateTime) {
+  if (inputDateTime == null) return '';
   return DateFormat.yMMMd().format(inputDateTime);
 }
 
 // Given a datetime, format it for storage (yyyy-MM-dd)
-String dateTimeToDateStd(DateTime inputDateTime) {
+String dateTimeToDateStd(DateTime? inputDateTime) {
+  if (inputDateTime == null) return '';
   return DateFormat('yyyy-MM-dd').format(inputDateTime);
 }
 
 // Given a date string in the standard storage format (yyyy-MM-dd)
 // return a string in the standard display format (yMMMd)
-String dateStdToDateDisplay(String? inputDateString) {
+String? dateStdToDateDisplay(String? inputDateString) {
   if (inputDateString == null) return '';
 
   DateTime? parsedDate = DateFormat('yyyy-MM-dd').tryParse(inputDateString);
   if (parsedDate == null) return '';
 
   return DateFormat.yMMMd().format(parsedDate);
+}
+
+// Given a date string in the display format (yMMMd) return a DateTime
+DateTime? dateDisplayToDateTime(String? inputDateString) {
+  if (inputDateString == null) return null;
+  return DateFormat.yMMMd().tryParse(inputDateString);
+}
+
+// Given a date string in the standard format (yyyy-MM-dd) return a DateTime
+DateTime? dateStdToDateTime(String? inputDateString) {
+  if (inputDateString == null) return null;
+  return DateFormat('yyyy-MM-dd').tryParse(inputDateString);
 }
 
 // Given a displayed date string (yMMMd format), format it for DB storage (yyyy-MM-dd)

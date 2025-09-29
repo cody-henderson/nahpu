@@ -3,6 +3,31 @@ import 'package:nahpu/services/types/export.dart';
 import 'package:nahpu/services/database/database.dart';
 import 'package:nahpu/services/utility_services.dart';
 
+class DateEditingController extends TextEditingController {
+  DateTime? _dateTime;
+  String? _date;
+
+  DateEditingController({String? date}) : 
+    _date = date,
+    _dateTime = dateStdToDateTime(date),
+    super(text: dateStdToDateDisplay(date));
+
+  String? get date => _date;    
+  DateTime? get dateTime => _dateTime;
+
+  set dateTime(DateTime? newDate) {
+    _dateTime = newDate;
+    _date = dateTimeToDateStd(newDate);
+    text = dateTimeToDateDisplay(_dateTime);
+  }
+
+  set date(String? newDate) {
+    _date = newDate;
+    _dateTime = dateStdToDateTime(newDate);
+    text = dateTimeToDateDisplay(_dateTime);
+  }
+}
+
 class ProjectFormCtrModel {
   ProjectFormCtrModel({
     required this.projectNameCtr,
@@ -18,8 +43,8 @@ class ProjectFormCtrModel {
   TextEditingController descriptionCtr;
   TextEditingController pICtr;
   TextEditingController locationCtr;
-  TextEditingController startDateCtr;
-  TextEditingController endDateCtr;
+  DateEditingController startDateCtr;
+  DateEditingController endDateCtr;
   String? createdCtr;
 
   factory ProjectFormCtrModel.empty() => ProjectFormCtrModel(
@@ -27,8 +52,8 @@ class ProjectFormCtrModel {
         descriptionCtr: TextEditingController(),
         pICtr: TextEditingController(),
         locationCtr: TextEditingController(),
-        startDateCtr: TextEditingController(),
-        endDateCtr: TextEditingController(),
+        startDateCtr: DateEditingController(),
+        endDateCtr: DateEditingController(),
         createdCtr: null,
       );
 
@@ -38,8 +63,8 @@ class ProjectFormCtrModel {
         descriptionCtr: TextEditingController(text: data?.description ?? ''),
         pICtr: TextEditingController(text: data?.principalInvestigator ?? ''),
         locationCtr: TextEditingController(text: data?.location ?? ''),
-        startDateCtr: TextEditingController(text: dateStdToDateDisplay(data?.startDate)),
-        endDateCtr: TextEditingController(text: dateStdToDateDisplay(data?.endDate)),
+        startDateCtr: DateEditingController(date: data?.startDate),
+        endDateCtr: DateEditingController(date: data?.endDate),
         createdCtr: data?.created,
       );
 
@@ -48,8 +73,8 @@ class ProjectFormCtrModel {
     descriptionCtr.text = data.description ?? '';
     pICtr.text = data.principalInvestigator ?? '';
     locationCtr.text = data.location ?? '';
-    startDateCtr.text = data.startDate ?? '';
-    endDateCtr.text = data.endDate ?? '';
+    startDateCtr.date = data.startDate ?? '';
+    endDateCtr.date = data.endDate ?? '';
     createdCtr = data.created ?? '';
   }
 
