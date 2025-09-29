@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nahpu/services/io_services.dart';
+import 'package:nahpu/services/database/migration_utilities.dart';
 import 'package:path/path.dart' as p;
 
 part 'database.g.dart';
@@ -67,9 +68,12 @@ class Database extends _$Database {
     });
   }
 
-  Future<void> _migrateFromVersion5(Migrator m) async {  
+  Future<void> _migrateFromVersion5(Migrator m) async {
     // Specimen record tables
     await m.addColumn(specimen, specimen.collectionDate);
+
+    // Date and time format changes
+    await migrateProjectDatesFormat(m);
   }
 
   Future<void> _migrateFromVersion4(Migrator m) async {
@@ -78,7 +82,7 @@ class Database extends _$Database {
     // Specimen record tables
     await m.addColumn(specimen, specimen.iDConfidence);
     await m.addColumn(specimen, specimen.iDMethod);
-    
+
     await m.addColumn(specimenPart, specimenPart.personnelId);
     await m.addColumn(specimenPart, specimenPart.pmi);
 
@@ -149,27 +153,7 @@ class Database extends _$Database {
     await m.deleteTable('bird_measurement');
     await m.createTable(avianMeasurement);
 
-    _castMammalType(m);
-  }
-
-  Future<void> _castMammalType(Migrator m) async {
-    await m.alterTable(TableMigration(mammalMeasurement, columnTransformer: {
-      mammalMeasurement.totalLength:
-          mammalMeasurement.totalLength.cast<double>(),
-      mammalMeasurement.tailLength: mammalMeasurement.tailLength.cast<double>(),
-      mammalMeasurement.hindFootLength:
-          mammalMeasurement.hindFootLength.cast<double>(),
-      mammalMeasurement.earLength: mammalMeasurement.earLength.cast<double>(),
-      mammalMeasurement.forearm: mammalMeasurement.forearm.cast<double>(),
-      mammalMeasurement.testisLength:
-          mammalMeasurement.testisLength.cast<double>(),
-      mammalMeasurement.testisWidth:
-          mammalMeasurement.testisWidth.cast<double>(),
-    }));
-  }
-
-  Future<void> addColumnToTable(String tableName, String columnName) async {
-    await customStatement('ALTER TABLE $tableName ADD COLUMN $columnName');
+    castMammalType(m);
   }
 
   Future<void> exportInto(File file) async {

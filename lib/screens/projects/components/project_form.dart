@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:drift/drift.dart' as db;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/services/types/controllers.dart';
 import 'package:nahpu/services/project_services.dart';
@@ -148,10 +147,10 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     onTap: () async {
                       DateTime? selectedDate = await _showDate(
                         context,
+                        widget.projectCtr.startDateCtr.dateTime
                       );
                       if (selectedDate != null) {
-                        widget.projectCtr.startDateCtr.text =
-                            DateFormat.yMMMd().format(selectedDate);
+                        widget.projectCtr.startDateCtr.dateTime = selectedDate;
                       }
                       _validateEditing();
                     },
@@ -169,10 +168,11 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     onTap: () async {
                       DateTime? selectedDate = await _showDate(
                         context,
+                        widget.projectCtr.endDateCtr.dateTime
                       );
                       if (selectedDate != null) {
-                        widget.projectCtr.endDateCtr.text =
-                            DateFormat.yMMMd().format(selectedDate);
+                        widget.projectCtr.endDateCtr.dateTime =
+                            selectedDate;
                       }
                       _validateEditing();
                     },
@@ -247,10 +247,10 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
     });
   }
 
-  Future<DateTime?> _showDate(BuildContext context) {
+  Future<DateTime?> _showDate(BuildContext context, DateTime? initialDate) {
     return showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: initialDate ?? DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2030)); // Prevent user from selecting future dates
   }
@@ -262,8 +262,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
-      startDate: db.Value(widget.projectCtr.startDateCtr.text),
-      endDate: db.Value(widget.projectCtr.endDateCtr.text),
+      startDate: db.Value(widget.projectCtr.startDateCtr.date),
+      endDate: db.Value(widget.projectCtr.endDateCtr.date),
       created: db.Value(getSystemDateTime()),
       lastAccessed: db.Value(getSystemDateTime()),
     );
@@ -277,9 +277,9 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
-      startDate: db.Value(widget.projectCtr.startDateCtr.text),
-      endDate: db.Value(widget.projectCtr.endDateCtr.text),
-      created: db.Value(getSystemDateTime()),
+      startDate: db.Value(widget.projectCtr.startDateCtr.date),
+      endDate: db.Value(widget.projectCtr.endDateCtr.date),
+      created: db.Value(widget.projectCtr.createdCtr),
       lastAccessed: db.Value(getSystemDateTime()),
     );
 
