@@ -175,8 +175,8 @@ class CollEventFormCtrModel {
 
   int? siteIDCtr;
   TextEditingController idSuffixCtr;
-  TextEditingController startDateCtr;
-  TextEditingController endDateCtr;
+  DateEditingController startDateCtr;
+  DateEditingController endDateCtr;
   TextEditingController startTimeCtr;
   TextEditingController endTimeCtr;
   String? primaryCollMethodCtr;
@@ -185,8 +185,8 @@ class CollEventFormCtrModel {
   factory CollEventFormCtrModel.empty() => CollEventFormCtrModel(
         siteIDCtr: null,
         idSuffixCtr: TextEditingController(),
-        startDateCtr: TextEditingController(),
-        endDateCtr: TextEditingController(),
+        startDateCtr: DateEditingController(),
+        endDateCtr: DateEditingController(),
         startTimeCtr: TextEditingController(),
         endTimeCtr: TextEditingController(),
         primaryCollMethodCtr: null,
@@ -197,8 +197,8 @@ class CollEventFormCtrModel {
       CollEventFormCtrModel(
         siteIDCtr: collEvent.siteID,
         idSuffixCtr: TextEditingController(text: collEvent.idSuffix),
-        startDateCtr: TextEditingController(text: collEvent.startDate),
-        endDateCtr: TextEditingController(text: collEvent.endDate),
+        startDateCtr: DateEditingController(date: collEvent.startDate),
+        endDateCtr: DateEditingController(date: collEvent.endDate),
         startTimeCtr: TextEditingController(text: collEvent.startTime),
         endTimeCtr: TextEditingController(text: collEvent.endTime),
         primaryCollMethodCtr: collEvent.primaryCollMethod,
@@ -221,12 +221,12 @@ class NarrativeFormCtrModel {
     required this.siteCtr,
     required this.narrativeCtr,
   });
-  TextEditingController dateCtr;
+  DateEditingController dateCtr;
   int? siteCtr;
   TextEditingController narrativeCtr;
 
   factory NarrativeFormCtrModel.empty() => NarrativeFormCtrModel(
-      dateCtr: TextEditingController(),
+      dateCtr: DateEditingController(),
       siteCtr: null,
       narrativeCtr: TextEditingController());
 
@@ -276,11 +276,11 @@ class SpecimenFormCtrModel {
   TextEditingController idMethodCtr;
   TextEditingController museumIDCtr;
   TextEditingController fieldNumberCtr;
-  TextEditingController prepDateCtr;
+  DateEditingController prepDateCtr;
   TextEditingController prepTimeCtr;
-  TextEditingController collDateCtr;
+  DateEditingController collDateCtr;
   TextEditingController collTimeCtr;
-  TextEditingController captureDateCtr;
+  DateEditingController captureDateCtr;
   TextEditingController captureTimeCtr;
   TextEditingController trapTypeCtr;
   TextEditingController methodIDCtr;
@@ -300,11 +300,11 @@ class SpecimenFormCtrModel {
         idConfidenceCtr: null,
         idMethodCtr: TextEditingController(),
         museumIDCtr: TextEditingController(),
-        prepDateCtr: TextEditingController(),
+        prepDateCtr: DateEditingController(),
         prepTimeCtr: TextEditingController(),
-        collDateCtr: TextEditingController(),
+        collDateCtr: DateEditingController(),
         collTimeCtr: TextEditingController(),
-        captureDateCtr: TextEditingController(),
+        captureDateCtr: DateEditingController(),
         captureTimeCtr: TextEditingController(),
         trapTypeCtr: TextEditingController(),
         methodIDCtr: TextEditingController(),
@@ -327,11 +327,11 @@ class SpecimenFormCtrModel {
         fieldNumberCtr:
             TextEditingController(text: specimen.fieldNumber?.toString() ?? ''),
         speciesCtr: specimen.speciesID,
-        prepDateCtr: TextEditingController(text: specimen.prepDate),
+        prepDateCtr: DateEditingController(date: specimen.prepDate),
         prepTimeCtr: TextEditingController(text: specimen.prepTime),
-        collDateCtr: TextEditingController(text: specimen.collectionDate),
+        collDateCtr: DateEditingController(date: specimen.collectionDate),
         collTimeCtr: TextEditingController(text: specimen.collectionTime),
-        captureDateCtr: TextEditingController(text: specimen.captureDate),
+        captureDateCtr: DateEditingController(date: specimen.captureDate),
         captureTimeCtr: TextEditingController(text: specimen.captureTime),
         trapTypeCtr: TextEditingController(text: specimen.trapType),
         methodIDCtr: TextEditingController(text: specimen.methodID ?? ''),
@@ -717,7 +717,7 @@ class PartFormCtrModel {
   TextEditingController countCtr;
   TextEditingController treatmentCtr;
   TextEditingController additionalTreatmentCtr;
-  TextEditingController dateTakenCtr;
+  DateEditingController dateTakenCtr;
   TextEditingController timeTakenCtr;
   TextEditingController pmiCtr;
   TextEditingController museumPermanentCtr;
@@ -732,7 +732,7 @@ class PartFormCtrModel {
         countCtr: TextEditingController(),
         treatmentCtr: TextEditingController(),
         additionalTreatmentCtr: TextEditingController(),
-        dateTakenCtr: TextEditingController(),
+        dateTakenCtr: DateEditingController(),
         timeTakenCtr: TextEditingController(),
         pmiCtr: TextEditingController(),
         museumPermanentCtr: TextEditingController(),
@@ -749,7 +749,7 @@ class PartFormCtrModel {
         treatmentCtr: TextEditingController(text: data.treatment ?? ''),
         additionalTreatmentCtr:
             TextEditingController(text: data.additionalTreatment ?? ''),
-        dateTakenCtr: TextEditingController(text: data.dateTaken ?? ''),
+        dateTakenCtr: DateEditingController(date: data.dateTaken ?? ''),
         timeTakenCtr: TextEditingController(text: data.timeTaken ?? ''),
         pmiCtr: TextEditingController(text: data.pmi ?? ''),
         museumPermanentCtr:
@@ -1192,14 +1192,14 @@ class AssociatedDataCtr {
   final TextEditingController nameCtr;
   String? typeCtr;
   final TextEditingController descriptionCtr;
-  final TextEditingController dateCtr;
+  final DateEditingController dateCtr;
   final TextEditingController urlCtr;
 
   factory AssociatedDataCtr.empty() => AssociatedDataCtr(
         nameCtr: TextEditingController(),
         typeCtr: null,
         descriptionCtr: TextEditingController(),
-        dateCtr: TextEditingController(),
+        dateCtr: DateEditingController(),
         urlCtr: TextEditingController(),
       );
 
@@ -1208,7 +1208,7 @@ class AssociatedDataCtr {
         nameCtr: TextEditingController(text: data.name ?? ''),
         typeCtr: data.type,
         descriptionCtr: TextEditingController(text: data.description ?? ''),
-        dateCtr: TextEditingController(text: data.date ?? ''),
+        dateCtr: DateEditingController(date: data.date ?? ''),
         urlCtr: TextEditingController(text: data.url ?? ''),
       );
 

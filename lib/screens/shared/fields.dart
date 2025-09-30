@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:nahpu/services/types/controllers.dart';
 
 class CommonDateField extends ConsumerStatefulWidget {
   const CommonDateField({
@@ -15,7 +15,7 @@ class CommonDateField extends ConsumerStatefulWidget {
     required this.onClear,
   });
 
-  final TextEditingController controller;
+  final DateEditingController controller;
   final String labelText;
   final String hintText;
   final DateTime initialDate;
@@ -40,19 +40,19 @@ class CommonDateFieldState extends ConsumerState<CommonDateField> {
         final selectedDate = await showDatePicker(
             context: context,
             cancelText: "Clear",
-            initialDate: widget.initialDate,
+            initialDate: widget.controller.dateTime ?? widget.initialDate,
             firstDate: DateTime(2000),
             lastDate: widget.lastDate);
 
         // OK pressed
         if (selectedDate != null && mounted) {
-          widget.controller.text = DateFormat.yMMMd().format(selectedDate);
+          widget.controller.dateTime = selectedDate;
           widget.onTap();
         }
 
         // Clear pressed (or picker closed)
         if (selectedDate == null && mounted) {
-          widget.controller.text = "";
+          widget.controller.dateTime = null;
           widget.onClear();
         }
       },

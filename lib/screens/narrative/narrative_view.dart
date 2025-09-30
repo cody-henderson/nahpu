@@ -200,7 +200,7 @@ class NarrativePages extends StatelessWidget {
   NarrativeFormCtrModel _updateController(
       List<NarrativeData> narrativeEntries, int index) {
     return NarrativeFormCtrModel(
-      dateCtr: TextEditingController(text: narrativeEntries[index].date),
+      dateCtr: DateEditingController(date: narrativeEntries[index].date),
       siteCtr: narrativeEntries[index].siteID,
       narrativeCtr:
           TextEditingController(text: narrativeEntries[index].narrative),
