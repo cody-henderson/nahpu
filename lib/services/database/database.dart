@@ -70,10 +70,13 @@ class Database extends _$Database {
 
   Future<void> _migrateFromVersion5(Migrator m) async {
     // Specimen record tables
-    await m.addColumn(specimen, specimen.collectionDate);
+    // await m.addColumn(specimen, specimen.collectionDate);
 
     // Date and time format changes
     await migrateProjectDatesFormat(m);
+    await migrateSpecimenDatesFormat(m);
+    await migrateNarrativeDatesFormat(m);
+    await migrateCollEventDatesFormat(m);
   }
 
   Future<void> _migrateFromVersion4(Migrator m) async {
