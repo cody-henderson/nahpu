@@ -63,6 +63,9 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
               TissueIDFields(
                 isMobile: isMobile,
               ),
+              SpecimenFormats(
+                isMobile: isMobile,
+              ),
               const SpecimenTypeSettings(),
               const TreatmentOptionSettings(),
             ],
@@ -70,6 +73,33 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
         },
       )),
     );
+  }
+}
+
+class SpecimenFormats extends ConsumerWidget {
+  const SpecimenFormats({super.key, required this.isMobile});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CommonSettingSection(title: 'Formats', children: [
+      Padding(
+          padding: const EdgeInsets.all(16),
+          child: AdaptiveLayout(
+            useHorizontalLayout: !isMobile,
+            children: [
+              TextCaseFmtDropDown(
+                  ref: ref,
+                  label: 'Specimen part types',
+                  textCasePrefString: specimenTypeFmtPrefKey),
+              TextCaseFmtDropDown(
+                  ref: ref,
+                  label: 'Treatment types',
+                  textCasePrefString: treatmentFmtPrefKey),
+            ],
+          ))
+    ]);
   }
 }
 
@@ -84,6 +114,8 @@ class SpecimenTypeSettings extends ConsumerWidget {
     return SettingChips(
       title: 'Specimen part types',
       controller: partController,
+      ref: ref,
+      textCasePrefString: specimenTypeFmtPrefKey,
       chipList: ref.watch(specimenTypesProvider).when(
             data: (data) {
               return data
@@ -119,7 +151,7 @@ class SpecimenTypeSettings extends ConsumerWidget {
             return CommonAlertDialog(
               titleText: 'Match database types?',
               descText: 'Matching database types will'
-                ' delete all unused specimen part types',
+                  ' delete all unused specimen part types',
               confirmFunction: SpecimenPartServices(ref: ref).getSpecimenTypes,
             );
           },
@@ -140,6 +172,8 @@ class TreatmentOptionSettings extends ConsumerWidget {
     return SettingChips(
       title: 'Treatments',
       controller: treatmentController,
+      ref: ref,
+      textCasePrefString: treatmentFmtPrefKey,
       chipList: ref.watch(treatmentOptionsProvider).when(
             data: (data) {
               return data
@@ -170,17 +204,17 @@ class TreatmentOptionSettings extends ConsumerWidget {
       resetLabel: 'Match database treatments',
       onReset: () {
         showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CommonAlertDialog(
-              titleText: 'Match database treatments?',
-              descText: 'Matching database types will'
-                ' delete all unused treatments',
-              confirmFunction: SpecimenPartServices(ref: ref).getTreatmentOptions,
-            );
-          }
-        );
-      }
+            context: context,
+            builder: (BuildContext context) {
+              return CommonAlertDialog(
+                titleText: 'Match database treatments?',
+                descText: 'Matching database types will'
+                    ' delete all unused treatments',
+                confirmFunction:
+                    SpecimenPartServices(ref: ref).getTreatmentOptions,
+              );
+            });
+      },
     );
   }
 }

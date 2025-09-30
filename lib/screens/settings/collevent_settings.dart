@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/services/providers/collevents.dart';
 import 'package:nahpu/screens/settings/common.dart';
 import 'package:nahpu/screens/shared/common.dart';
+import 'package:nahpu/screens/shared/layout.dart';
 import 'package:nahpu/services/collevent_services.dart';
 
 class CollEventSelection extends StatefulWidget {
@@ -16,18 +17,49 @@ class _CollEventSelectionState extends State<CollEventSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Collection Event Settings'),
-      ),
-      body: const SafeArea(
-        child: CommonSettingList(
-          sections: [
-            CollMethodSettings(),
-            PersonnelRoleSetting(),
-          ],
+        appBar: AppBar(
+          title: const Text('Collection Event Settings'),
         ),
-      ),
-    );
+        body: SafeArea(child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          bool isMobile = constraints.maxWidth < 600;
+          return CommonSettingList(
+            sections: [
+              EventFormats(
+                isMobile: isMobile,
+              ),
+              CollMethodSettings(),
+              PersonnelRoleSetting(),
+            ],
+          );
+        })));
+  }
+}
+
+class EventFormats extends ConsumerWidget {
+  const EventFormats({super.key, required this.isMobile});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CommonSettingSection(title: 'Formats', children: [
+      Padding(
+          padding: const EdgeInsets.all(16),
+          child: AdaptiveLayout(
+            useHorizontalLayout: !isMobile,
+            children: [
+              TextCaseFmtDropDown(
+                  ref: ref,
+                  label: 'Collection methods',
+                  textCasePrefString: collEventMethodFmtPrefKey),
+              TextCaseFmtDropDown(
+                  ref: ref,
+                  label: 'Personnel roles',
+                  textCasePrefString: collPersonnelRoleFmtPrefKey),
+            ],
+          ))
+    ]);
   }
 }
 
@@ -40,6 +72,8 @@ class CollMethodSettings extends ConsumerWidget {
     return SettingChips(
       title: 'Collection methods',
       controller: controller,
+      ref: ref,
+      textCasePrefString: collEventMethodFmtPrefKey,
       chipList: ref.watch(collEventMethodProvider).when(
             data: (data) {
               return data.map((e) {
@@ -71,7 +105,7 @@ class CollMethodSettings extends ConsumerWidget {
             return CommonAlertDialog(
               titleText: 'Match database methods?',
               descText: 'Matching database types will'
-                ' delete all unused collection methods',
+                  ' delete all unused collection methods',
               confirmFunction: CollMethodServices(ref: ref).getAllMethods,
             );
           },
@@ -90,6 +124,8 @@ class PersonnelRoleSetting extends ConsumerWidget {
     return SettingChips(
       title: 'Personnel roles',
       controller: controller,
+      ref: ref,
+      textCasePrefString: collPersonnelRoleFmtPrefKey,
       chipList: ref.watch(collPersonnelRoleProvider).when(
             data: (data) {
               return data.map((e) {
@@ -119,7 +155,7 @@ class PersonnelRoleSetting extends ConsumerWidget {
             return CommonAlertDialog(
               titleText: 'Match database roles?',
               descText: 'Matching database types will'
-                ' delete all unused personnel roles',
+                  ' delete all unused personnel roles',
               confirmFunction: CollEvenPersonnelServices(ref: ref).getAllRoles,
             );
           },
