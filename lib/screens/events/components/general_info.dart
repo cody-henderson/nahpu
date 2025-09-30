@@ -99,7 +99,7 @@ class EventInfoFieldState extends ConsumerState<EventInfoField> {
                     widget.collEventId,
                     CollEventCompanion(
                       startDate:
-                          db.Value(widget.collEventCtr.startDateCtr.text),
+                          db.Value(widget.collEventCtr.startDateCtr.date),
                     ),
                   );
                 },
@@ -172,7 +172,7 @@ class EndDateField extends ConsumerWidget {
         CollEventServices(ref: ref).updateCollEvent(
           collEventId,
           CollEventCompanion(
-            endDate: db.Value(collEventCtr.endDateCtr.text),
+            endDate: db.Value(collEventCtr.endDateCtr.date),
           ),
         );
       },
@@ -180,7 +180,7 @@ class EndDateField extends ConsumerWidget {
         CollEventServices(ref: ref).updateCollEvent(
           collEventId,
           CollEventCompanion(
-            startDate: db.Value(null),
+            endDate: db.Value(null),
           ),
         );
       }      

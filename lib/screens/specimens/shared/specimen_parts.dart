@@ -377,7 +377,7 @@ class PartSubTitle extends StatelessWidget {
       '${_getTextFirst(part.tissueID)}'
       '$treatment'
       '${_getText(part.additionalTreatment)}'
-      '${_getText(part.dateTaken)}'
+      '${_getText(dateStdToDateDisplay(part.dateTaken))}'
       '${_getText(part.timeTaken)}'
       '${_getPMI()}'
       '$remark',
@@ -592,7 +592,7 @@ class PartFormState extends ConsumerState<PartForm> {
       count: db.Value(widget.partCtr.countCtr.text),
       treatment: db.Value(widget.partCtr.treatmentCtr.text),
       additionalTreatment: db.Value(widget.partCtr.additionalTreatmentCtr.text),
-      dateTaken: db.Value(widget.partCtr.dateTakenCtr.text),
+      dateTaken: db.Value(widget.partCtr.dateTakenCtr.date),
       timeTaken: db.Value(widget.partCtr.timeTakenCtr.text),
       pmi: db.Value(widget.partCtr.pmiCtr.text),
       museumPermanent: db.Value(widget.partCtr.museumPermanentCtr.text),

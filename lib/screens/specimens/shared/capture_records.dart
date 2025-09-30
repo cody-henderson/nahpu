@@ -495,7 +495,7 @@ class CaptureDate extends ConsumerWidget {
         SpecimenServices(ref: ref).updateSpecimen(
           specimenUuid,
           SpecimenCompanion(
-            captureDate: db.Value(specimenCtr.captureDateCtr.text),
+            captureDate: db.Value(specimenCtr.captureDateCtr.date),
           ),
         );
       },

@@ -59,7 +59,7 @@ class DateForm extends ConsumerWidget {
       onTap: () {
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
-          NarrativeCompanion(date: db.Value(narrativeCtr.dateCtr.text)),
+          NarrativeCompanion(date: db.Value(narrativeCtr.dateCtr.date)),
         );
       },
       onClear: () {

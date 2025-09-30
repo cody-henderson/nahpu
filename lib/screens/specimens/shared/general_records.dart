@@ -241,7 +241,7 @@ class SpecimenCollectionDateField extends ConsumerWidget {
           specimenUuid,
           SpecimenCompanion(
             collectionDate: db.Value(
-              specimenCtr.collDateCtr.text,
+              specimenCtr.collDateCtr.date,
             )
           ),
         );
@@ -355,7 +355,7 @@ class PrepDateField extends ConsumerWidget {
         SpecimenServices(ref: ref).updateSpecimen(
           specimenUuid,
           SpecimenCompanion(
-            prepDate: db.Value(specimenCtr.prepDateCtr.text),
+            prepDate: db.Value(specimenCtr.prepDateCtr.date),
           ),
         );
       },
