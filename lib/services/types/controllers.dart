@@ -28,6 +28,31 @@ class DateEditingController extends TextEditingController {
   }
 }
 
+class TimeEditingController extends TextEditingController {
+  TimeOfDay? _timeOfDay;
+  String? _time;
+
+  TimeEditingController({String? time}) : 
+    _time = time,
+    _timeOfDay = timeStdToTimeOfDay(time),
+    super(text: timeStdToTimeDisplay(time));
+
+  String? get time => _time;    
+  TimeOfDay? get timeOfDay => _timeOfDay;
+
+  set timeOfDay(TimeOfDay? newTime) {
+    _timeOfDay = newTime;
+    _time = timeOfDayToTimeStd(newTime);
+    text = timeOfDayToTimeDisplay(_timeOfDay);
+  }
+
+  set time(String? newTime) {
+    _time = newTime;
+    _timeOfDay = timeStdToTimeOfDay(newTime);
+    text = timeOfDayToTimeDisplay(_timeOfDay);
+  }
+}
+
 class ProjectFormCtrModel {
   ProjectFormCtrModel({
     required this.projectNameCtr,

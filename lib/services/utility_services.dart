@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String get listTileSeparator => " · ";
@@ -29,10 +30,32 @@ String getSystemDateTime() {
   return (date: formattedDate, time: formattedTime);
 }
 
+extension TimeOfDayFormatter on TimeOfDay {
+  String toTimeStd() {
+    final hour = this.hour.toString().padLeft(2,'0');
+    final minute = this.minute.toString().padLeft(2,'0');
+    final second = '00';
+    return '$hour:$minute:$second';
+  }
+
+  String toTimeDisplay() {
+    final hour = this.hourOfPeriod.toString();
+    final minute = this.minute.toString().padLeft(2,'0');
+    final amPM = this.period.name.toUpperCase();
+    return '$hour:$minute $amPM';
+  }
+}
+
 // Given a datetime, format it for display to the user (yMMMd)
 String dateTimeToDateDisplay(DateTime? inputDateTime) {
   if (inputDateTime == null) return '';
   return DateFormat.yMMMd().format(inputDateTime);
+}
+
+// Given a TimeOfDay, format it for display to the user (h:m a)
+String timeOfDayToTimeDisplay(TimeOfDay? inputTimeOfDay) {
+  if (inputTimeOfDay == null) return '';
+  return inputTimeOfDay.toTimeDisplay();
 }
 
 // Given a datetime, format it for storage (yyyy-MM-dd)
@@ -41,21 +64,28 @@ String dateTimeToDateStd(DateTime? inputDateTime) {
   return DateFormat('yyyy-MM-dd').format(inputDateTime);
 }
 
+// Given a TimeOfDay, format it for storage (h:m:s)
+String timeOfDayToTimeStd(TimeOfDay? inputTimeOfDay) {
+  if (inputTimeOfDay == null) return '';
+  return inputTimeOfDay.toTimeStd();
+}
+
 // Given a date string in the standard storage format (yyyy-MM-dd)
 // return a string in the standard display format (yMMMd)
 String? dateStdToDateDisplay(String? inputDateString) {
   if (inputDateString == null) return '';
-
   DateTime? parsedDate = DateFormat('yyyy-MM-dd').tryParse(inputDateString);
   if (parsedDate == null) return '';
-
   return DateFormat.yMMMd().format(parsedDate);
 }
 
-// Given a date string in the display format (yMMMd) return a DateTime
-DateTime? dateDisplayToDateTime(String? inputDateString) {
-  if (inputDateString == null) return null;
-  return DateFormat.yMMMd().tryParse(inputDateString);
+// Given a time string in the standard storage format (H:m:s)
+// return a string in the standard display format (h:m a), assuming a local timezone
+String? timeStdToTimeDisplay(String? inputTimeString) {
+  if (inputTimeString == null) return '';
+  DateTime? parsedTime = DateFormat.Hms().tryParse(inputTimeString);
+  if (parsedTime == null) return '';
+  return TimeOfDay.fromDateTime(parsedTime).toTimeDisplay();
 }
 
 // Given a date string in the standard format (yyyy-MM-dd) return a DateTime
@@ -64,15 +94,13 @@ DateTime? dateStdToDateTime(String? inputDateString) {
   return DateFormat('yyyy-MM-dd').tryParse(inputDateString);
 }
 
-// Given a displayed date string (yMMMd format), format it for DB storage (yyyy-MM-dd)
-String dateDisplayToDateStd(String? inputDateString) {
-  if (inputDateString == null) return '';
-
-  DateTime? parsedDate = DateFormat.yMMMd().tryParse(inputDateString);
-
-  if (parsedDate == null) return '';
-
-  return DateFormat('yyyy-MM-dd').format(parsedDate);
+// Given a time string in the standard storage format (H:m:s)
+// return a TimeOfDay, assuming a local timezone
+TimeOfDay? timeStdToTimeOfDay(String? inputTimeString) {
+  if (inputTimeString == null) return null;
+  DateTime? parsedTime = DateFormat.Hms().tryParse(inputTimeString);
+  if (parsedTime == null) return null;
+  return TimeOfDay.fromDateTime(parsedTime);
 }
 
 // Insert only unique values
