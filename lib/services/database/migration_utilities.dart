@@ -28,7 +28,14 @@ String convertDateString(String inputDateString) {
   return DateFormat('yyyy-MM-dd').format(parsedDate);
 }
 
-Future<void> migrateProjectDatesFormat(Migrator m) async {
+String convertTimeString(String inputTimeString) {
+  DateTime? parsedTime = DateFormat('h:m a').tryParse(inputTimeString) ??
+      DateFormat('H:m').tryParse(inputTimeString);
+  if (parsedTime == null) return inputTimeString;
+  return DateFormat.Hms().format(parsedTime);
+}
+
+Future<void> migrateProjectDateTimeFormat(Migrator m) async {
   final db = m.database as Database;
 
   final fieldsToUpdate = ['startDate', 'endDate'];
@@ -59,10 +66,11 @@ Future<void> migrateProjectDatesFormat(Migrator m) async {
   }
 }
 
-Future<void> migrateSpecimenDatesFormat(Migrator m) async {
+Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
   final db = m.database as Database;
 
-  final specimenFieldsToUpdate = ['prepDate', 'collectionDate', 'captureDate'];
+  final specimenDateFields = ['prepDate', 'collectionDate', 'captureDate'];
+  final specimenTimeFields = ['prepTime', 'collectionTime', 'captureTime'];
   final projects = await ProjectQuery(db).getAllProjects();
 
   for (final projectData in projects) {
@@ -73,7 +81,7 @@ Future<void> migrateSpecimenDatesFormat(Migrator m) async {
       bool doSpecimenUpdate = false;
       final specimenJson = specimenData.toJson();
 
-      for (final field in specimenFieldsToUpdate) {
+      for (final field in specimenDateFields) {
         final dateString = specimenJson[field];
 
         if (dateString != null && dateString.isNotEmpty) {
@@ -82,6 +90,19 @@ Future<void> migrateSpecimenDatesFormat(Migrator m) async {
           if (updatedDateString != dateString) {
             doSpecimenUpdate = true;
             specimenJson[field] = updatedDateString;
+          }
+        }
+      }
+
+      for (final field in specimenTimeFields) {
+        final timeString = specimenJson[field];
+
+        if (timeString != null && timeString.isNotEmpty) {
+          final updatedTimeString = convertTimeString(timeString);
+
+          if (updatedTimeString != timeString) {
+            doSpecimenUpdate = true;
+            specimenJson[field] = updatedTimeString;
           }
         }
       }
@@ -97,20 +118,35 @@ Future<void> migrateSpecimenDatesFormat(Migrator m) async {
           await SpecimenPartQuery(db).getSpecimenParts(specimenData.uuid);
 
       for (final specimenPartData in specimenParts) {
+        bool doSpecimenPartUpdate = false;
         final specimenPartJson = specimenPartData.toJson();
-        final dateString = specimenPartJson['dateTaken'];
 
+        final dateString = specimenPartJson['dateTaken'];
         if (dateString != null && dateString.isNotEmpty) {
           final updatedDateString = convertDateString(dateString);
 
           if (updatedDateString != dateString) {
+            doSpecimenPartUpdate = true;
             specimenPartJson['dateTaken'] = updatedDateString;
-            final updatedSpecimenPartData =
-                SpecimenPartData.fromJson(specimenPartJson);
-            SpecimenPartQuery(db).updateSpecimenPart(
-                updatedSpecimenPartData.id as int,
-                updatedSpecimenPartData.toCompanion(false));
           }
+        }
+
+        final timeString = specimenPartJson['timeTaken'];
+        if (timeString != null && timeString.isNotEmpty) {
+          final updatedTimeString = convertTimeString(timeString);
+
+          if (updatedTimeString != timeString) {
+            doSpecimenPartUpdate = true;
+            specimenPartJson['timeTaken'] = updatedTimeString;
+          }
+        }
+
+        if (doSpecimenPartUpdate) {
+          final updatedSpecimenPartData =
+              SpecimenPartData.fromJson(specimenPartJson);
+          SpecimenPartQuery(db).updateSpecimenPart(
+              updatedSpecimenPartData.id as int,
+              updatedSpecimenPartData.toCompanion(false));
         }
       }
 
@@ -139,7 +175,7 @@ Future<void> migrateSpecimenDatesFormat(Migrator m) async {
   }
 }
 
-Future<void> migrateNarrativeDatesFormat(Migrator m) async {
+Future<void> migrateNarrativeDateTimeFormat(Migrator m) async {
   final db = m.database as Database;
   final projects = await ProjectQuery(db).getAllProjects();
 
@@ -165,11 +201,12 @@ Future<void> migrateNarrativeDatesFormat(Migrator m) async {
   }
 }
 
-Future<void> migrateCollEventDatesFormat(Migrator m) async {
+Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
   final db = m.database as Database;
   final projects = await ProjectQuery(db).getAllProjects();
 
-  final collEventFieldsToUpdate = ['startDate', 'endDate'];
+  final collEventDateFields = ['startDate', 'endDate'];
+  final collEventTimeFields = ['startTime', 'endTime'];
 
   for (final projectData in projects) {
     final eventList =
@@ -179,7 +216,7 @@ Future<void> migrateCollEventDatesFormat(Migrator m) async {
       bool doUpdate = false;
       final eventJson = eventData.toJson();
 
-      for (final field in collEventFieldsToUpdate) {
+      for (final field in collEventDateFields) {
         final dateString = eventJson[field];
 
         if (dateString != null && dateString.isNotEmpty) {
@@ -188,6 +225,19 @@ Future<void> migrateCollEventDatesFormat(Migrator m) async {
           if (updatedDateString != dateString) {
             doUpdate = true;
             eventJson[field] = updatedDateString;
+          }
+        }
+      }
+
+      for (final field in collEventTimeFields) {
+        final timeString = eventJson[field];
+
+        if (timeString != null && timeString.isNotEmpty) {
+          final updatedTimeString = convertTimeString(timeString);
+
+          if (updatedTimeString != timeString) {
+            doUpdate = true;
+            eventJson[field] = updatedTimeString;
           }
         }
       }
