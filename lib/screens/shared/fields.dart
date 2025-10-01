@@ -71,7 +71,7 @@ class CommonTimeField extends ConsumerStatefulWidget {
     required this.onClear,
   });
 
-  final TextEditingController controller;
+  final TimeEditingController controller;
   final String labelText;
   final String hintText;
   final TimeOfDay initialTime;
@@ -92,21 +92,21 @@ class CommonTimeFieldState extends ConsumerState<CommonTimeField> {
       ),
       controller: widget.controller,
       onTap: () async {
-        final time = await _showTimePicker(
+        final selectedTimeOfDate = await _showTimePicker(
           context: context,
           cancelText: "Clear",
-          initialTime: widget.initialTime,
+          initialTime: widget.controller.timeOfDay ?? widget.initialTime,
         );
 
         // OK pressed
-        if (time != null && mounted) {
-          widget.controller.text = _formatTimeOfDay(time);
+        if (selectedTimeOfDate != null && mounted) {
+          widget.controller.timeOfDay = selectedTimeOfDate;
           widget.onTap();
         }
 
         // Clear pressed (or picker closed)
-        if (time == null && mounted) {
-          widget.controller.text = "";
+        if (selectedTimeOfDate == null && mounted) {
+          widget.controller.timeOfDay = null;
           widget.onClear();
         }
       },

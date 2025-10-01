@@ -378,7 +378,7 @@ class PartSubTitle extends StatelessWidget {
       '$treatment'
       '${_getText(part.additionalTreatment)}'
       '${_getText(dateStdToDateDisplay(part.dateTaken))}'
-      '${_getText(part.timeTaken)}'
+      '${_getText(timeStdToTimeDisplay(part.timeTaken))}'
       '${_getPMI()}'
       '$remark',
       style: Theme.of(context).textTheme.bodyMedium,
@@ -593,7 +593,7 @@ class PartFormState extends ConsumerState<PartForm> {
       treatment: db.Value(widget.partCtr.treatmentCtr.text),
       additionalTreatment: db.Value(widget.partCtr.additionalTreatmentCtr.text),
       dateTaken: db.Value(widget.partCtr.dateTakenCtr.date),
-      timeTaken: db.Value(widget.partCtr.timeTakenCtr.text),
+      timeTaken: db.Value(widget.partCtr.timeTakenCtr.time),
       pmi: db.Value(widget.partCtr.pmiCtr.text),
       museumPermanent: db.Value(widget.partCtr.museumPermanentCtr.text),
       museumLoan: db.Value(widget.partCtr.museumLoanCtr.text),

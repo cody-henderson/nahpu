@@ -202,8 +202,8 @@ class CollEventFormCtrModel {
   TextEditingController idSuffixCtr;
   DateEditingController startDateCtr;
   DateEditingController endDateCtr;
-  TextEditingController startTimeCtr;
-  TextEditingController endTimeCtr;
+  TimeEditingController startTimeCtr;
+  TimeEditingController endTimeCtr;
   String? primaryCollMethodCtr;
   TextEditingController noteCtr;
 
@@ -212,8 +212,8 @@ class CollEventFormCtrModel {
         idSuffixCtr: TextEditingController(),
         startDateCtr: DateEditingController(),
         endDateCtr: DateEditingController(),
-        startTimeCtr: TextEditingController(),
-        endTimeCtr: TextEditingController(),
+        startTimeCtr: TimeEditingController(),
+        endTimeCtr: TimeEditingController(),
         primaryCollMethodCtr: null,
         noteCtr: TextEditingController(),
       );
@@ -224,8 +224,8 @@ class CollEventFormCtrModel {
         idSuffixCtr: TextEditingController(text: collEvent.idSuffix),
         startDateCtr: DateEditingController(date: collEvent.startDate),
         endDateCtr: DateEditingController(date: collEvent.endDate),
-        startTimeCtr: TextEditingController(text: collEvent.startTime),
-        endTimeCtr: TextEditingController(text: collEvent.endTime),
+        startTimeCtr: TimeEditingController(time: collEvent.startTime),
+        endTimeCtr: TimeEditingController(time: collEvent.endTime),
         primaryCollMethodCtr: collEvent.primaryCollMethod,
         noteCtr: TextEditingController(text: collEvent.collMethodNotes),
       );
@@ -302,11 +302,11 @@ class SpecimenFormCtrModel {
   TextEditingController museumIDCtr;
   TextEditingController fieldNumberCtr;
   DateEditingController prepDateCtr;
-  TextEditingController prepTimeCtr;
+  TimeEditingController prepTimeCtr;
   DateEditingController collDateCtr;
-  TextEditingController collTimeCtr;
+  TimeEditingController collTimeCtr;
   DateEditingController captureDateCtr;
-  TextEditingController captureTimeCtr;
+  TimeEditingController captureTimeCtr;
   TextEditingController trapTypeCtr;
   TextEditingController methodIDCtr;
 
@@ -326,11 +326,11 @@ class SpecimenFormCtrModel {
         idMethodCtr: TextEditingController(),
         museumIDCtr: TextEditingController(),
         prepDateCtr: DateEditingController(),
-        prepTimeCtr: TextEditingController(),
+        prepTimeCtr: TimeEditingController(),
         collDateCtr: DateEditingController(),
-        collTimeCtr: TextEditingController(),
+        collTimeCtr: TimeEditingController(),
         captureDateCtr: DateEditingController(),
-        captureTimeCtr: TextEditingController(),
+        captureTimeCtr: TimeEditingController(),
         trapTypeCtr: TextEditingController(),
         methodIDCtr: TextEditingController(),
       );
@@ -353,11 +353,11 @@ class SpecimenFormCtrModel {
             TextEditingController(text: specimen.fieldNumber?.toString() ?? ''),
         speciesCtr: specimen.speciesID,
         prepDateCtr: DateEditingController(date: specimen.prepDate),
-        prepTimeCtr: TextEditingController(text: specimen.prepTime),
+        prepTimeCtr: TimeEditingController(time: specimen.prepTime),
         collDateCtr: DateEditingController(date: specimen.collectionDate),
-        collTimeCtr: TextEditingController(text: specimen.collectionTime),
+        collTimeCtr: TimeEditingController(time: specimen.collectionTime),
         captureDateCtr: DateEditingController(date: specimen.captureDate),
-        captureTimeCtr: TextEditingController(text: specimen.captureTime),
+        captureTimeCtr: TimeEditingController(time: specimen.captureTime),
         trapTypeCtr: TextEditingController(text: specimen.trapType),
         methodIDCtr: TextEditingController(text: specimen.methodID ?? ''),
         // ..selection =
@@ -743,7 +743,7 @@ class PartFormCtrModel {
   TextEditingController treatmentCtr;
   TextEditingController additionalTreatmentCtr;
   DateEditingController dateTakenCtr;
-  TextEditingController timeTakenCtr;
+  TimeEditingController timeTakenCtr;
   TextEditingController pmiCtr;
   TextEditingController museumPermanentCtr;
   TextEditingController museumLoanCtr;
@@ -758,7 +758,7 @@ class PartFormCtrModel {
         treatmentCtr: TextEditingController(),
         additionalTreatmentCtr: TextEditingController(),
         dateTakenCtr: DateEditingController(),
-        timeTakenCtr: TextEditingController(),
+        timeTakenCtr: TimeEditingController(),
         pmiCtr: TextEditingController(),
         museumPermanentCtr: TextEditingController(),
         museumLoanCtr: TextEditingController(),
@@ -775,7 +775,7 @@ class PartFormCtrModel {
         additionalTreatmentCtr:
             TextEditingController(text: data.additionalTreatment ?? ''),
         dateTakenCtr: DateEditingController(date: data.dateTaken ?? ''),
-        timeTakenCtr: TextEditingController(text: data.timeTaken ?? ''),
+        timeTakenCtr: TimeEditingController(time: data.timeTaken ?? ''),
         pmiCtr: TextEditingController(text: data.pmi ?? ''),
         museumPermanentCtr:
             TextEditingController(text: data.museumPermanent ?? ''),

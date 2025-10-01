@@ -618,7 +618,7 @@ class CaptureTimeState extends ConsumerState<CaptureTime> {
               SpecimenServices(ref: ref).updateSpecimen(
                 widget.specimenUuid,
                 SpecimenCompanion(
-                  captureTime: db.Value(widget.specimenCtr.captureTimeCtr.text),
+                  captureTime: db.Value(widget.specimenCtr.captureTimeCtr.time),
                 ),
               );
             },

@@ -280,7 +280,7 @@ class SpecimenCollectionTimeField extends ConsumerWidget {
           specimenUuid,
           SpecimenCompanion(
               collectionTime: db.Value(
-            specimenCtr.collTimeCtr.text,
+            specimenCtr.collTimeCtr.time,
           )),
         );
       },
@@ -392,7 +392,7 @@ class PrepTimeField extends ConsumerWidget {
         SpecimenServices(ref: ref).updateSpecimen(
           specimenUuid,
           SpecimenCompanion(
-            prepTime: db.Value(specimenCtr.prepTimeCtr.text),
+            prepTime: db.Value(specimenCtr.prepTimeCtr.time),
           ),
         );
       },

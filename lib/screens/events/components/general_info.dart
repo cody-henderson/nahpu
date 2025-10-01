@@ -339,7 +339,7 @@ class EventTimeField extends ConsumerWidget {
             CollEventServices(ref: ref).updateCollEvent(
               collEventId,
               CollEventCompanion(
-                startTime: db.Value(collEventCtr.startTimeCtr.text),
+                startTime: db.Value(collEventCtr.startTimeCtr.time),
               ),
             );
           },
@@ -361,7 +361,7 @@ class EventTimeField extends ConsumerWidget {
             CollEventServices(ref: ref).updateCollEvent(
               collEventId,
               CollEventCompanion(
-                endTime: db.Value(collEventCtr.endTimeCtr.text),
+                endTime: db.Value(collEventCtr.endTimeCtr.time),
               ),
             );
           },
