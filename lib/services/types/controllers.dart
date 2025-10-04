@@ -7,12 +7,12 @@ class DateEditingController extends TextEditingController {
   DateTime? _dateTime;
   String? _date;
 
-  DateEditingController({String? date}) : 
-    _date = date,
-    _dateTime = dateStdToDateTime(date),
-    super(text: dateStdToDateDisplay(date));
+  DateEditingController({String? date})
+      : _date = date,
+        _dateTime = dateStdToDateTime(date),
+        super(text: dateStdToDateDisplay(date));
 
-  String? get date => _date;    
+  String? get date => _date;
   DateTime? get dateTime => _dateTime;
 
   set dateTime(DateTime? newDate) {
@@ -32,12 +32,12 @@ class TimeEditingController extends TextEditingController {
   TimeOfDay? _timeOfDay;
   String? _time;
 
-  TimeEditingController({String? time}) : 
-    _time = time,
-    _timeOfDay = timeStdToTimeOfDay(time),
-    super(text: timeStdToTimeDisplay(time));
+  TimeEditingController({String? time})
+      : _time = time,
+        _timeOfDay = timeStdToTimeOfDay(time),
+        super(text: timeStdToTimeDisplay(time));
 
-  String? get time => _time;    
+  String? get time => _time;
   TimeOfDay? get timeOfDay => _timeOfDay;
 
   set timeOfDay(TimeOfDay? newTime) {
@@ -283,6 +283,7 @@ class SpecimenFormCtrModel {
     required this.collTimeCtr,
     required this.captureDateCtr,
     required this.captureTimeCtr,
+    required this.relativeCaptureTimeCtr,
     required this.trapTypeCtr,
     required this.methodIDCtr,
   });
@@ -307,6 +308,7 @@ class SpecimenFormCtrModel {
   TimeEditingController collTimeCtr;
   DateEditingController captureDateCtr;
   TimeEditingController captureTimeCtr;
+  TextEditingController relativeCaptureTimeCtr;
   TextEditingController trapTypeCtr;
   TextEditingController methodIDCtr;
 
@@ -331,6 +333,7 @@ class SpecimenFormCtrModel {
         collTimeCtr: TimeEditingController(),
         captureDateCtr: DateEditingController(),
         captureTimeCtr: TimeEditingController(),
+        relativeCaptureTimeCtr: TextEditingController(),
         trapTypeCtr: TextEditingController(),
         methodIDCtr: TextEditingController(),
       );
@@ -358,6 +361,8 @@ class SpecimenFormCtrModel {
         collTimeCtr: TimeEditingController(time: specimen.collectionTime),
         captureDateCtr: DateEditingController(date: specimen.captureDate),
         captureTimeCtr: TimeEditingController(time: specimen.captureTime),
+        relativeCaptureTimeCtr:
+            TextEditingController(text: specimen.relativeCaptureTime),
         trapTypeCtr: TextEditingController(text: specimen.trapType),
         methodIDCtr: TextEditingController(text: specimen.methodID ?? ''),
         // ..selection =
