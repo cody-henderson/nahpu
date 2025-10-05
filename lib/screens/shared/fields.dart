@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:nahpu/services/types/controllers.dart';
+import 'package:nahpu/screens/shared/pickers.dart';
 
 class CommonDateField extends ConsumerStatefulWidget {
   const CommonDateField({
@@ -37,23 +38,28 @@ class CommonDateFieldState extends ConsumerState<CommonDateField> {
       ),
       controller: widget.controller,
       onTap: () async {
-        final selectedDate = await showDatePicker(
+        final result = await showCustomDatePicker(
             context: context,
-            cancelText: "Clear",
             initialDate: widget.controller.dateTime ?? widget.initialDate,
             firstDate: DateTime(2000),
             lastDate: widget.lastDate);
 
-        // OK pressed
-        if (selectedDate != null && mounted) {
-          widget.controller.dateTime = selectedDate;
-          widget.onTap();
-        }
+        final returnType = result?.$2 ?? DialogReturnType.cancel;
+        final selectedDate = result?.$1;
 
-        // Clear pressed (or picker closed)
-        if (selectedDate == null && mounted) {
-          widget.controller.dateTime = null;
-          widget.onClear();
+        switch (returnType) {
+          case DialogReturnType.confirm: // OK pressed
+            if (selectedDate != null && mounted) {
+              widget.controller.dateTime = selectedDate;
+              widget.onTap();
+            }
+          case DialogReturnType.clear: // Clear pressed
+            if (selectedDate == null && mounted) {
+              widget.controller.dateTime = null;
+              widget.onClear();
+            }
+          case DialogReturnType.cancel: // Cancel pressed or widget closed
+          // No action needed
         }
       },
     );
@@ -92,41 +98,30 @@ class CommonTimeFieldState extends ConsumerState<CommonTimeField> {
       ),
       controller: widget.controller,
       onTap: () async {
-        final selectedTimeOfDate = await _showTimePicker(
+        final result = await showCustomTimePicker(
           context: context,
-          cancelText: "Clear",
           initialTime: widget.controller.timeOfDay ?? widget.initialTime,
         );
 
-        // OK pressed
-        if (selectedTimeOfDate != null && mounted) {
-          widget.controller.timeOfDay = selectedTimeOfDate;
-          widget.onTap();
-        }
+        final returnType = result?.$2 ?? DialogReturnType.cancel;
+        final selectedTime = result?.$1;
 
-        // Clear pressed (or picker closed)
-        if (selectedTimeOfDate == null && mounted) {
-          widget.controller.timeOfDay = null;
-          widget.onClear();
+        switch (returnType) {
+          case DialogReturnType.confirm: // OK pressed
+            if (selectedTime != null && mounted) {
+              widget.controller.timeOfDay = selectedTime;
+              widget.onTap();
+            }
+          case DialogReturnType.clear: // Clear pressed
+            if (selectedTime == null && mounted) {
+              widget.controller.timeOfDay = null;
+              widget.onClear();
+            }
+          case DialogReturnType.cancel: // Cancel pressed or widget closed
+          // No action needed
         }
       },
     );
-  }
-
-  Future<TimeOfDay?> _showTimePicker({
-    required BuildContext context,
-    required String cancelText,
-    required TimeOfDay initialTime,
-  }) {
-    return showTimePicker(
-      context: context,
-      cancelText: cancelText,
-      initialTime: initialTime,
-    );
-  }
-
-  String _formatTimeOfDay(TimeOfDay time) {
-    return time.format(context);
   }
 }
 
