@@ -506,7 +506,7 @@ class CaptureDate extends ConsumerWidget {
             captureDate: db.Value(null),
           ),
         );
-      },      
+      },
     );
   }
 }
@@ -588,6 +588,7 @@ class CaptureTimeState extends ConsumerState<CaptureTime> {
               labelText: 'Capture time',
               hintText: 'Enter time',
             ),
+            initialValue: widget.specimenCtr.relativeCaptureTimeCtr.text,
             items: relativeTimeList
                 .map(
                   (e) => DropdownMenuItem(
@@ -598,12 +599,12 @@ class CaptureTimeState extends ConsumerState<CaptureTime> {
                 .toList(),
             onChanged: (String? newValue) {
               setState(() {
-                widget.specimenCtr.captureTimeCtr.text = newValue ?? '';
+                widget.specimenCtr.relativeCaptureTimeCtr.text = newValue ?? '';
                 SpecimenServices(ref: ref).updateSpecimen(
                   widget.specimenUuid,
                   SpecimenCompanion(
-                    captureTime:
-                        db.Value(widget.specimenCtr.captureTimeCtr.text),
+                    relativeCaptureTime: db.Value(
+                        widget.specimenCtr.relativeCaptureTimeCtr.text),
                   ),
                 );
               });
@@ -623,14 +624,9 @@ class CaptureTimeState extends ConsumerState<CaptureTime> {
               );
             },
             onClear: () {
-              SpecimenServices(ref: ref).updateSpecimen(
-                widget.specimenUuid,
-                SpecimenCompanion(
-                    captureTime: db.Value(null)
-                )
-              );
-            }              
-          );
+              SpecimenServices(ref: ref).updateSpecimen(widget.specimenUuid,
+                  SpecimenCompanion(captureTime: db.Value(null)));
+            });
   }
 }
 

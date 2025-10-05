@@ -250,3 +250,14 @@ Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
     }
   }
 }
+
+Future<void> moveRelativeCaptureTimes(Migrator m) async {
+  final db = m.database as Database;
+  return db.customStatement('''
+      UPDATE specimen 
+      SET relativeCaptureTime = captureTime,
+        captureTime = NULL
+      WHERE isRelativeTime
+        AND captureTime IN ('Dawn', 'Morning', 'Afternoon', 'Dusk', 'Night')   
+    ''');
+}

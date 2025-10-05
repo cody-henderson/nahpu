@@ -6393,6 +6393,13 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _relativeCaptureTimeMeta =
+      const VerificationMeta('relativeCaptureTime');
+  late final GeneratedColumn<String> relativeCaptureTime =
+      GeneratedColumn<String>('relativeCaptureTime', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints: '');
   static const VerificationMeta _trapTypeMeta =
       const VerificationMeta('trapType');
   late final GeneratedColumn<String> trapType = GeneratedColumn<String>(
@@ -6486,6 +6493,7 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
         captureDate,
         isRelativeTime,
         captureTime,
+        relativeCaptureTime,
         trapType,
         methodID,
         coordinateID,
@@ -6581,6 +6589,12 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
           _captureTimeMeta,
           captureTime.isAcceptableOrUnknown(
               data['captureTime']!, _captureTimeMeta));
+    }
+    if (data.containsKey('relativeCaptureTime')) {
+      context.handle(
+          _relativeCaptureTimeMeta,
+          relativeCaptureTime.isAcceptableOrUnknown(
+              data['relativeCaptureTime']!, _relativeCaptureTimeMeta));
     }
     if (data.containsKey('trapType')) {
       context.handle(_trapTypeMeta,
@@ -6679,6 +6693,8 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
           .read(DriftSqlType.int, data['${effectivePrefix}isRelativeTime']),
       captureTime: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}captureTime']),
+      relativeCaptureTime: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}relativeCaptureTime']),
       trapType: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}trapType']),
       methodID: attachedDatabase.typeMapping
@@ -6741,6 +6757,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
   final String? captureDate;
   final int? isRelativeTime;
   final String? captureTime;
+  final String? relativeCaptureTime;
   final String? trapType;
   final String? methodID;
 
@@ -6769,6 +6786,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       this.captureDate,
       this.isRelativeTime,
       this.captureTime,
+      this.relativeCaptureTime,
       this.trapType,
       this.methodID,
       this.coordinateID,
@@ -6822,6 +6840,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
     }
     if (!nullToAbsent || captureTime != null) {
       map['captureTime'] = Variable<String>(captureTime);
+    }
+    if (!nullToAbsent || relativeCaptureTime != null) {
+      map['relativeCaptureTime'] = Variable<String>(relativeCaptureTime);
     }
     if (!nullToAbsent || trapType != null) {
       map['trapType'] = Variable<String>(trapType);
@@ -6901,6 +6922,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       captureTime: captureTime == null && nullToAbsent
           ? const Value.absent()
           : Value(captureTime),
+      relativeCaptureTime: relativeCaptureTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(relativeCaptureTime),
       trapType: trapType == null && nullToAbsent
           ? const Value.absent()
           : Value(trapType),
@@ -6955,6 +6979,8 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       captureDate: serializer.fromJson<String?>(json['captureDate']),
       isRelativeTime: serializer.fromJson<int?>(json['isRelativeTime']),
       captureTime: serializer.fromJson<String?>(json['captureTime']),
+      relativeCaptureTime:
+          serializer.fromJson<String?>(json['relativeCaptureTime']),
       trapType: serializer.fromJson<String?>(json['trapType']),
       methodID: serializer.fromJson<String?>(json['methodID']),
       coordinateID: serializer.fromJson<int?>(json['coordinateID']),
@@ -6987,6 +7013,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       'captureDate': serializer.toJson<String?>(captureDate),
       'isRelativeTime': serializer.toJson<int?>(isRelativeTime),
       'captureTime': serializer.toJson<String?>(captureTime),
+      'relativeCaptureTime': serializer.toJson<String?>(relativeCaptureTime),
       'trapType': serializer.toJson<String?>(trapType),
       'methodID': serializer.toJson<String?>(methodID),
       'coordinateID': serializer.toJson<int?>(coordinateID),
@@ -7016,6 +7043,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           Value<String?> captureDate = const Value.absent(),
           Value<int?> isRelativeTime = const Value.absent(),
           Value<String?> captureTime = const Value.absent(),
+          Value<String?> relativeCaptureTime = const Value.absent(),
           Value<String?> trapType = const Value.absent(),
           Value<String?> methodID = const Value.absent(),
           Value<int?> coordinateID = const Value.absent(),
@@ -7046,6 +7074,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
         isRelativeTime:
             isRelativeTime.present ? isRelativeTime.value : this.isRelativeTime,
         captureTime: captureTime.present ? captureTime.value : this.captureTime,
+        relativeCaptureTime: relativeCaptureTime.present
+            ? relativeCaptureTime.value
+            : this.relativeCaptureTime,
         trapType: trapType.present ? trapType.value : this.trapType,
         methodID: methodID.present ? methodID.value : this.methodID,
         coordinateID:
@@ -7093,6 +7124,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           : this.isRelativeTime,
       captureTime:
           data.captureTime.present ? data.captureTime.value : this.captureTime,
+      relativeCaptureTime: data.relativeCaptureTime.present
+          ? data.relativeCaptureTime.value
+          : this.relativeCaptureTime,
       trapType: data.trapType.present ? data.trapType.value : this.trapType,
       methodID: data.methodID.present ? data.methodID.value : this.methodID,
       coordinateID: data.coordinateID.present
@@ -7137,6 +7171,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           ..write('captureDate: $captureDate, ')
           ..write('isRelativeTime: $isRelativeTime, ')
           ..write('captureTime: $captureTime, ')
+          ..write('relativeCaptureTime: $relativeCaptureTime, ')
           ..write('trapType: $trapType, ')
           ..write('methodID: $methodID, ')
           ..write('coordinateID: $coordinateID, ')
@@ -7168,6 +7203,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
         captureDate,
         isRelativeTime,
         captureTime,
+        relativeCaptureTime,
         trapType,
         methodID,
         coordinateID,
@@ -7198,6 +7234,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           other.captureDate == this.captureDate &&
           other.isRelativeTime == this.isRelativeTime &&
           other.captureTime == this.captureTime &&
+          other.relativeCaptureTime == this.relativeCaptureTime &&
           other.trapType == this.trapType &&
           other.methodID == this.methodID &&
           other.coordinateID == this.coordinateID &&
@@ -7226,6 +7263,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
   final Value<String?> captureDate;
   final Value<int?> isRelativeTime;
   final Value<String?> captureTime;
+  final Value<String?> relativeCaptureTime;
   final Value<String?> trapType;
   final Value<String?> methodID;
   final Value<int?> coordinateID;
@@ -7253,6 +7291,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     this.captureDate = const Value.absent(),
     this.isRelativeTime = const Value.absent(),
     this.captureTime = const Value.absent(),
+    this.relativeCaptureTime = const Value.absent(),
     this.trapType = const Value.absent(),
     this.methodID = const Value.absent(),
     this.coordinateID = const Value.absent(),
@@ -7281,6 +7320,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     this.captureDate = const Value.absent(),
     this.isRelativeTime = const Value.absent(),
     this.captureTime = const Value.absent(),
+    this.relativeCaptureTime = const Value.absent(),
     this.trapType = const Value.absent(),
     this.methodID = const Value.absent(),
     this.coordinateID = const Value.absent(),
@@ -7309,6 +7349,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     Expression<String>? captureDate,
     Expression<int>? isRelativeTime,
     Expression<String>? captureTime,
+    Expression<String>? relativeCaptureTime,
     Expression<String>? trapType,
     Expression<String>? methodID,
     Expression<int>? coordinateID,
@@ -7337,6 +7378,8 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
       if (captureDate != null) 'captureDate': captureDate,
       if (isRelativeTime != null) 'isRelativeTime': isRelativeTime,
       if (captureTime != null) 'captureTime': captureTime,
+      if (relativeCaptureTime != null)
+        'relativeCaptureTime': relativeCaptureTime,
       if (trapType != null) 'trapType': trapType,
       if (methodID != null) 'methodID': methodID,
       if (coordinateID != null) 'coordinateID': coordinateID,
@@ -7368,6 +7411,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
       Value<String?>? captureDate,
       Value<int?>? isRelativeTime,
       Value<String?>? captureTime,
+      Value<String?>? relativeCaptureTime,
       Value<String?>? trapType,
       Value<String?>? methodID,
       Value<int?>? coordinateID,
@@ -7395,6 +7439,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
       captureDate: captureDate ?? this.captureDate,
       isRelativeTime: isRelativeTime ?? this.isRelativeTime,
       captureTime: captureTime ?? this.captureTime,
+      relativeCaptureTime: relativeCaptureTime ?? this.relativeCaptureTime,
       trapType: trapType ?? this.trapType,
       methodID: methodID ?? this.methodID,
       coordinateID: coordinateID ?? this.coordinateID,
@@ -7455,6 +7500,9 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     if (captureTime.present) {
       map['captureTime'] = Variable<String>(captureTime.value);
     }
+    if (relativeCaptureTime.present) {
+      map['relativeCaptureTime'] = Variable<String>(relativeCaptureTime.value);
+    }
     if (trapType.present) {
       map['trapType'] = Variable<String>(trapType.value);
     }
@@ -7511,6 +7559,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
           ..write('captureDate: $captureDate, ')
           ..write('isRelativeTime: $isRelativeTime, ')
           ..write('captureTime: $captureTime, ')
+          ..write('relativeCaptureTime: $relativeCaptureTime, ')
           ..write('trapType: $trapType, ')
           ..write('methodID: $methodID, ')
           ..write('coordinateID: $coordinateID, ')
@@ -15701,6 +15750,7 @@ typedef $SpecimenCreateCompanionBuilder = SpecimenCompanion Function({
   Value<String?> captureDate,
   Value<int?> isRelativeTime,
   Value<String?> captureTime,
+  Value<String?> relativeCaptureTime,
   Value<String?> trapType,
   Value<String?> methodID,
   Value<int?> coordinateID,
@@ -15729,6 +15779,7 @@ typedef $SpecimenUpdateCompanionBuilder = SpecimenCompanion Function({
   Value<String?> captureDate,
   Value<int?> isRelativeTime,
   Value<String?> captureTime,
+  Value<String?> relativeCaptureTime,
   Value<String?> trapType,
   Value<String?> methodID,
   Value<int?> coordinateID,
@@ -15815,6 +15866,10 @@ class $SpecimenFilterComposer extends Composer<_$Database, Specimen> {
 
   ColumnFilters<String> get captureTime => $composableBuilder(
       column: $table.captureTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get relativeCaptureTime => $composableBuilder(
+      column: $table.relativeCaptureTime,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get trapType => $composableBuilder(
       column: $table.trapType, builder: (column) => ColumnFilters(column));
@@ -15923,6 +15978,10 @@ class $SpecimenOrderingComposer extends Composer<_$Database, Specimen> {
   ColumnOrderings<String> get captureTime => $composableBuilder(
       column: $table.captureTime, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get relativeCaptureTime => $composableBuilder(
+      column: $table.relativeCaptureTime,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get trapType => $composableBuilder(
       column: $table.trapType, builder: (column) => ColumnOrderings(column));
 
@@ -16028,6 +16087,9 @@ class $SpecimenAnnotationComposer extends Composer<_$Database, Specimen> {
   GeneratedColumn<String> get captureTime => $composableBuilder(
       column: $table.captureTime, builder: (column) => column);
 
+  GeneratedColumn<String> get relativeCaptureTime => $composableBuilder(
+      column: $table.relativeCaptureTime, builder: (column) => column);
+
   GeneratedColumn<String> get trapType =>
       $composableBuilder(column: $table.trapType, builder: (column) => column);
 
@@ -16116,6 +16178,7 @@ class $SpecimenTableManager extends RootTableManager<
             Value<String?> captureDate = const Value.absent(),
             Value<int?> isRelativeTime = const Value.absent(),
             Value<String?> captureTime = const Value.absent(),
+            Value<String?> relativeCaptureTime = const Value.absent(),
             Value<String?> trapType = const Value.absent(),
             Value<String?> methodID = const Value.absent(),
             Value<int?> coordinateID = const Value.absent(),
@@ -16144,6 +16207,7 @@ class $SpecimenTableManager extends RootTableManager<
             captureDate: captureDate,
             isRelativeTime: isRelativeTime,
             captureTime: captureTime,
+            relativeCaptureTime: relativeCaptureTime,
             trapType: trapType,
             methodID: methodID,
             coordinateID: coordinateID,
@@ -16172,6 +16236,7 @@ class $SpecimenTableManager extends RootTableManager<
             Value<String?> captureDate = const Value.absent(),
             Value<int?> isRelativeTime = const Value.absent(),
             Value<String?> captureTime = const Value.absent(),
+            Value<String?> relativeCaptureTime = const Value.absent(),
             Value<String?> trapType = const Value.absent(),
             Value<String?> methodID = const Value.absent(),
             Value<int?> coordinateID = const Value.absent(),
@@ -16200,6 +16265,7 @@ class $SpecimenTableManager extends RootTableManager<
             captureDate: captureDate,
             isRelativeTime: isRelativeTime,
             captureTime: captureTime,
+            relativeCaptureTime: relativeCaptureTime,
             trapType: trapType,
             methodID: methodID,
             coordinateID: coordinateID,
