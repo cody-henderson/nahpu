@@ -32,20 +32,19 @@ String getSystemDateTime() {
 
 extension TimeOfDayFormatter on TimeOfDay {
   String toTimeStd() {
-    final hour = this.hour.toString().padLeft(2,'0');
-    final minute = this.minute.toString().padLeft(2,'0');
+    final hour = this.hour.toString().padLeft(2, '0');
+    final minute = this.minute.toString().padLeft(2, '0');
     final second = '00';
     return '$hour:$minute:$second';
   }
 
   String toTimeDisplay() {
-    final hour = this.hourOfPeriod.toString();
-    final minute = this.minute.toString().padLeft(2,'0');
-    final amPM = this.period.name.toUpperCase();
+    final hour = hourOfPeriod.toString();
+    final minute = this.minute.toString().padLeft(2, '0');
+    final amPM = period.name.toUpperCase();
     return '$hour:$minute $amPM';
   }
 }
-
 
 // Given a datetime, format it for display to the user (yMMMd)
 String dateTimeToDateDisplay(DateTime? inputDateTime) {
