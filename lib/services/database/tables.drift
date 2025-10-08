@@ -111,6 +111,7 @@ CREATE TABLE narrative (
     projectUuid TEXT,
     date TEXT,
     siteID INT,
+    writerId TEXT,
     narrative TEXT,
     mediaID INT REFERENCES media(primaryId),
     FOREIGN KEY(projectUuid) REFERENCES project(uuid),

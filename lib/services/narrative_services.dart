@@ -34,6 +34,13 @@ class NarrativeServices extends AppServices {
     NarrativeQuery(dbAccess).updateNarrativeEntry(id, entries);
   }
 
+  /// Update the writer for a narrative.
+  Future<void> updateNarrativeWriter(int id, String? writerUuid) async {
+    await NarrativeQuery(dbAccess).updateNarrativeWriter(id, writerUuid);
+    // Refresh narrative provider so UI reflects persisted change
+    ref.invalidate(narrativeEntryProvider);
+  }
+
   Future<void> createNarrativeMediaFromList(
       int narrativeId, List<String> filePaths) async {
     for (String filePath in filePaths) {
