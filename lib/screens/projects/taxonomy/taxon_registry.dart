@@ -10,7 +10,6 @@ import 'package:nahpu/screens/shared/forms.dart';
 import 'package:nahpu/screens/shared/common.dart';
 import 'package:nahpu/screens/projects/taxonomy/specimen_list.dart';
 import 'package:nahpu/services/database/database.dart';
-import 'package:nahpu/services/specimen_services.dart';
 import 'package:nahpu/services/statistics/captures.dart';
 
 class TaxonRegistryViewer extends ConsumerStatefulWidget {
@@ -228,15 +227,10 @@ class RecordedTaxaViewState extends ConsumerState<RecordedTaxaView> {
               ? const SizedBox.shrink()
               : TextButton(
                   onPressed: () async {
-                    final data =
-                        await SpecimenServices(ref: ref).getAllSpecimens();
                     if (context.mounted) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => SpecimenListPage(
-                            specimenData: data,
-                          ),
-                        ),
+                            builder: (context) => SpecimenListPage()),
                       );
                     }
                   },
