@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/services/providers/sites.dart';
+import 'package:nahpu/services/providers/personnel.dart';
 import 'package:nahpu/screens/shared/features.dart';
 import 'package:nahpu/screens/shared/fields.dart';
 import 'package:nahpu/services/database/database.dart';
@@ -68,6 +69,47 @@ class DateForm extends ConsumerWidget {
           NarrativeCompanion(date: db.Value(null)),
         );
       }
+    );
+  }
+}
+
+class WriterForm extends ConsumerWidget {
+  const WriterForm({
+    super.key,
+    required this.narrativeId,
+    required this.narrativeCtr,
+  });
+
+  final int narrativeId;
+  final NarrativeFormCtrModel narrativeCtr;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<PersonnelData> personnelList = [];
+    final personnelEntry = ref.watch(projectPersonnelProvider);
+    personnelEntry.whenData(
+      (personnelEntry) => personnelList = personnelEntry,
+    );
+
+    return DropdownButtonFormField<String?>(
+      initialValue: narrativeCtr.writerCtr,
+      isExpanded: true,
+      decoration: const InputDecoration(
+        labelText: 'Writer',
+        hintText: 'Choose a person name',
+      ),
+      items: personnelList
+          .map(
+            (e) => DropdownMenuItem(
+              value: e.uuid,
+              child: CommonDropdownText(text: e.name ?? ''),
+            ),
+          )
+          .toList(),
+      onChanged: (String? uuid) async {
+        narrativeCtr.writerCtr = uuid;
+        await NarrativeServices(ref: ref).updateNarrativeWriter(narrativeId, uuid);
+      },
     );
   }
 }

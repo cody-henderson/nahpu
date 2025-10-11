@@ -57,6 +57,10 @@ class NarrativeFormState extends ConsumerState<NarrativeForm> {
                     narrativeId: widget.narrativeId,
                     narrativeCtr: widget.narrativeCtr,
                   ),
+                  WriterForm(
+                    narrativeId: widget.narrativeId,
+                    narrativeCtr: widget.narrativeCtr,
+                  ),
                 ],
               ),
             ),
