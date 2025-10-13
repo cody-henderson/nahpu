@@ -32,6 +32,7 @@ class MammalMeasurementFormsState
   MammalMeasurementCtrModel ctr = MammalMeasurementCtrModel.empty();
   TextEditingController headBodyLengthCtr = TextEditingController();
   TextEditingController tailHeadBodyPercentCtr = TextEditingController();
+  String? _hblErrorText;
 
   @override
   void initState() {
@@ -62,18 +63,17 @@ class MammalMeasurementFormsState
               hintText: 'Enter TTL',
               isLastField: false,
               isDouble: true,
+              errorText: _hblErrorText,
               onChanged: (String? value) {
-                if (value != null && value.isNotEmpty) {
                   setState(() {
                     _getHBTailPercent();
                     SpecimenServices(ref: ref).updateMammalMeasurement(
                       widget.specimenUuid,
                       MammalMeasurementCompanion(
-                        totalLength: db.Value(double.tryParse(value) ?? 0),
+                        totalLength: db.Value(double.tryParse(value ?? '') ?? 0),
                       ),
                     );
                   });
-                }
               },
             ),
             CommonNumField(
@@ -82,18 +82,17 @@ class MammalMeasurementFormsState
               hintText: 'Enter TL',
               isDouble: true,
               isLastField: false,
+              errorText: _hblErrorText,
               onChanged: (String? value) {
-                if (value != null && value.isNotEmpty) {
                   setState(() {
                     _getHBTailPercent();
                     SpecimenServices(ref: ref).updateMammalMeasurement(
                       widget.specimenUuid,
                       MammalMeasurementCompanion(
-                        tailLength: db.Value(double.tryParse(value)),
+                        tailLength: db.Value(double.tryParse(value ?? '') ?? 0),
                       ),
                     );
                   });
-                }
               },
             ),
           ],
@@ -361,11 +360,12 @@ class MammalMeasurementFormsState
       tailLengthText: ctr.tailLengthCtr.text,
     );
 
-    ({String headAndBodyText, String percentTailText})? results =
+    ({String headAndBodyText, String percentTailText, String errorText})? results =
         service.getHBandTailPercentage();
 
     headBodyLengthCtr.text = results?.headAndBodyText ?? '';
     tailHeadBodyPercentCtr.text = results?.percentTailText ?? '';
+    _hblErrorText = results?.errorText ?? '';
   }
 }
 
