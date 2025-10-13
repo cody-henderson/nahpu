@@ -690,15 +690,23 @@ class MammalMeasurementServices {
   final String totalLengthText;
   final String tailLengthText;
 
-  ({String headAndBodyText, String percentTailText})? getHBandTailPercentage() {
+  ({String headAndBodyText, String percentTailText, String errorText})? getHBandTailPercentage() {
     double? totalLength =
         totalLengthText.isNotEmpty ? double.tryParse(totalLengthText) : null;
     double? tailLength =
         tailLengthText.isNotEmpty ? double.tryParse(tailLengthText) : null;
     if (totalLength == null || tailLength == null || totalLength < 1) {
       return null;
+    } 
+    
+    double? headBodyLength = totalLength - tailLength;
+    if (headBodyLength <= 0) {
+      return (
+        headAndBodyText: '',
+        percentTailText: '',
+        errorText: 'Total length should not be less than or equal to tail length.',
+      );
     } else {
-      double headBodyLength = (totalLength - tailLength);
       String headAndBodyText = headBodyLength.truncateZeroFixed(1);
       String tailHeadBodyPercent =
           (tailLength / headBodyLength * 100).truncateZeroFixed(1);
@@ -706,7 +714,8 @@ class MammalMeasurementServices {
 
       return (
         headAndBodyText: headAndBodyText,
-        percentTailText: percentTailText
+        percentTailText: percentTailText,
+        errorText: '',
       );
     }
   }

@@ -242,6 +242,7 @@ class CommonNumField extends ConsumerWidget {
     required this.isLastField,
     this.isDouble = false,
     this.isSigned = false,
+    this.errorText,
   });
 
   final String labelText;
@@ -252,6 +253,7 @@ class CommonNumField extends ConsumerWidget {
   final bool isDouble;
   final bool enabled;
   final bool isSigned;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -261,10 +263,13 @@ class CommonNumField extends ConsumerWidget {
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
+        errorText: errorText,
+        errorMaxLines: 3,
       ),
-      inputFormatters: isDouble
-          ? [FilteringTextInputFormatter.allow(RegExp(r"[0-9.-]"))]
-          : [FilteringTextInputFormatter.digitsOnly],
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+            RegExp('${isSigned ? r'^-?' : ''}${r'\d*'}${isDouble ? r'\.?\d*' : ''}'))
+      ],
       keyboardType:
           TextInputType.numberWithOptions(decimal: isDouble, signed: isSigned),
       onChanged: onChanged,
