@@ -59,6 +59,7 @@ class ProjectFormCtrModel {
     required this.descriptionCtr,
     required this.pICtr,
     required this.locationCtr,
+    required this.timeZoneCtr,
     required this.startDateCtr,
     required this.endDateCtr,
     required this.createdCtr,
@@ -68,6 +69,7 @@ class ProjectFormCtrModel {
   TextEditingController descriptionCtr;
   TextEditingController pICtr;
   TextEditingController locationCtr;
+  TextEditingController timeZoneCtr;
   DateEditingController startDateCtr;
   DateEditingController endDateCtr;
   String? createdCtr;
@@ -77,6 +79,7 @@ class ProjectFormCtrModel {
         descriptionCtr: TextEditingController(),
         pICtr: TextEditingController(),
         locationCtr: TextEditingController(),
+        timeZoneCtr: TextEditingController(),
         startDateCtr: DateEditingController(),
         endDateCtr: DateEditingController(),
         createdCtr: null,
@@ -88,6 +91,7 @@ class ProjectFormCtrModel {
         descriptionCtr: TextEditingController(text: data?.description ?? ''),
         pICtr: TextEditingController(text: data?.principalInvestigator ?? ''),
         locationCtr: TextEditingController(text: data?.location ?? ''),
+        timeZoneCtr: TextEditingController(text: data?.timeZone),
         startDateCtr: DateEditingController(date: data?.startDate),
         endDateCtr: DateEditingController(date: data?.endDate),
         createdCtr: data?.created,
@@ -98,6 +102,7 @@ class ProjectFormCtrModel {
     descriptionCtr.text = data.description ?? '';
     pICtr.text = data.principalInvestigator ?? '';
     locationCtr.text = data.location ?? '';
+    timeZoneCtr.text = data.timeZone ?? '';
     startDateCtr.date = data.startDate ?? '';
     endDateCtr.date = data.endDate ?? '';
     createdCtr = data.created ?? '';
@@ -108,6 +113,7 @@ class ProjectFormCtrModel {
     descriptionCtr.dispose();
     pICtr.dispose();
     locationCtr.dispose();
+    timeZoneCtr.dispose();
     startDateCtr.dispose();
     endDateCtr.dispose();
   }

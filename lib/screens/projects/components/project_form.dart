@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:drift/drift.dart' as db;
+import 'package:timezone/timezone.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/services/types/controllers.dart';
@@ -137,6 +138,15 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                 ),
                 Visibility(
                   visible: _showMore ||
+                      widget.projectCtr.timeZoneCtr.text.isNotEmpty,
+                  child: TimeZoneField(
+                    projectCtr: widget.projectCtr,
+                    onChanged: (_) {
+                      _validateEditing();
+                    },)
+                ),                
+                Visibility(
+                  visible: _showMore ||
                       widget.projectCtr.startDateCtr.text.isNotEmpty,
                   child: TextField(
                     controller: widget.projectCtr.startDateCtr,
@@ -235,6 +245,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
         widget.projectCtr.descriptionCtr.text.isNotEmpty &&
         widget.projectCtr.pICtr.text.isNotEmpty &&
         widget.projectCtr.locationCtr.text.isNotEmpty &&
+        widget.projectCtr.timeZoneCtr.text.isNotEmpty &&
         widget.projectCtr.startDateCtr.text.isNotEmpty &&
         widget.projectCtr.endDateCtr.text.isNotEmpty;
   }
@@ -262,6 +273,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
+      timeZone: db.Value(widget.projectCtr.timeZoneCtr.text),
       startDate: db.Value(widget.projectCtr.startDateCtr.date),
       endDate: db.Value(widget.projectCtr.endDateCtr.date),
       created: db.Value(getSystemDateTime()),
@@ -277,6 +289,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
+      timeZone: db.Value(widget.projectCtr.timeZoneCtr.text),
       startDate: db.Value(widget.projectCtr.startDateCtr.date),
       endDate: db.Value(widget.projectCtr.endDateCtr.date),
       created: db.Value(widget.projectCtr.createdCtr),
@@ -291,6 +304,24 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       context,
       MaterialPageRoute(builder: (context) => const Dashboard()),
     );
+  }
+}
+
+extension LocationDropdownText on Location {
+
+  String toText() {
+
+    if (name == 'UTC') return '(UTC) Coordinated Universal Time';
+
+    final utcOffset = (currentTimeZone.offset / 3.6e6);
+    final plusMinus = utcOffset >= 0 ? '+' : '-';
+    final utcOffsetHours = utcOffset.toInt();
+    final utcOffsetMinutes = ((utcOffset % 1.0) * 60).toInt();
+    
+    final paddedHour = utcOffsetHours.abs().toString().padLeft(2,'0');
+    final paddedMinutes = utcOffsetMinutes.toString().padLeft(2,'0');
+
+    return '(UTC$plusMinus$paddedHour:$paddedMinutes) $name';
   }
 }
 
@@ -335,6 +366,63 @@ class ProjectFormField extends StatelessWidget {
       onChanged: onChanged,
     );
   }
+}
+
+class TimeZoneField extends ConsumerWidget {
+  const TimeZoneField({
+    super.key,
+    required this.projectCtr,
+    required this.onChanged,
+  });
+
+  final ProjectFormCtrModel projectCtr;
+  final Null Function(String?)? onChanged;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return DropdownButtonFormField<String>(
+      initialValue: projectCtr.timeZoneCtr.text,
+      decoration: const InputDecoration(
+        labelText: 'Timezone',
+        hintText: 'Choose a timezone'
+      ),
+      items: _timeZoneDropdown(),
+      onChanged: (String? value) {
+        if (value != null) {
+          projectCtr.timeZoneCtr.text = value;        
+        }
+        onChanged!(value);
+      },
+    );
+  }
+
+  List<DropdownMenuItem<String>> _timeZoneDropdown() {
+    final locations = timeZoneDatabase.locations.values.toList();
+    print(locations.map((e) => e.name).toList().where((e) => e == '').length);
+
+    // Sort locations by UTC offset, then name
+    locations.sort((a,b) {
+      int offsetCompare = a.currentTimeZone.offset.compareTo(b.currentTimeZone.offset);
+      if (offsetCompare != 0) {
+        return offsetCompare;
+      }
+      return a.name.compareTo(b.name);
+    });
+
+    final locationItems = locations
+        .map((e) => DropdownMenuItem<String>(
+          value: e.name,
+          child: CommonDropdownText(text: LocationDropdownText(e).toText())))
+        .toList();
+
+    final chooseOneItem = DropdownMenuItem(
+      value: '', child: HintDropdownText(text: 'Choose a timezone')
+    );
+
+    locationItems.insert(0, chooseOneItem);
+
+    return locationItems;
+  }  
 }
 
 class TaxonGroupFields extends ConsumerWidget {
