@@ -12,10 +12,42 @@ import 'package:nahpu/services/types/export.dart';
 import 'package:drift/drift.dart' as db;
 import 'package:nahpu/services/utility_services.dart';
 
-class TaxonRegistryLayout extends StatelessWidget {
+class TaxonRegistryLayout extends StatefulWidget {
   const TaxonRegistryLayout({super.key, required this.children});
 
   final List<Widget> children;
+
+  @override
+  State<TaxonRegistryLayout> createState() => _TaxonRegistryLayoutState();
+}
+
+class _TaxonRegistryLayoutState extends State<TaxonRegistryLayout> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonScrollbar(
+      scrollController: _scrollController,
+      child: ListView(
+        controller: _scrollController, // Assign the controller
+        scrollDirection: Axis.horizontal,
+        itemExtent: 340,
+        children: widget.children,
+      ),
+    );
+  }
+}
+
+class SliderView extends StatelessWidget {
+  const SliderView({super.key, required this.items});
+
+  final List<Widget> items;
 
   @override
   Widget build(BuildContext context) {
