@@ -562,7 +562,7 @@ class IdTile extends ConsumerWidget {
                 isLastField: true,
                 onChanged: (String? value) {
                   if (value != null) {
-                    SpecimenServices(ref: ref).updateSpecimen(
+                    SpecimenServices(ref: ref).updateSpecimenSkipInvalidation(
                       specimenUuid,
                       SpecimenCompanion(
                         museumID: db.Value(value),
