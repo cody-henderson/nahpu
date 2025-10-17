@@ -33,6 +33,10 @@ class ProjectInfo extends ConsumerWidget {
           text: projectData?.location,
         ),
         ProjectInfoText(
+          title: 'Time zone: ',
+          text: projectData?.timeZone,
+        ),        
+        ProjectInfoText(
           title: 'Start date: ',
           text: dateStdToDateDisplay(projectData?.startDate),
         ),

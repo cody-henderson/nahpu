@@ -41,6 +41,13 @@ class Project extends Table with TableInfo<Project, ProjectData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _timeZoneMeta =
+      const VerificationMeta('timeZone');
+  late final GeneratedColumn<String> timeZone = GeneratedColumn<String>(
+      'timeZone', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _startDateMeta =
       const VerificationMeta('startDate');
   late final GeneratedColumn<String> startDate = GeneratedColumn<String>(
@@ -76,6 +83,7 @@ class Project extends Table with TableInfo<Project, ProjectData> {
         description,
         principalInvestigator,
         location,
+        timeZone,
         startDate,
         endDate,
         created,
@@ -119,6 +127,10 @@ class Project extends Table with TableInfo<Project, ProjectData> {
       context.handle(_locationMeta,
           location.isAcceptableOrUnknown(data['location']!, _locationMeta));
     }
+    if (data.containsKey('timeZone')) {
+      context.handle(_timeZoneMeta,
+          timeZone.isAcceptableOrUnknown(data['timeZone']!, _timeZoneMeta));
+    }
     if (data.containsKey('startDate')) {
       context.handle(_startDateMeta,
           startDate.isAcceptableOrUnknown(data['startDate']!, _startDateMeta));
@@ -156,6 +168,8 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           DriftSqlType.string, data['${effectivePrefix}principalInvestigator']),
       location: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location']),
+      timeZone: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}timeZone']),
       startDate: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}startDate']),
       endDate: attachedDatabase.typeMapping
@@ -182,6 +196,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
   final String? description;
   final String? principalInvestigator;
   final String? location;
+  final String? timeZone;
   final String? startDate;
   final String? endDate;
   final String? created;
@@ -192,6 +207,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       this.description,
       this.principalInvestigator,
       this.location,
+      this.timeZone,
       this.startDate,
       this.endDate,
       this.created,
@@ -209,6 +225,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
     }
     if (!nullToAbsent || location != null) {
       map['location'] = Variable<String>(location);
+    }
+    if (!nullToAbsent || timeZone != null) {
+      map['timeZone'] = Variable<String>(timeZone);
     }
     if (!nullToAbsent || startDate != null) {
       map['startDate'] = Variable<String>(startDate);
@@ -238,6 +257,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       location: location == null && nullToAbsent
           ? const Value.absent()
           : Value(location),
+      timeZone: timeZone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(timeZone),
       startDate: startDate == null && nullToAbsent
           ? const Value.absent()
           : Value(startDate),
@@ -263,6 +285,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       principalInvestigator:
           serializer.fromJson<String?>(json['principalInvestigator']),
       location: serializer.fromJson<String?>(json['location']),
+      timeZone: serializer.fromJson<String?>(json['timeZone']),
       startDate: serializer.fromJson<String?>(json['startDate']),
       endDate: serializer.fromJson<String?>(json['endDate']),
       created: serializer.fromJson<String?>(json['created']),
@@ -279,6 +302,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       'principalInvestigator':
           serializer.toJson<String?>(principalInvestigator),
       'location': serializer.toJson<String?>(location),
+      'timeZone': serializer.toJson<String?>(timeZone),
       'startDate': serializer.toJson<String?>(startDate),
       'endDate': serializer.toJson<String?>(endDate),
       'created': serializer.toJson<String?>(created),
@@ -292,6 +316,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           Value<String?> description = const Value.absent(),
           Value<String?> principalInvestigator = const Value.absent(),
           Value<String?> location = const Value.absent(),
+          Value<String?> timeZone = const Value.absent(),
           Value<String?> startDate = const Value.absent(),
           Value<String?> endDate = const Value.absent(),
           Value<String?> created = const Value.absent(),
@@ -304,6 +329,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
             ? principalInvestigator.value
             : this.principalInvestigator,
         location: location.present ? location.value : this.location,
+        timeZone: timeZone.present ? timeZone.value : this.timeZone,
         startDate: startDate.present ? startDate.value : this.startDate,
         endDate: endDate.present ? endDate.value : this.endDate,
         created: created.present ? created.value : this.created,
@@ -320,6 +346,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           ? data.principalInvestigator.value
           : this.principalInvestigator,
       location: data.location.present ? data.location.value : this.location,
+      timeZone: data.timeZone.present ? data.timeZone.value : this.timeZone,
       startDate: data.startDate.present ? data.startDate.value : this.startDate,
       endDate: data.endDate.present ? data.endDate.value : this.endDate,
       created: data.created.present ? data.created.value : this.created,
@@ -337,6 +364,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           ..write('description: $description, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
+          ..write('timeZone: $timeZone, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('created: $created, ')
@@ -352,6 +380,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       description,
       principalInvestigator,
       location,
+      timeZone,
       startDate,
       endDate,
       created,
@@ -365,6 +394,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           other.description == this.description &&
           other.principalInvestigator == this.principalInvestigator &&
           other.location == this.location &&
+          other.timeZone == this.timeZone &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
           other.created == this.created &&
@@ -377,6 +407,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
   final Value<String?> description;
   final Value<String?> principalInvestigator;
   final Value<String?> location;
+  final Value<String?> timeZone;
   final Value<String?> startDate;
   final Value<String?> endDate;
   final Value<String?> created;
@@ -388,6 +419,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.description = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
+    this.timeZone = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
     this.created = const Value.absent(),
@@ -400,6 +432,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.description = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
+    this.timeZone = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
     this.created = const Value.absent(),
@@ -413,6 +446,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     Expression<String>? description,
     Expression<String>? principalInvestigator,
     Expression<String>? location,
+    Expression<String>? timeZone,
     Expression<String>? startDate,
     Expression<String>? endDate,
     Expression<String>? created,
@@ -426,6 +460,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       if (principalInvestigator != null)
         'principalInvestigator': principalInvestigator,
       if (location != null) 'location': location,
+      if (timeZone != null) 'timeZone': timeZone,
       if (startDate != null) 'startDate': startDate,
       if (endDate != null) 'endDate': endDate,
       if (created != null) 'created': created,
@@ -440,6 +475,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       Value<String?>? description,
       Value<String?>? principalInvestigator,
       Value<String?>? location,
+      Value<String?>? timeZone,
       Value<String?>? startDate,
       Value<String?>? endDate,
       Value<String?>? created,
@@ -452,6 +488,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       principalInvestigator:
           principalInvestigator ?? this.principalInvestigator,
       location: location ?? this.location,
+      timeZone: timeZone ?? this.timeZone,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       created: created ?? this.created,
@@ -479,6 +516,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     if (location.present) {
       map['location'] = Variable<String>(location.value);
     }
+    if (timeZone.present) {
+      map['timeZone'] = Variable<String>(timeZone.value);
+    }
     if (startDate.present) {
       map['startDate'] = Variable<String>(startDate.value);
     }
@@ -505,6 +545,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
           ..write('description: $description, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
+          ..write('timeZone: $timeZone, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('created: $created, ')
@@ -12485,6 +12526,7 @@ typedef $ProjectCreateCompanionBuilder = ProjectCompanion Function({
   Value<String?> description,
   Value<String?> principalInvestigator,
   Value<String?> location,
+  Value<String?> timeZone,
   Value<String?> startDate,
   Value<String?> endDate,
   Value<String?> created,
@@ -12497,6 +12539,7 @@ typedef $ProjectUpdateCompanionBuilder = ProjectCompanion Function({
   Value<String?> description,
   Value<String?> principalInvestigator,
   Value<String?> location,
+  Value<String?> timeZone,
   Value<String?> startDate,
   Value<String?> endDate,
   Value<String?> created,
@@ -12527,6 +12570,9 @@ class $ProjectFilterComposer extends Composer<_$Database, Project> {
 
   ColumnFilters<String> get location => $composableBuilder(
       column: $table.location, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get timeZone => $composableBuilder(
+      column: $table.timeZone, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get startDate => $composableBuilder(
       column: $table.startDate, builder: (column) => ColumnFilters(column));
@@ -12565,6 +12611,9 @@ class $ProjectOrderingComposer extends Composer<_$Database, Project> {
   ColumnOrderings<String> get location => $composableBuilder(
       column: $table.location, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get timeZone => $composableBuilder(
+      column: $table.timeZone, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get startDate => $composableBuilder(
       column: $table.startDate, builder: (column) => ColumnOrderings(column));
 
@@ -12601,6 +12650,9 @@ class $ProjectAnnotationComposer extends Composer<_$Database, Project> {
 
   GeneratedColumn<String> get location =>
       $composableBuilder(column: $table.location, builder: (column) => column);
+
+  GeneratedColumn<String> get timeZone =>
+      $composableBuilder(column: $table.timeZone, builder: (column) => column);
 
   GeneratedColumn<String> get startDate =>
       $composableBuilder(column: $table.startDate, builder: (column) => column);
@@ -12643,6 +12695,7 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> description = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
+            Value<String?> timeZone = const Value.absent(),
             Value<String?> startDate = const Value.absent(),
             Value<String?> endDate = const Value.absent(),
             Value<String?> created = const Value.absent(),
@@ -12655,6 +12708,7 @@ class $ProjectTableManager extends RootTableManager<
             description: description,
             principalInvestigator: principalInvestigator,
             location: location,
+            timeZone: timeZone,
             startDate: startDate,
             endDate: endDate,
             created: created,
@@ -12667,6 +12721,7 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> description = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
+            Value<String?> timeZone = const Value.absent(),
             Value<String?> startDate = const Value.absent(),
             Value<String?> endDate = const Value.absent(),
             Value<String?> created = const Value.absent(),
@@ -12679,6 +12734,7 @@ class $ProjectTableManager extends RootTableManager<
             description: description,
             principalInvestigator: principalInvestigator,
             location: location,
+            timeZone: timeZone,
             startDate: startDate,
             endDate: endDate,
             created: created,

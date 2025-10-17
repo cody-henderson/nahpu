@@ -82,11 +82,14 @@ class Database extends _$Database {
         print('Migration v6: failed to add narrative.writerId: $e');
       }
     }
+
+    // Timezones
+    await m.addColumn(project, project.timeZone);
   }
 
   Future<void> _migrateFromVersion5(Migrator m) async {
     // New specimen record columns
-    // await m.addColumn(specimen, specimen.collectionDate);
+    await m.addColumn(specimen, specimen.collectionDate);
     await m.addColumn(specimen, specimen.relativeCaptureTime);
 
     // Migrate specimen relative capture times to new column
