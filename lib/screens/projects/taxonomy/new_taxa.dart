@@ -54,7 +54,7 @@ class SliderView extends StatelessWidget {
     return ListView(
       scrollDirection: Axis.horizontal,
       itemExtent: 340,
-      children: children,
+      children: items,
     );
   }
 }

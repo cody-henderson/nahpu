@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:drift/drift.dart' as db;
@@ -137,14 +138,14 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                   ),
                 ),
                 Visibility(
-                  visible: _showMore ||
-                      widget.projectCtr.timeZoneCtr.text.isNotEmpty,
-                  child: TimeZoneField(
-                    projectCtr: widget.projectCtr,
-                    onChanged: (_) {
-                      _validateEditing();
-                    },)
-                ),                
+                    visible: _showMore ||
+                        widget.projectCtr.timeZoneCtr.text.isNotEmpty,
+                    child: TimeZoneField(
+                      projectCtr: widget.projectCtr,
+                      onChanged: (_) {
+                        _validateEditing();
+                      },
+                    )),
                 Visibility(
                   visible: _showMore ||
                       widget.projectCtr.startDateCtr.text.isNotEmpty,
@@ -156,9 +157,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     ),
                     onTap: () async {
                       DateTime? selectedDate = await _showDate(
-                        context,
-                        widget.projectCtr.startDateCtr.dateTime
-                      );
+                          context, widget.projectCtr.startDateCtr.dateTime);
                       if (selectedDate != null) {
                         widget.projectCtr.startDateCtr.dateTime = selectedDate;
                       }
@@ -177,12 +176,9 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     ),
                     onTap: () async {
                       DateTime? selectedDate = await _showDate(
-                        context,
-                        widget.projectCtr.endDateCtr.dateTime
-                      );
+                          context, widget.projectCtr.endDateCtr.dateTime);
                       if (selectedDate != null) {
-                        widget.projectCtr.endDateCtr.dateTime =
-                            selectedDate;
+                        widget.projectCtr.endDateCtr.dateTime = selectedDate;
                       }
                       _validateEditing();
                     },
@@ -308,18 +304,16 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
 }
 
 extension LocationDropdownText on Location {
-
   String toText() {
-
     if (name == 'UTC') return '(UTC) Coordinated Universal Time';
 
     final utcOffset = (currentTimeZone.offset / 3.6e6);
     final plusMinus = utcOffset >= 0 ? '+' : '-';
     final utcOffsetHours = utcOffset.toInt();
     final utcOffsetMinutes = ((utcOffset % 1.0) * 60).toInt();
-    
-    final paddedHour = utcOffsetHours.abs().toString().padLeft(2,'0');
-    final paddedMinutes = utcOffsetMinutes.toString().padLeft(2,'0');
+
+    final paddedHour = utcOffsetHours.abs().toString().padLeft(2, '0');
+    final paddedMinutes = utcOffsetMinutes.toString().padLeft(2, '0');
 
     return '(UTC$plusMinus$paddedHour:$paddedMinutes) $name';
   }
@@ -383,13 +377,11 @@ class TimeZoneField extends ConsumerWidget {
     return DropdownButtonFormField<String>(
       initialValue: projectCtr.timeZoneCtr.text,
       decoration: const InputDecoration(
-        labelText: 'Timezone',
-        hintText: 'Choose a timezone'
-      ),
+          labelText: 'Timezone', hintText: 'Choose a timezone'),
       items: _timeZoneDropdown(),
       onChanged: (String? value) {
         if (value != null) {
-          projectCtr.timeZoneCtr.text = value;        
+          projectCtr.timeZoneCtr.text = value;
         }
         onChanged!(value);
       },
@@ -398,11 +390,14 @@ class TimeZoneField extends ConsumerWidget {
 
   List<DropdownMenuItem<String>> _timeZoneDropdown() {
     final locations = timeZoneDatabase.locations.values.toList();
-    print(locations.map((e) => e.name).toList().where((e) => e == '').length);
+    if (kDebugMode) {
+      print(locations.map((e) => e.name).toList().where((e) => e == '').length);
+    }
 
     // Sort locations by UTC offset, then name
-    locations.sort((a,b) {
-      int offsetCompare = a.currentTimeZone.offset.compareTo(b.currentTimeZone.offset);
+    locations.sort((a, b) {
+      int offsetCompare =
+          a.currentTimeZone.offset.compareTo(b.currentTimeZone.offset);
       if (offsetCompare != 0) {
         return offsetCompare;
       }
@@ -411,18 +406,17 @@ class TimeZoneField extends ConsumerWidget {
 
     final locationItems = locations
         .map((e) => DropdownMenuItem<String>(
-          value: e.name,
-          child: CommonDropdownText(text: LocationDropdownText(e).toText())))
+            value: e.name,
+            child: CommonDropdownText(text: LocationDropdownText(e).toText())))
         .toList();
 
     final chooseOneItem = DropdownMenuItem(
-      value: '', child: HintDropdownText(text: 'Choose a timezone')
-    );
+        value: '', child: HintDropdownText(text: 'Choose a timezone'));
 
     locationItems.insert(0, chooseOneItem);
 
     return locationItems;
-  }  
+  }
 }
 
 class TaxonGroupFields extends ConsumerWidget {
