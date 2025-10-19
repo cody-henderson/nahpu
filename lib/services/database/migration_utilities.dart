@@ -54,7 +54,7 @@ Future<void> migrateProjectDateTimeFormat(Migrator m) async {
 
         if (updatedDateString != dateString) {
           doUpdate = true;
-          updateStrings.add('$field = \'$updatedDateString\'' );
+          updateStrings.add('$field = \'$updatedDateString\'');
         }
       }
     }
@@ -63,8 +63,7 @@ Future<void> migrateProjectDateTimeFormat(Migrator m) async {
       db.customStatement('''UPDATE project 
         SET ${updateStrings.join(',')} 
         WHERE uuid = '${projectJson['uuid']}'
-        '''
-      );
+        ''');
     }
   }
 }
@@ -93,7 +92,7 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
 
           if (updatedDateString != dateString) {
             doSpecimenUpdate = true;
-            updateStrings.add('$field = \'$updatedDateString\'' );
+            updateStrings.add('$field = \'$updatedDateString\'');
           }
         }
       }
@@ -106,7 +105,7 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
 
           if (updatedTimeString != timeString) {
             doSpecimenUpdate = true;
-            updateStrings.add('$field = \'$updatedTimeString\'' );
+            updateStrings.add('$field = \'$updatedTimeString\'');
           }
         }
       }
@@ -115,8 +114,7 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
         db.customStatement('''UPDATE specimen 
           SET ${updateStrings.join(',')} 
           WHERE uuid = '${specimenJson['uuid']}'
-          '''
-        );
+          ''');
       }
 
       // Specimen part update
@@ -152,8 +150,7 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
             SET dateTaken = '${specimenPartJson['dateTaken']}',
               timeTaken = '${specimenPartJson['timeTaken']}'
             WHERE id = '${specimenPartJson['id']}'
-            '''
-          );
+            ''');
         }
       }
 
@@ -172,8 +169,7 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
             db.customStatement('''UPDATE associatedData 
               SET date = '${associatedDatumJson['date']}'
               WHERE primaryId = '${associatedDatumJson['primaryId']}'
-              '''
-            );
+              ''');
           }
         }
       }
@@ -200,8 +196,7 @@ Future<void> migrateNarrativeDateTimeFormat(Migrator m) async {
           db.customStatement('''UPDATE narrative 
             SET date = '$updatedDateString'
             WHERE id = '${narrativeJson['id']}'
-            '''
-          );
+            ''');
         }
       }
     }
@@ -232,7 +227,7 @@ Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
 
           if (updatedDateString != dateString) {
             doUpdate = true;
-            updateStrings.add('$field = \'$updatedDateString\'' );
+            updateStrings.add('$field = \'$updatedDateString\'');
           }
         }
       }
@@ -245,7 +240,7 @@ Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
 
           if (updatedTimeString != timeString) {
             doUpdate = true;
-            updateStrings.add('$field = \'$updatedTimeString\'' );
+            updateStrings.add('$field = \'$updatedTimeString\'');
           }
         }
       }
@@ -254,8 +249,7 @@ Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
         db.customStatement('''UPDATE collEvent 
           SET ${updateStrings.join(',')} 
           WHERE id = '${eventJson['id']}'
-          '''
-        );
+          ''');
       }
     }
   }
