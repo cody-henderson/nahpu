@@ -222,9 +222,8 @@ class _CustomDatePickerDialogState extends State<CustomDatePickerDialog>
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: OverflowBar(
-              spacing: 8,
+            alignment: AlignmentDirectional.centerStart,
+            child: Row(
               children: <Widget>[
                 // Added Clear button to default date picker dialog widget
                 TextButton(
@@ -235,6 +234,7 @@ class _CustomDatePickerDialogState extends State<CustomDatePickerDialog>
                     widget.clearText ?? _defaultClearText,
                   ),
                 ),
+                Spacer(),
                 TextButton(
                   style: datePickerTheme.cancelButtonStyle ??
                       defaults.cancelButtonStyle,
@@ -3233,10 +3233,8 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog>
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 36),
               child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: OverflowBar(
-                  spacing: 8,
-                  overflowAlignment: OverflowBarAlignment.end,
+                alignment: AlignmentDirectional.centerStart,
+                child: Row(
                   children: <Widget>[
                     // Added Clear button to default date picker dialog widget
                     TextButton(
@@ -3247,6 +3245,7 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog>
                         widget.clearText ?? _defaultClearText,
                       ),
                     ),
+                    Spacer(),
                     TextButton(
                       style: pickerTheme.cancelButtonStyle ??
                           defaultTheme.cancelButtonStyle,
