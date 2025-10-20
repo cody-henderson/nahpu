@@ -222,9 +222,8 @@ class _CustomDatePickerDialogState extends State<CustomDatePickerDialog>
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: OverflowBar(
-              spacing: 8,
+            alignment: AlignmentDirectional.centerStart,
+            child: Row(
               children: <Widget>[
                 // Added Clear button to default date picker dialog widget
                 TextButton(
@@ -235,6 +234,7 @@ class _CustomDatePickerDialogState extends State<CustomDatePickerDialog>
                     widget.clearText ?? _defaultClearText,
                   ),
                 ),
+                Spacer(),
                 TextButton(
                   style: datePickerTheme.cancelButtonStyle ??
                       defaults.cancelButtonStyle,
@@ -3233,10 +3233,8 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog>
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 36),
               child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: OverflowBar(
-                  spacing: 8,
-                  overflowAlignment: OverflowBarAlignment.end,
+                alignment: AlignmentDirectional.centerStart,
+                child: Row(
                   children: <Widget>[
                     // Added Clear button to default date picker dialog widget
                     TextButton(
@@ -3247,6 +3245,7 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog>
                         widget.clearText ?? _defaultClearText,
                       ),
                     ),
+                    Spacer(),
                     TextButton(
                       style: pickerTheme.cancelButtonStyle ??
                           defaultTheme.cancelButtonStyle,
@@ -4063,10 +4062,6 @@ class _TimePickerDefaultsM2 extends _TimePickerDefaults {
       ),
       hintStyle: hourMinuteTextStyle.copyWith(
           color: _colors.onSurface.withOpacity(0.36)),
-      // Prevent the error text from appearing.
-      // TODO(rami-a): Remove this workaround once
-      // https://github.com/flutter/flutter/issues/54104
-      // is fixed.
       errorStyle: const TextStyle(fontSize: 0, height: 1),
     );
   }
@@ -4358,9 +4353,6 @@ class _TimePickerDefaultsM3 extends _TimePickerDefaults {
   @override
   TextStyle get hourMinuteTextStyle {
     return MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
-      // TODO(tahatesser): Update this when https://github.com/flutter/flutter/issues/131247 is fixed.
-      // This is using the correct text style from Material 3 spec.
-      // https://m3.material.io/components/time-pickers/specs#fd0b6939-edab-4058-82e1-93d163945215
       return switch (entryMode) {
         TimePickerEntryMode.dial || TimePickerEntryMode.dialOnly => _textTheme
             .displayLarge!
@@ -4407,10 +4399,6 @@ class _TimePickerDefaultsM3 extends _TimePickerDefaults {
       ),
       hintStyle: hourMinuteTextStyle.copyWith(
           color: _colors.onSurface.withOpacity(0.36)),
-      // Prevent the error text from appearing.
-      // TODO(rami-a): Remove this workaround once
-      // https://github.com/flutter/flutter/issues/54104
-      // is fixed.
       errorStyle: const TextStyle(fontSize: 0),
     );
   }
@@ -4423,15 +4411,11 @@ class _TimePickerDefaultsM3 extends _TimePickerDefaults {
 
   @override
   MaterialStateProperty<Color?>? get timeSelectorSeparatorColor {
-    // TODO(tahatesser): Update this when tokens are available.
-    // This is taken from https://m3.material.io/components/time-pickers/specs.
     return MaterialStatePropertyAll<Color>(_colors.onSurface);
   }
 
   @override
   MaterialStateProperty<TextStyle?>? get timeSelectorSeparatorTextStyle {
-    // TODO(tahatesser): Update this when tokens are available.
-    // This is taken from https://m3.material.io/components/time-pickers/specs.
     return MaterialStatePropertyAll<TextStyle?>(_textTheme.displayLarge);
   }
 }
