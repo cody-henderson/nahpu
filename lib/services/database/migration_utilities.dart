@@ -43,6 +43,7 @@ Future<void> migrateProjectDateTimeFormat(Migrator m) async {
 
   for (final projectData in projects) {
     bool doUpdate = false;
+    List<String> updateStrings = [];
     final projectJson = projectData.toJson();
 
     for (final field in fieldsToUpdate) {
@@ -53,15 +54,16 @@ Future<void> migrateProjectDateTimeFormat(Migrator m) async {
 
         if (updatedDateString != dateString) {
           doUpdate = true;
-          projectJson[field] = updatedDateString;
+          updateStrings.add('$field = \'$updatedDateString\'');
         }
       }
     }
 
     if (doUpdate) {
-      final updatedProjectData = ProjectData.fromJson(projectJson);
-      ProjectQuery(db).updateProjectEntry(
-          updatedProjectData.uuid, updatedProjectData.toCompanion(false));
+      db.customStatement('''UPDATE project 
+        SET ${updateStrings.join(',')} 
+        WHERE uuid = '${projectJson['uuid']}'
+        ''');
     }
   }
 }
@@ -79,6 +81,7 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
     for (final specimenData in specimens) {
       // Specimen general records and capture records update
       bool doSpecimenUpdate = false;
+      List<String> updateStrings = [];
       final specimenJson = specimenData.toJson();
 
       for (final field in specimenDateFields) {
@@ -89,7 +92,7 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
 
           if (updatedDateString != dateString) {
             doSpecimenUpdate = true;
-            specimenJson[field] = updatedDateString;
+            updateStrings.add('$field = \'$updatedDateString\'');
           }
         }
       }
@@ -102,15 +105,16 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
 
           if (updatedTimeString != timeString) {
             doSpecimenUpdate = true;
-            specimenJson[field] = updatedTimeString;
+            updateStrings.add('$field = \'$updatedTimeString\'');
           }
         }
       }
 
       if (doSpecimenUpdate) {
-        final updatedSpecimenData = SpecimenData.fromJson(specimenJson);
-        SpecimenQuery(db).updateSpecimenEntry(
-            updatedSpecimenData.uuid, updatedSpecimenData.toCompanion(false));
+        db.customStatement('''UPDATE specimen 
+          SET ${updateStrings.join(',')} 
+          WHERE uuid = '${specimenJson['uuid']}'
+          ''');
       }
 
       // Specimen part update
@@ -142,11 +146,11 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
         }
 
         if (doSpecimenPartUpdate) {
-          final updatedSpecimenPartData =
-              SpecimenPartData.fromJson(specimenPartJson);
-          SpecimenPartQuery(db).updateSpecimenPart(
-              updatedSpecimenPartData.id as int,
-              updatedSpecimenPartData.toCompanion(false));
+          db.customStatement('''UPDATE specimenPart 
+            SET dateTaken = '${specimenPartJson['dateTaken']}',
+              timeTaken = '${specimenPartJson['timeTaken']}'
+            WHERE id = '${specimenPartJson['id']}'
+            ''');
         }
       }
 
@@ -162,12 +166,10 @@ Future<void> migrateSpecimenDateTimeFormat(Migrator m) async {
           final updatedDateString = convertDateString(dateString);
 
           if (updatedDateString != dateString) {
-            associatedDatumJson['date'] = updatedDateString;
-            final updatedAssociatedDatum =
-                AssociatedDataData.fromJson(associatedDatumJson);
-            AssociatedDataQuery(db).updateAssociatedData(
-                updatedAssociatedDatum.primaryId as int,
-                updatedAssociatedDatum.toCompanion(false));
+            db.customStatement('''UPDATE associatedData 
+              SET date = '${associatedDatumJson['date']}'
+              WHERE primaryId = '${associatedDatumJson['primaryId']}'
+              ''');
           }
         }
       }
@@ -191,10 +193,10 @@ Future<void> migrateNarrativeDateTimeFormat(Migrator m) async {
         final updatedDateString = convertDateString(dateString);
 
         if (updatedDateString != dateString) {
-          narrativeJson['date'] = updatedDateString;
-          final updatedNarrativeData = NarrativeData.fromJson(narrativeJson);
-          NarrativeQuery(db).updateNarrativeEntry(
-              updatedNarrativeData.id, updatedNarrativeData.toCompanion(false));
+          db.customStatement('''UPDATE narrative 
+            SET date = '$updatedDateString'
+            WHERE id = '${narrativeJson['id']}'
+            ''');
         }
       }
     }
@@ -214,6 +216,7 @@ Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
 
     for (final eventData in eventList) {
       bool doUpdate = false;
+      List<String> updateStrings = [];
       final eventJson = eventData.toJson();
 
       for (final field in collEventDateFields) {
@@ -224,7 +227,7 @@ Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
 
           if (updatedDateString != dateString) {
             doUpdate = true;
-            eventJson[field] = updatedDateString;
+            updateStrings.add('$field = \'$updatedDateString\'');
           }
         }
       }
@@ -237,15 +240,16 @@ Future<void> migrateCollEventDateTimeFormat(Migrator m) async {
 
           if (updatedTimeString != timeString) {
             doUpdate = true;
-            eventJson[field] = updatedTimeString;
+            updateStrings.add('$field = \'$updatedTimeString\'');
           }
         }
       }
 
       if (doUpdate) {
-        final updatedEventData = CollEventData.fromJson(eventJson);
-        CollEventQuery(db).updateCollEventEntry(
-            updatedEventData.id, updatedEventData.toCompanion(false));
+        db.customStatement('''UPDATE collEvent 
+          SET ${updateStrings.join(',')} 
+          WHERE id = '${eventJson['id']}'
+          ''');
       }
     }
   }
