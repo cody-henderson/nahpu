@@ -46,20 +46,35 @@ class NarrativeFormState extends ConsumerState<NarrativeForm> {
             FormCard(
               isPrimary: true,
               isWithTitle: false,
-              child: AdaptiveLayout(
-                useHorizontalLayout: useHorizontalLayout,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  DateForm(
-                    narrativeId: widget.narrativeId,
-                    narrativeCtr: widget.narrativeCtr,
+                  AdaptiveLayout(
+                    useHorizontalLayout: useHorizontalLayout,
+                    children: [
+                      DateForm(
+                        narrativeId: widget.narrativeId,
+                        narrativeCtr: widget.narrativeCtr,
+                      ),
+                      // Time field to the right of Date
+                      TimeForm(
+                        narrativeId: widget.narrativeId,
+                        narrativeCtr: widget.narrativeCtr,
+                      ),
+                    ],
                   ),
-                  SiteForm(
-                    narrativeId: widget.narrativeId,
-                    narrativeCtr: widget.narrativeCtr,
-                  ),
-                  WriterForm(
-                    narrativeId: widget.narrativeId,
-                    narrativeCtr: widget.narrativeCtr,
+                  AdaptiveLayout(
+                    useHorizontalLayout: useHorizontalLayout,
+                    children: [
+                      SiteForm(
+                        narrativeId: widget.narrativeId,
+                        narrativeCtr: widget.narrativeCtr,
+                      ),
+                      WriterForm(
+                        narrativeId: widget.narrativeId,
+                        narrativeCtr: widget.narrativeCtr,
+                      ),
+                    ],
                   ),
                 ],
               ),

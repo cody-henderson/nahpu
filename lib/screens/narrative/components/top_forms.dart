@@ -58,17 +58,74 @@ class DateForm extends ConsumerWidget {
       lastDate: DateTime.now(),
       controller: narrativeCtr.dateCtr,
       onTap: () {
+        // If time is set, combine date and time into a single datetime string
+        String? dateStd = narrativeCtr.dateCtr.date;
+        String? timeStd = narrativeCtr.timeCtr.time;
+        String? combined;
+        if (dateStd != null && dateStd.isNotEmpty && timeStd != null && timeStd.isNotEmpty) {
+          combined = '\$dateStd \$timeStd';
+        } else {
+          combined = dateStd;
+        }
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
-          NarrativeCompanion(date: db.Value(narrativeCtr.dateCtr.date)),
+          NarrativeCompanion(date: db.Value(combined)),
         );
       },
       onClear: () {
+        // Clearing date should remove the stored date (and time)
+        narrativeCtr.timeCtr.time = null;
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
           NarrativeCompanion(date: db.Value(null)),
         );
       }
+    );
+  }
+}
+
+class TimeForm extends ConsumerWidget {
+  const TimeForm({
+    super.key,
+    required this.narrativeId,
+    required this.narrativeCtr,
+  });
+
+  final int narrativeId;
+  final NarrativeFormCtrModel narrativeCtr;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CommonTimeField(
+      labelText: 'Time',
+      hintText: 'Enter time',
+      initialTime: TimeOfDay.now(),
+      controller: narrativeCtr.timeCtr,
+      onTap: () {
+        // Combine with date if available
+        String? dateStd = narrativeCtr.dateCtr.date;
+        String? timeStd = narrativeCtr.timeCtr.time;
+        String? combined;
+        if (dateStd != null && dateStd.isNotEmpty && timeStd != null && timeStd.isNotEmpty) {
+          combined = '$dateStd $timeStd';
+        } else if (timeStd != null && timeStd.isNotEmpty) {
+          // If only time set, store as today with time
+          final today = DateTime.now();
+          final dateOnly = '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+          combined = '$dateOnly $timeStd';
+        }
+        NarrativeServices(ref: ref).updateNarrative(
+          narrativeId,
+          NarrativeCompanion(date: db.Value(combined)),
+        );
+      },
+      onClear: () {
+        // Clearing time keeps date only
+        NarrativeServices(ref: ref).updateNarrative(
+          narrativeId,
+          NarrativeCompanion(date: db.Value(narrativeCtr.dateCtr.date)),
+        );
+      },
     );
   }
 }
