@@ -32,6 +32,23 @@ class NarrativeFormState extends ConsumerState<NarrativeForm> {
 
   @override
   void dispose() {
+    // Persist date and time (if any) before disposing controllers so that
+    // unsaved changes are not lost when the user navigates away.
+    try {
+      String? dateStd = widget.narrativeCtr.dateCtr.date;
+      String? timeStd = widget.narrativeCtr.timeCtr.time;
+
+      NarrativeServices(ref: ref).updateNarrative(
+        widget.narrativeId,
+        NarrativeCompanion(
+          date: db.Value(dateStd),
+          time: db.Value(timeStd),
+        ),
+      );
+    } catch (e) {
+      // Best-effort: don't crash on dispose if update fails.
+    }
+
     widget.narrativeCtr.dispose();
     super.dispose();
   }

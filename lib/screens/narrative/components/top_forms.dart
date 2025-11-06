@@ -58,18 +58,15 @@ class DateForm extends ConsumerWidget {
       lastDate: DateTime.now(),
       controller: narrativeCtr.dateCtr,
       onTap: () {
-        // If time is set, combine date and time into a single datetime string
+        // Persist date and (optionally) time into separate columns.
         String? dateStd = narrativeCtr.dateCtr.date;
         String? timeStd = narrativeCtr.timeCtr.time;
-        String? combined;
-        if (dateStd != null && dateStd.isNotEmpty && timeStd != null && timeStd.isNotEmpty) {
-          combined = '\$dateStd \$timeStd';
-        } else {
-          combined = dateStd;
-        }
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
-          NarrativeCompanion(date: db.Value(combined)),
+          NarrativeCompanion(
+            date: db.Value(dateStd),
+            time: db.Value(timeStd),
+          ),
         );
       },
       onClear: () {
@@ -77,7 +74,7 @@ class DateForm extends ConsumerWidget {
         narrativeCtr.timeCtr.time = null;
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
-          NarrativeCompanion(date: db.Value(null)),
+          NarrativeCompanion(date: db.Value(null), time: db.Value(null)),
         );
       }
     );
@@ -96,34 +93,41 @@ class TimeForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    void persistTimeChange(String? timeStd) {
+      String? dateStd = narrativeCtr.dateCtr.date;
+      
+      // If setting a time and no date is set, default to today
+      if (timeStd != null && timeStd.isNotEmpty && (dateStd == null || dateStd.isEmpty)) {
+        final today = DateTime.now();
+        dateStd = '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+        // Update both date and time
+        NarrativeServices(ref: ref).updateNarrative(
+          narrativeId,
+          NarrativeCompanion(
+            date: db.Value(dateStd),
+            time: db.Value(timeStd),
+          ),
+        );
+      } else {
+        // Just update time
+        NarrativeServices(ref: ref).updateNarrative(
+          narrativeId,
+          NarrativeCompanion(time: db.Value(timeStd)),
+        );
+      }
+    }
+
     return CommonTimeField(
       labelText: 'Time',
       hintText: 'Enter time',
       initialTime: TimeOfDay.now(),
       controller: narrativeCtr.timeCtr,
-      onTap: () {
-        // Combine with date if available
-        String? dateStd = narrativeCtr.dateCtr.date;
-        String? timeStd = narrativeCtr.timeCtr.time;
-        String? combined;
-        if (dateStd != null && dateStd.isNotEmpty && timeStd != null && timeStd.isNotEmpty) {
-          combined = '$dateStd $timeStd';
-        } else if (timeStd != null && timeStd.isNotEmpty) {
-          // If only time set, store as today with time
-          final today = DateTime.now();
-          final dateOnly = '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
-          combined = '$dateOnly $timeStd';
-        }
-        NarrativeServices(ref: ref).updateNarrative(
-          narrativeId,
-          NarrativeCompanion(date: db.Value(combined)),
-        );
-      },
+      onTap: () => persistTimeChange(narrativeCtr.timeCtr.time),
       onClear: () {
         // Clearing time keeps date only
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
-          NarrativeCompanion(date: db.Value(narrativeCtr.dateCtr.date)),
+          NarrativeCompanion(time: db.Value(null)),
         );
       },
     );
