@@ -64,6 +64,19 @@ class CatalogFmtSelectionState extends ConsumerState<CatalogFmtSelection> {
                   Navigator.pop(context);
                 },
               ),
+              CommonSettingTile(
+                title: 'Amphibians',
+                icon: MdiIcons.waterOutline,
+                trailing: widget.selectedFmt == 'Amphibians'
+                    ? const Icon(Icons.check)
+                    : null,
+                onTap: () {
+                  ref
+                      .read(catalogFmtNotifierProvider.notifier)
+                      .set(CatalogFmt.amphibians);
+                  Navigator.pop(context);
+                },
+              ),
             ],
           )
         ],

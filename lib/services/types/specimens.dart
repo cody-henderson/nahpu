@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nahpu/services/types/export.dart';
 
-enum CatalogFmt { generalMammals, birds, bats }
+enum CatalogFmt { generalMammals, birds, bats, amphibians }
 
 // Database read through index.
 // and stored as integer.
@@ -122,6 +122,8 @@ SpecimenRecordType matchCatalogFmtToRecordType(CatalogFmt catalogFmt) {
       return SpecimenRecordType.generalMammals;
     case CatalogFmt.bats:
       return SpecimenRecordType.bats;
+    case CatalogFmt.amphibians:
+      return SpecimenRecordType.amphibians;
   }
 }
 
@@ -159,6 +161,8 @@ String matchCatFmtToTaxonGroup(CatalogFmt catalogFmt) {
       return 'General Mammals';
     case CatalogFmt.bats:
       return 'Bats';
+    case CatalogFmt.amphibians:
+      return 'Amphibians';
   }
 }
 
@@ -170,6 +174,9 @@ IconData matchCatFmtToPartIcon(CatalogFmt catalogFmt) {
       return MdiIcons.pawOutline;
     case CatalogFmt.bats:
       return MdiIcons.pawOutline;
+    case CatalogFmt.amphibians:
+      // TODO: Placeholder
+      return MdiIcons.waterOutline;
   }
 }
 
@@ -181,6 +188,9 @@ IconData matchCatFmtToIcon(CatalogFmt catalogFmt, bool isSelected) {
       return isSelected ? MdiIcons.paw : MdiIcons.pawOutline;
     case CatalogFmt.bats:
       return MdiIcons.bat;
+    case CatalogFmt.amphibians:
+      // TODO: Placeholder
+      return MdiIcons.waterOutline;
   }
 }
 
@@ -210,6 +220,9 @@ String matchCatalogFmtToIconPath(CatalogFmt fmt) {
       return 'assets/icons/bat.svg';
     case CatalogFmt.birds:
       return 'assets/icons/bird.svg';
+    case CatalogFmt.amphibians:
+      // TODO: Placeholder
+      return 'assets/icons/clue.svg';
   }
 }
 

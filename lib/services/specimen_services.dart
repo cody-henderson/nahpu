@@ -47,6 +47,10 @@ class SpecimenServices extends AppServices {
       case CatalogFmt.generalMammals:
         _createMammalSpecimen(specimenUuid);
         break;
+      case CatalogFmt.amphibians:
+        // TODO: Placeholder
+        _createMammalSpecimen(specimenUuid);
+        break;
     }
     invalidateSpecimenList();
     return specimenUuid;
@@ -286,6 +290,10 @@ class SpecimenServices extends AppServices {
       case CatalogFmt.generalMammals:
         await deleteMammalMeasurements(specimenUuid);
         break;
+      case CatalogFmt.amphibians:
+        // TODO: Placeholder
+        await deleteMammalMeasurements(specimenUuid);
+        break;
     }
     await SpecimenQuery(dbAccess).deleteAllSpecimenMedias(specimenUuid);
     await SpecimenQuery(dbAccess).deleteSpecimen(specimenUuid);
@@ -306,6 +314,10 @@ class SpecimenServices extends AppServices {
           await deleteMammalMeasurements(specimen.uuid);
           break;
         case CatalogFmt.generalMammals:
+          await deleteMammalMeasurements(specimen.uuid);
+          break;
+        case CatalogFmt.amphibians:
+          // TODO: Placeholder
           await deleteMammalMeasurements(specimen.uuid);
           break;
       }
@@ -690,21 +702,23 @@ class MammalMeasurementServices {
   final String totalLengthText;
   final String tailLengthText;
 
-  ({String headAndBodyText, String percentTailText, String errorText})? getHBandTailPercentage() {
+  ({String headAndBodyText, String percentTailText, String errorText})?
+      getHBandTailPercentage() {
     double? totalLength =
         totalLengthText.isNotEmpty ? double.tryParse(totalLengthText) : null;
     double? tailLength =
         tailLengthText.isNotEmpty ? double.tryParse(tailLengthText) : null;
     if (totalLength == null || tailLength == null || totalLength < 1) {
       return null;
-    } 
-    
+    }
+
     double? headBodyLength = totalLength - tailLength;
     if (headBodyLength <= 0) {
       return (
         headAndBodyText: '',
         percentTailText: '',
-        errorText: 'Total length should not be less than or equal to tail length.',
+        errorText:
+            'Total length should not be less than or equal to tail length.',
       );
     } else {
       String headAndBodyText = headBodyLength.truncateZeroFixed(1);
