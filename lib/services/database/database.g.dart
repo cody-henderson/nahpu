@@ -4871,6 +4871,12 @@ class Narrative extends Table with TableInfo<Narrative, NarrativeData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _timeMeta = const VerificationMeta('time');
+  late final GeneratedColumn<String> time = GeneratedColumn<String>(
+      'time', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _siteIDMeta = const VerificationMeta('siteID');
   late final GeneratedColumn<int> siteID = GeneratedColumn<int>(
       'siteID', aliasedName, true,
@@ -4900,7 +4906,7 @@ class Narrative extends Table with TableInfo<Narrative, NarrativeData> {
       $customConstraints: 'REFERENCES media(primaryId)');
   @override
   List<GeneratedColumn> get $columns =>
-      [id, projectUuid, date, siteID, writerId, narrative, mediaID];
+      [id, projectUuid, date, time, siteID, writerId, narrative, mediaID];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -4923,6 +4929,10 @@ class Narrative extends Table with TableInfo<Narrative, NarrativeData> {
     if (data.containsKey('date')) {
       context.handle(
           _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    }
+    if (data.containsKey('time')) {
+      context.handle(
+          _timeMeta, time.isAcceptableOrUnknown(data['time']!, _timeMeta));
     }
     if (data.containsKey('siteID')) {
       context.handle(_siteIDMeta,
@@ -4955,6 +4965,8 @@ class Narrative extends Table with TableInfo<Narrative, NarrativeData> {
           .read(DriftSqlType.string, data['${effectivePrefix}projectUuid']),
       date: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}date']),
+      time: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}time']),
       siteID: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}siteID']),
       writerId: attachedDatabase.typeMapping
@@ -4984,6 +4996,9 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
   final int id;
   final String? projectUuid;
   final String? date;
+  final String? time;
+
+  /// Add this new column
   final int? siteID;
   final String? writerId;
   final String? narrative;
@@ -4992,6 +5007,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
       {required this.id,
       this.projectUuid,
       this.date,
+      this.time,
       this.siteID,
       this.writerId,
       this.narrative,
@@ -5005,6 +5021,9 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
     }
     if (!nullToAbsent || date != null) {
       map['date'] = Variable<String>(date);
+    }
+    if (!nullToAbsent || time != null) {
+      map['time'] = Variable<String>(time);
     }
     if (!nullToAbsent || siteID != null) {
       map['siteID'] = Variable<int>(siteID);
@@ -5028,6 +5047,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
           ? const Value.absent()
           : Value(projectUuid),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      time: time == null && nullToAbsent ? const Value.absent() : Value(time),
       siteID:
           siteID == null && nullToAbsent ? const Value.absent() : Value(siteID),
       writerId: writerId == null && nullToAbsent
@@ -5049,6 +5069,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
       id: serializer.fromJson<int>(json['id']),
       projectUuid: serializer.fromJson<String?>(json['projectUuid']),
       date: serializer.fromJson<String?>(json['date']),
+      time: serializer.fromJson<String?>(json['time']),
       siteID: serializer.fromJson<int?>(json['siteID']),
       writerId: serializer.fromJson<String?>(json['writerId']),
       narrative: serializer.fromJson<String?>(json['narrative']),
@@ -5062,6 +5083,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
       'id': serializer.toJson<int>(id),
       'projectUuid': serializer.toJson<String?>(projectUuid),
       'date': serializer.toJson<String?>(date),
+      'time': serializer.toJson<String?>(time),
       'siteID': serializer.toJson<int?>(siteID),
       'writerId': serializer.toJson<String?>(writerId),
       'narrative': serializer.toJson<String?>(narrative),
@@ -5073,6 +5095,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
           {int? id,
           Value<String?> projectUuid = const Value.absent(),
           Value<String?> date = const Value.absent(),
+          Value<String?> time = const Value.absent(),
           Value<int?> siteID = const Value.absent(),
           Value<String?> writerId = const Value.absent(),
           Value<String?> narrative = const Value.absent(),
@@ -5081,6 +5104,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
         id: id ?? this.id,
         projectUuid: projectUuid.present ? projectUuid.value : this.projectUuid,
         date: date.present ? date.value : this.date,
+        time: time.present ? time.value : this.time,
         siteID: siteID.present ? siteID.value : this.siteID,
         writerId: writerId.present ? writerId.value : this.writerId,
         narrative: narrative.present ? narrative.value : this.narrative,
@@ -5092,6 +5116,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
       projectUuid:
           data.projectUuid.present ? data.projectUuid.value : this.projectUuid,
       date: data.date.present ? data.date.value : this.date,
+      time: data.time.present ? data.time.value : this.time,
       siteID: data.siteID.present ? data.siteID.value : this.siteID,
       writerId: data.writerId.present ? data.writerId.value : this.writerId,
       narrative: data.narrative.present ? data.narrative.value : this.narrative,
@@ -5105,6 +5130,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
           ..write('id: $id, ')
           ..write('projectUuid: $projectUuid, ')
           ..write('date: $date, ')
+          ..write('time: $time, ')
           ..write('siteID: $siteID, ')
           ..write('writerId: $writerId, ')
           ..write('narrative: $narrative, ')
@@ -5114,8 +5140,8 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, projectUuid, date, siteID, writerId, narrative, mediaID);
+  int get hashCode => Object.hash(
+      id, projectUuid, date, time, siteID, writerId, narrative, mediaID);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5123,6 +5149,7 @@ class NarrativeData extends DataClass implements Insertable<NarrativeData> {
           other.id == this.id &&
           other.projectUuid == this.projectUuid &&
           other.date == this.date &&
+          other.time == this.time &&
           other.siteID == this.siteID &&
           other.writerId == this.writerId &&
           other.narrative == this.narrative &&
@@ -5133,6 +5160,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
   final Value<int> id;
   final Value<String?> projectUuid;
   final Value<String?> date;
+  final Value<String?> time;
   final Value<int?> siteID;
   final Value<String?> writerId;
   final Value<String?> narrative;
@@ -5141,6 +5169,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
     this.id = const Value.absent(),
     this.projectUuid = const Value.absent(),
     this.date = const Value.absent(),
+    this.time = const Value.absent(),
     this.siteID = const Value.absent(),
     this.writerId = const Value.absent(),
     this.narrative = const Value.absent(),
@@ -5150,6 +5179,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
     this.id = const Value.absent(),
     this.projectUuid = const Value.absent(),
     this.date = const Value.absent(),
+    this.time = const Value.absent(),
     this.siteID = const Value.absent(),
     this.writerId = const Value.absent(),
     this.narrative = const Value.absent(),
@@ -5159,6 +5189,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
     Expression<int>? id,
     Expression<String>? projectUuid,
     Expression<String>? date,
+    Expression<String>? time,
     Expression<int>? siteID,
     Expression<String>? writerId,
     Expression<String>? narrative,
@@ -5168,6 +5199,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
       if (id != null) 'id': id,
       if (projectUuid != null) 'projectUuid': projectUuid,
       if (date != null) 'date': date,
+      if (time != null) 'time': time,
       if (siteID != null) 'siteID': siteID,
       if (writerId != null) 'writerId': writerId,
       if (narrative != null) 'narrative': narrative,
@@ -5179,6 +5211,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
       {Value<int>? id,
       Value<String?>? projectUuid,
       Value<String?>? date,
+      Value<String?>? time,
       Value<int?>? siteID,
       Value<String?>? writerId,
       Value<String?>? narrative,
@@ -5187,6 +5220,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
       id: id ?? this.id,
       projectUuid: projectUuid ?? this.projectUuid,
       date: date ?? this.date,
+      time: time ?? this.time,
       siteID: siteID ?? this.siteID,
       writerId: writerId ?? this.writerId,
       narrative: narrative ?? this.narrative,
@@ -5205,6 +5239,9 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
     }
     if (date.present) {
       map['date'] = Variable<String>(date.value);
+    }
+    if (time.present) {
+      map['time'] = Variable<String>(time.value);
     }
     if (siteID.present) {
       map['siteID'] = Variable<int>(siteID.value);
@@ -5227,6 +5264,7 @@ class NarrativeCompanion extends UpdateCompanion<NarrativeData> {
           ..write('id: $id, ')
           ..write('projectUuid: $projectUuid, ')
           ..write('date: $date, ')
+          ..write('time: $time, ')
           ..write('siteID: $siteID, ')
           ..write('writerId: $writerId, ')
           ..write('narrative: $narrative, ')
@@ -15017,6 +15055,7 @@ typedef $NarrativeCreateCompanionBuilder = NarrativeCompanion Function({
   Value<int> id,
   Value<String?> projectUuid,
   Value<String?> date,
+  Value<String?> time,
   Value<int?> siteID,
   Value<String?> writerId,
   Value<String?> narrative,
@@ -15026,6 +15065,7 @@ typedef $NarrativeUpdateCompanionBuilder = NarrativeCompanion Function({
   Value<int> id,
   Value<String?> projectUuid,
   Value<String?> date,
+  Value<String?> time,
   Value<int?> siteID,
   Value<String?> writerId,
   Value<String?> narrative,
@@ -15067,6 +15107,9 @@ class $NarrativeFilterComposer extends Composer<_$Database, Narrative> {
 
   ColumnFilters<String> get date => $composableBuilder(
       column: $table.date, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get time => $composableBuilder(
+      column: $table.time, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get siteID => $composableBuilder(
       column: $table.siteID, builder: (column) => ColumnFilters(column));
@@ -15115,6 +15158,9 @@ class $NarrativeOrderingComposer extends Composer<_$Database, Narrative> {
   ColumnOrderings<String> get date => $composableBuilder(
       column: $table.date, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get time => $composableBuilder(
+      column: $table.time, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get siteID => $composableBuilder(
       column: $table.siteID, builder: (column) => ColumnOrderings(column));
 
@@ -15161,6 +15207,9 @@ class $NarrativeAnnotationComposer extends Composer<_$Database, Narrative> {
 
   GeneratedColumn<String> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<String> get time =>
+      $composableBuilder(column: $table.time, builder: (column) => column);
 
   GeneratedColumn<int> get siteID =>
       $composableBuilder(column: $table.siteID, builder: (column) => column);
@@ -15218,6 +15267,7 @@ class $NarrativeTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String?> projectUuid = const Value.absent(),
             Value<String?> date = const Value.absent(),
+            Value<String?> time = const Value.absent(),
             Value<int?> siteID = const Value.absent(),
             Value<String?> writerId = const Value.absent(),
             Value<String?> narrative = const Value.absent(),
@@ -15227,6 +15277,7 @@ class $NarrativeTableManager extends RootTableManager<
             id: id,
             projectUuid: projectUuid,
             date: date,
+            time: time,
             siteID: siteID,
             writerId: writerId,
             narrative: narrative,
@@ -15236,6 +15287,7 @@ class $NarrativeTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String?> projectUuid = const Value.absent(),
             Value<String?> date = const Value.absent(),
+            Value<String?> time = const Value.absent(),
             Value<int?> siteID = const Value.absent(),
             Value<String?> writerId = const Value.absent(),
             Value<String?> narrative = const Value.absent(),
@@ -15245,6 +15297,7 @@ class $NarrativeTableManager extends RootTableManager<
             id: id,
             projectUuid: projectUuid,
             date: date,
+            time: time,
             siteID: siteID,
             writerId: writerId,
             narrative: narrative,
