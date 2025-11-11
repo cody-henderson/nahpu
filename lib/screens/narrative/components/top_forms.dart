@@ -58,17 +58,78 @@ class DateForm extends ConsumerWidget {
       lastDate: DateTime.now(),
       controller: narrativeCtr.dateCtr,
       onTap: () {
+        // Persist date and (optionally) time into separate columns.
+        String? dateStd = narrativeCtr.dateCtr.date;
+        String? timeStd = narrativeCtr.timeCtr.time;
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
-          NarrativeCompanion(date: db.Value(narrativeCtr.dateCtr.date)),
+          NarrativeCompanion(
+            date: db.Value(dateStd),
+            time: db.Value(timeStd),
+          ),
         );
       },
       onClear: () {
+        // Clearing date should remove the stored date (and time)
+        narrativeCtr.timeCtr.time = null;
         NarrativeServices(ref: ref).updateNarrative(
           narrativeId,
-          NarrativeCompanion(date: db.Value(null)),
+          NarrativeCompanion(date: db.Value(null), time: db.Value(null)),
         );
       }
+    );
+  }
+}
+
+class TimeForm extends ConsumerWidget {
+  const TimeForm({
+    super.key,
+    required this.narrativeId,
+    required this.narrativeCtr,
+  });
+
+  final int narrativeId;
+  final NarrativeFormCtrModel narrativeCtr;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    void persistTimeChange(String? timeStd) {
+      String? dateStd = narrativeCtr.dateCtr.date;
+      
+      // If setting a time and no date is set, default to today
+      if (timeStd != null && timeStd.isNotEmpty && (dateStd == null || dateStd.isEmpty)) {
+        final today = DateTime.now();
+        dateStd = '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+        // Update both date and time
+        NarrativeServices(ref: ref).updateNarrative(
+          narrativeId,
+          NarrativeCompanion(
+            date: db.Value(dateStd),
+            time: db.Value(timeStd),
+          ),
+        );
+      } else {
+        // Just update time
+        NarrativeServices(ref: ref).updateNarrative(
+          narrativeId,
+          NarrativeCompanion(time: db.Value(timeStd)),
+        );
+      }
+    }
+
+    return CommonTimeField(
+      labelText: 'Time',
+      hintText: 'Enter time',
+      initialTime: TimeOfDay.now(),
+      controller: narrativeCtr.timeCtr,
+      onTap: () => persistTimeChange(narrativeCtr.timeCtr.time),
+      onClear: () {
+        // Clearing time keeps date only
+        NarrativeServices(ref: ref).updateNarrative(
+          narrativeId,
+          NarrativeCompanion(time: db.Value(null)),
+        );
+      },
     );
   }
 }
