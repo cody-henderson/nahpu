@@ -11702,6 +11702,287 @@ class AvianMeasurementCompanion extends UpdateCompanion<AvianMeasurementData> {
   }
 }
 
+class HerpMeasurement extends Table
+    with TableInfo<HerpMeasurement, HerpMeasurementData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  HerpMeasurement(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _specimenUuidMeta =
+      const VerificationMeta('specimenUuid');
+  late final GeneratedColumn<String> specimenUuid = GeneratedColumn<String>(
+      'specimenUuid', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  static const VerificationMeta _ageMeta = const VerificationMeta('age');
+  late final GeneratedColumn<int> age = GeneratedColumn<int>(
+      'age', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _weightMeta = const VerificationMeta('weight');
+  late final GeneratedColumn<double> weight = GeneratedColumn<double>(
+      'weight', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _sexMeta = const VerificationMeta('sex');
+  late final GeneratedColumn<int> sex = GeneratedColumn<int>(
+      'sex', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  @override
+  List<GeneratedColumn> get $columns => [specimenUuid, age, weight, sex];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'herpMeasurement';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<HerpMeasurementData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('specimenUuid')) {
+      context.handle(
+          _specimenUuidMeta,
+          specimenUuid.isAcceptableOrUnknown(
+              data['specimenUuid']!, _specimenUuidMeta));
+    } else if (isInserting) {
+      context.missing(_specimenUuidMeta);
+    }
+    if (data.containsKey('age')) {
+      context.handle(
+          _ageMeta, age.isAcceptableOrUnknown(data['age']!, _ageMeta));
+    }
+    if (data.containsKey('weight')) {
+      context.handle(_weightMeta,
+          weight.isAcceptableOrUnknown(data['weight']!, _weightMeta));
+    }
+    if (data.containsKey('sex')) {
+      context.handle(
+          _sexMeta, sex.isAcceptableOrUnknown(data['sex']!, _sexMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  HerpMeasurementData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HerpMeasurementData(
+      specimenUuid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}specimenUuid'])!,
+      age: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}age']),
+      weight: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}weight']),
+      sex: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sex']),
+    );
+  }
+
+  @override
+  HerpMeasurement createAlias(String alias) {
+    return HerpMeasurement(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints =>
+      const ['FOREIGN KEY(specimenUuid)REFERENCES specimen(uuid)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class HerpMeasurementData extends DataClass
+    implements Insertable<HerpMeasurementData> {
+  final String specimenUuid;
+  final int? age;
+  final double? weight;
+  final int? sex;
+  const HerpMeasurementData(
+      {required this.specimenUuid, this.age, this.weight, this.sex});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['specimenUuid'] = Variable<String>(specimenUuid);
+    if (!nullToAbsent || age != null) {
+      map['age'] = Variable<int>(age);
+    }
+    if (!nullToAbsent || weight != null) {
+      map['weight'] = Variable<double>(weight);
+    }
+    if (!nullToAbsent || sex != null) {
+      map['sex'] = Variable<int>(sex);
+    }
+    return map;
+  }
+
+  HerpMeasurementCompanion toCompanion(bool nullToAbsent) {
+    return HerpMeasurementCompanion(
+      specimenUuid: Value(specimenUuid),
+      age: age == null && nullToAbsent ? const Value.absent() : Value(age),
+      weight:
+          weight == null && nullToAbsent ? const Value.absent() : Value(weight),
+      sex: sex == null && nullToAbsent ? const Value.absent() : Value(sex),
+    );
+  }
+
+  factory HerpMeasurementData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HerpMeasurementData(
+      specimenUuid: serializer.fromJson<String>(json['specimenUuid']),
+      age: serializer.fromJson<int?>(json['age']),
+      weight: serializer.fromJson<double?>(json['weight']),
+      sex: serializer.fromJson<int?>(json['sex']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'specimenUuid': serializer.toJson<String>(specimenUuid),
+      'age': serializer.toJson<int?>(age),
+      'weight': serializer.toJson<double?>(weight),
+      'sex': serializer.toJson<int?>(sex),
+    };
+  }
+
+  HerpMeasurementData copyWith(
+          {String? specimenUuid,
+          Value<int?> age = const Value.absent(),
+          Value<double?> weight = const Value.absent(),
+          Value<int?> sex = const Value.absent()}) =>
+      HerpMeasurementData(
+        specimenUuid: specimenUuid ?? this.specimenUuid,
+        age: age.present ? age.value : this.age,
+        weight: weight.present ? weight.value : this.weight,
+        sex: sex.present ? sex.value : this.sex,
+      );
+  HerpMeasurementData copyWithCompanion(HerpMeasurementCompanion data) {
+    return HerpMeasurementData(
+      specimenUuid: data.specimenUuid.present
+          ? data.specimenUuid.value
+          : this.specimenUuid,
+      age: data.age.present ? data.age.value : this.age,
+      weight: data.weight.present ? data.weight.value : this.weight,
+      sex: data.sex.present ? data.sex.value : this.sex,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HerpMeasurementData(')
+          ..write('specimenUuid: $specimenUuid, ')
+          ..write('age: $age, ')
+          ..write('weight: $weight, ')
+          ..write('sex: $sex')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(specimenUuid, age, weight, sex);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HerpMeasurementData &&
+          other.specimenUuid == this.specimenUuid &&
+          other.age == this.age &&
+          other.weight == this.weight &&
+          other.sex == this.sex);
+}
+
+class HerpMeasurementCompanion extends UpdateCompanion<HerpMeasurementData> {
+  final Value<String> specimenUuid;
+  final Value<int?> age;
+  final Value<double?> weight;
+  final Value<int?> sex;
+  final Value<int> rowid;
+  const HerpMeasurementCompanion({
+    this.specimenUuid = const Value.absent(),
+    this.age = const Value.absent(),
+    this.weight = const Value.absent(),
+    this.sex = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HerpMeasurementCompanion.insert({
+    required String specimenUuid,
+    this.age = const Value.absent(),
+    this.weight = const Value.absent(),
+    this.sex = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : specimenUuid = Value(specimenUuid);
+  static Insertable<HerpMeasurementData> custom({
+    Expression<String>? specimenUuid,
+    Expression<int>? age,
+    Expression<double>? weight,
+    Expression<int>? sex,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (specimenUuid != null) 'specimenUuid': specimenUuid,
+      if (age != null) 'age': age,
+      if (weight != null) 'weight': weight,
+      if (sex != null) 'sex': sex,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HerpMeasurementCompanion copyWith(
+      {Value<String>? specimenUuid,
+      Value<int?>? age,
+      Value<double?>? weight,
+      Value<int?>? sex,
+      Value<int>? rowid}) {
+    return HerpMeasurementCompanion(
+      specimenUuid: specimenUuid ?? this.specimenUuid,
+      age: age ?? this.age,
+      weight: weight ?? this.weight,
+      sex: sex ?? this.sex,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (specimenUuid.present) {
+      map['specimenUuid'] = Variable<String>(specimenUuid.value);
+    }
+    if (age.present) {
+      map['age'] = Variable<int>(age.value);
+    }
+    if (weight.present) {
+      map['weight'] = Variable<double>(weight.value);
+    }
+    if (sex.present) {
+      map['sex'] = Variable<int>(sex.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HerpMeasurementCompanion(')
+          ..write('specimenUuid: $specimenUuid, ')
+          ..write('age: $age, ')
+          ..write('weight: $weight, ')
+          ..write('sex: $sex, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class SpecimenPart extends Table
     with TableInfo<SpecimenPart, SpecimenPartData> {
   @override
@@ -12478,6 +12759,7 @@ abstract class _$Database extends GeneratedDatabase {
   late final PersonnelList personnelList = PersonnelList(this);
   late final MammalMeasurement mammalMeasurement = MammalMeasurement(this);
   late final AvianMeasurement avianMeasurement = AvianMeasurement(this);
+  late final HerpMeasurement herpMeasurement = HerpMeasurement(this);
   late final SpecimenPart specimenPart = SpecimenPart(this);
   Selectable<ListProjectResult> listProject() {
     return customSelect('SELECT uuid, name, created, lastAccessed FROM project',
@@ -12516,6 +12798,7 @@ abstract class _$Database extends GeneratedDatabase {
         personnelList,
         mammalMeasurement,
         avianMeasurement,
+        herpMeasurement,
         specimenPart
       ];
 }
@@ -18142,6 +18425,165 @@ typedef $AvianMeasurementProcessedTableManager = ProcessedTableManager<
     ),
     AvianMeasurementData,
     PrefetchHooks Function()>;
+typedef $HerpMeasurementCreateCompanionBuilder = HerpMeasurementCompanion
+    Function({
+  required String specimenUuid,
+  Value<int?> age,
+  Value<double?> weight,
+  Value<int?> sex,
+  Value<int> rowid,
+});
+typedef $HerpMeasurementUpdateCompanionBuilder = HerpMeasurementCompanion
+    Function({
+  Value<String> specimenUuid,
+  Value<int?> age,
+  Value<double?> weight,
+  Value<int?> sex,
+  Value<int> rowid,
+});
+
+class $HerpMeasurementFilterComposer
+    extends Composer<_$Database, HerpMeasurement> {
+  $HerpMeasurementFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get specimenUuid => $composableBuilder(
+      column: $table.specimenUuid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get age => $composableBuilder(
+      column: $table.age, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get sex => $composableBuilder(
+      column: $table.sex, builder: (column) => ColumnFilters(column));
+}
+
+class $HerpMeasurementOrderingComposer
+    extends Composer<_$Database, HerpMeasurement> {
+  $HerpMeasurementOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get specimenUuid => $composableBuilder(
+      column: $table.specimenUuid,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get age => $composableBuilder(
+      column: $table.age, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get sex => $composableBuilder(
+      column: $table.sex, builder: (column) => ColumnOrderings(column));
+}
+
+class $HerpMeasurementAnnotationComposer
+    extends Composer<_$Database, HerpMeasurement> {
+  $HerpMeasurementAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get specimenUuid => $composableBuilder(
+      column: $table.specimenUuid, builder: (column) => column);
+
+  GeneratedColumn<int> get age =>
+      $composableBuilder(column: $table.age, builder: (column) => column);
+
+  GeneratedColumn<double> get weight =>
+      $composableBuilder(column: $table.weight, builder: (column) => column);
+
+  GeneratedColumn<int> get sex =>
+      $composableBuilder(column: $table.sex, builder: (column) => column);
+}
+
+class $HerpMeasurementTableManager extends RootTableManager<
+    _$Database,
+    HerpMeasurement,
+    HerpMeasurementData,
+    $HerpMeasurementFilterComposer,
+    $HerpMeasurementOrderingComposer,
+    $HerpMeasurementAnnotationComposer,
+    $HerpMeasurementCreateCompanionBuilder,
+    $HerpMeasurementUpdateCompanionBuilder,
+    (
+      HerpMeasurementData,
+      BaseReferences<_$Database, HerpMeasurement, HerpMeasurementData>
+    ),
+    HerpMeasurementData,
+    PrefetchHooks Function()> {
+  $HerpMeasurementTableManager(_$Database db, HerpMeasurement table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $HerpMeasurementFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $HerpMeasurementOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $HerpMeasurementAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> specimenUuid = const Value.absent(),
+            Value<int?> age = const Value.absent(),
+            Value<double?> weight = const Value.absent(),
+            Value<int?> sex = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              HerpMeasurementCompanion(
+            specimenUuid: specimenUuid,
+            age: age,
+            weight: weight,
+            sex: sex,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String specimenUuid,
+            Value<int?> age = const Value.absent(),
+            Value<double?> weight = const Value.absent(),
+            Value<int?> sex = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              HerpMeasurementCompanion.insert(
+            specimenUuid: specimenUuid,
+            age: age,
+            weight: weight,
+            sex: sex,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $HerpMeasurementProcessedTableManager = ProcessedTableManager<
+    _$Database,
+    HerpMeasurement,
+    HerpMeasurementData,
+    $HerpMeasurementFilterComposer,
+    $HerpMeasurementOrderingComposer,
+    $HerpMeasurementAnnotationComposer,
+    $HerpMeasurementCreateCompanionBuilder,
+    $HerpMeasurementUpdateCompanionBuilder,
+    (
+      HerpMeasurementData,
+      BaseReferences<_$Database, HerpMeasurement, HerpMeasurementData>
+    ),
+    HerpMeasurementData,
+    PrefetchHooks Function()>;
 typedef $SpecimenPartCreateCompanionBuilder = SpecimenPartCompanion Function({
   Value<int?> id,
   Value<String?> specimenUuid,
@@ -18498,6 +18940,8 @@ class $DatabaseManager {
       $MammalMeasurementTableManager(_db, _db.mammalMeasurement);
   $AvianMeasurementTableManager get avianMeasurement =>
       $AvianMeasurementTableManager(_db, _db.avianMeasurement);
+  $HerpMeasurementTableManager get herpMeasurement =>
+      $HerpMeasurementTableManager(_db, _db.herpMeasurement);
   $SpecimenPartTableManager get specimenPart =>
       $SpecimenPartTableManager(_db, _db.specimenPart);
 }

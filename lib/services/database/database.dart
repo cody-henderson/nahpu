@@ -72,7 +72,7 @@ class Database extends _$Database {
     });
   }
 
-    Future<void> _migrateFromVersion6(Migrator m) async {
+  Future<void> _migrateFromVersion6(Migrator m) async {
     // v6: add writerId to narrative table. Best-effort: ignore if already present.
     try {
       await m.addColumn(narrative, narrative.writerId);
@@ -85,6 +85,9 @@ class Database extends _$Database {
 
     // Timezones
     await m.addColumn(project, project.timeZone);
+
+    // Herpetofauna measurements
+    await m.createTable(herpMeasurement);
   }
 
   Future<void> _migrateFromVersion5(Migrator m) async {

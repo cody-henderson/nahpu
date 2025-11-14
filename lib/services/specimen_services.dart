@@ -42,14 +42,11 @@ class SpecimenServices extends AppServices {
         _createBirdSpecimen(specimenUuid);
         break;
       case CatalogFmt.bats:
-        _createMammalSpecimen(specimenUuid);
-        break;
       case CatalogFmt.generalMammals:
         _createMammalSpecimen(specimenUuid);
         break;
       case CatalogFmt.herpetofauna:
-        // TODO: Placeholder
-        _createMammalSpecimen(specimenUuid);
+        _createHerpSpecimen(specimenUuid);
         break;
     }
     invalidateSpecimenList();
@@ -233,6 +230,20 @@ class SpecimenServices extends AppServices {
         .updateMammalMeasurements(specimenUuid, entries);
   }
 
+  void _createHerpSpecimen(String specimenUuid) {
+    HerpSpecimenQuery(dbAccess).createHerpMeasurements(
+        HerpMeasurementCompanion(specimenUuid: db.Value(specimenUuid)));
+  }
+
+  Future<HerpMeasurementData> getHerpMeasurementData(String specimenUuid) {
+    return HerpSpecimenQuery(dbAccess).getHerpMeasurementByUuid(specimenUuid);
+  }
+
+  void updateHerpMeasurement(
+      String specimenUuid, HerpMeasurementCompanion entries) {
+    HerpSpecimenQuery(dbAccess).updateHerpMeasurements(specimenUuid, entries);
+  }
+
   void _createBirdSpecimen(String specimenUuid) {
     AvianSpecimenQuery(dbAccess).createAvianMeasurements(
         AvianMeasurementCompanion(specimenUuid: db.Value(specimenUuid)));
@@ -277,6 +288,10 @@ class SpecimenServices extends AppServices {
     await MammalSpecimenQuery(dbAccess).deleteMammalMeasurements(specimenUuid);
   }
 
+  Future<void> deleteHerpMeasurements(String specimenUuid) async {
+    await HerpSpecimenQuery(dbAccess).deleteHerpMeasurements(specimenUuid);
+  }
+
   Future<void> deleteSpecimen(
       String specimenUuid, CatalogFmt catalogFmt) async {
     await deleteAllSpecimenParts(specimenUuid);
@@ -291,8 +306,7 @@ class SpecimenServices extends AppServices {
         await deleteMammalMeasurements(specimenUuid);
         break;
       case CatalogFmt.herpetofauna:
-        // TODO: Placeholder
-        await deleteMammalMeasurements(specimenUuid);
+        await deleteHerpMeasurements(specimenUuid);
         break;
     }
     await SpecimenQuery(dbAccess).deleteAllSpecimenMedias(specimenUuid);
@@ -317,8 +331,7 @@ class SpecimenServices extends AppServices {
           await deleteMammalMeasurements(specimen.uuid);
           break;
         case CatalogFmt.herpetofauna:
-          // TODO: Placeholder
-          await deleteMammalMeasurements(specimen.uuid);
+          await deleteHerpMeasurements(specimen.uuid);
           break;
       }
     }
