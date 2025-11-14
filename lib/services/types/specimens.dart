@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nahpu/services/types/export.dart';
 
-enum CatalogFmt { generalMammals, birds, bats, amphibians }
+enum CatalogFmt { generalMammals, birds, bats, herpetofauna }
 
 // Database read through index.
 // and stored as integer.
@@ -99,6 +99,7 @@ const List<String> taxonGroupList = [
   'Birds',
   'General Mammals',
   'Bats',
+  'Herpetofauna',
 ];
 
 CatalogFmt matchTaxonGroupToCatFmt(String? taxonGroup) {
@@ -109,6 +110,8 @@ CatalogFmt matchTaxonGroupToCatFmt(String? taxonGroup) {
       return CatalogFmt.generalMammals;
     case 'Bats':
       return CatalogFmt.bats;
+    case 'Herpetofauna':
+      return CatalogFmt.herpetofauna;
     default:
       return CatalogFmt.generalMammals;
   }
@@ -122,8 +125,8 @@ SpecimenRecordType matchCatalogFmtToRecordType(CatalogFmt catalogFmt) {
       return SpecimenRecordType.generalMammals;
     case CatalogFmt.bats:
       return SpecimenRecordType.bats;
-    case CatalogFmt.amphibians:
-      return SpecimenRecordType.amphibians;
+    case CatalogFmt.herpetofauna:
+      return SpecimenRecordType.herpetofauna;
   }
 }
 
@@ -135,6 +138,8 @@ String matchRecordTypeToTaxonGroup(SpecimenRecordType recordType) {
       return 'General Mammals';
     case SpecimenRecordType.bats:
       return 'Bats';
+    case SpecimenRecordType.herpetofauna:
+      return 'Herpetofauna';
     default:
       throw Exception('Invalid record type');
   }
@@ -148,6 +153,8 @@ SpecimenRecordType matchTaxonGroupToRecordType(String taxonGroup) {
       return SpecimenRecordType.generalMammals;
     case 'Bats':
       return SpecimenRecordType.bats;
+    case 'Herpetofauna':
+      return SpecimenRecordType.herpetofauna;
     default:
       return SpecimenRecordType.generalMammals;
   }
@@ -161,8 +168,8 @@ String matchCatFmtToTaxonGroup(CatalogFmt catalogFmt) {
       return 'General Mammals';
     case CatalogFmt.bats:
       return 'Bats';
-    case CatalogFmt.amphibians:
-      return 'Amphibians';
+    case CatalogFmt.herpetofauna:
+      return 'Herpetofauna';
   }
 }
 
@@ -174,9 +181,8 @@ IconData matchCatFmtToPartIcon(CatalogFmt catalogFmt) {
       return MdiIcons.pawOutline;
     case CatalogFmt.bats:
       return MdiIcons.pawOutline;
-    case CatalogFmt.amphibians:
-      // TODO: Placeholder
-      return MdiIcons.waterOutline;
+    case CatalogFmt.herpetofauna:
+      return MdiIcons.snake;
   }
 }
 
@@ -188,9 +194,8 @@ IconData matchCatFmtToIcon(CatalogFmt catalogFmt, bool isSelected) {
       return isSelected ? MdiIcons.paw : MdiIcons.pawOutline;
     case CatalogFmt.bats:
       return MdiIcons.bat;
-    case CatalogFmt.amphibians:
-      // TODO: Placeholder
-      return MdiIcons.waterOutline;
+    case CatalogFmt.herpetofauna:
+      return MdiIcons.snake;
   }
 }
 
@@ -220,7 +225,7 @@ String matchCatalogFmtToIconPath(CatalogFmt fmt) {
       return 'assets/icons/bat.svg';
     case CatalogFmt.birds:
       return 'assets/icons/bird.svg';
-    case CatalogFmt.amphibians:
+    case CatalogFmt.herpetofauna:
       // TODO: Placeholder
       return 'assets/icons/clue.svg';
   }

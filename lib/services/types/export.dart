@@ -62,7 +62,7 @@ enum SpecimenRecordType {
   generalMammals,
   bats,
   allMammals,
-  amphibians,
+  herpetofauna,
 }
 
 enum TaxonRecordType {

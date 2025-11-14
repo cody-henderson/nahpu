@@ -159,7 +159,7 @@ class PersonnelImageService {
         return _getMammalAvatar();
       case CatalogFmt.bats:
         return _getBatAvatar();
-      case CatalogFmt.amphibians:
+      case CatalogFmt.herpetofauna:
         return _getMammalAvatar(); // TODO: Placeholder
     }
   }

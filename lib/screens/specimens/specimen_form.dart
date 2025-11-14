@@ -46,7 +46,7 @@ class SpecimenFormState extends ConsumerState<SpecimenForm> {
             specimenUuid: widget.specimenUuid,
             specimenCtr: widget.specimenCtr,
             isBats: true);
-      case CatalogFmt.amphibians:
+      case CatalogFmt.herpetofauna:
         return MammalForms(
             // TODO: Placeholder
             specimenUuid: widget.specimenUuid,

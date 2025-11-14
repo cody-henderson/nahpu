@@ -134,8 +134,7 @@ class EventInfoFieldState extends ConsumerState<EventInfoField> {
           case CatalogFmt.birds:
             return DateTime.now();
           default:
-            // General mammals, bats, amphibians
-            // TODO: Confirm for amphibians
+            // General mammals, bats, herpetofauna
             return DateTime.now().subtract(const Duration(days: 1));
         }
       },
@@ -373,8 +372,7 @@ class EventTimeField extends ConsumerWidget {
               case CatalogFmt.generalMammals:
                 return const TimeOfDay(hour: 7, minute: 0);
               default:
-                // Birds, bats, amphibians
-                // TODO: Confirm for amphibians
+                // Birds, bats, herpetofauna
                 return TimeOfDay.now();
             }
           },

@@ -82,7 +82,7 @@ class SpecimenRecordWriter {
         return batMeasurementExportList;
       case SpecimenRecordType.allMammals:
         return batMeasurementExportList;
-      case SpecimenRecordType.amphibians:
+      case SpecimenRecordType.herpetofauna:
         // TODO: Placeholder
         return mammalMeasurementExportList;
     }
@@ -122,7 +122,7 @@ class SpecimenRecordWriter {
         return await _getMeasurementGeneralMammals(specimenUuid, isBat);
       case SpecimenRecordType.allMammals:
         return await _getMeasurementGeneralMammals(specimenUuid, isBat);
-      case SpecimenRecordType.amphibians:
+      case SpecimenRecordType.herpetofauna:
         // TODO: Placeholder
         return await _getMeasurementGeneralMammals(specimenUuid, isBat);
     }

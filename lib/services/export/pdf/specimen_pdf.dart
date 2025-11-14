@@ -249,7 +249,7 @@ class SpecimenPdfWriter extends PdfServices {
         return _getMammalMeasurements(specimenUuid, true);
       case CatalogFmt.birds:
         return _getAvianMeasurements(specimenUuid);
-      case CatalogFmt.amphibians:
+      case CatalogFmt.herpetofauna:
         // TODO: Placeholder
         return _getMammalMeasurements(specimenUuid, false);
     }
