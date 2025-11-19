@@ -732,6 +732,46 @@ class AvianMeasurementCtrModel {
   }
 }
 
+class HerpMeasurementCtrModel {
+  HerpMeasurementCtrModel({
+    required this.sexCtr,
+    required this.ageCtr,
+    required this.weightCtr,
+    required this.svlCtr,
+    required this.remarkCtr,
+  });
+
+  int? sexCtr;
+  int? ageCtr;
+  TextEditingController weightCtr;
+  TextEditingController svlCtr;
+  TextEditingController remarkCtr;
+
+  factory HerpMeasurementCtrModel.empty() => HerpMeasurementCtrModel(
+        sexCtr: null,
+        ageCtr: null,
+        weightCtr: TextEditingController(),
+        svlCtr: TextEditingController(),
+        remarkCtr: TextEditingController(),
+      );
+
+  factory HerpMeasurementCtrModel.fromData(HerpMeasurementData data) =>
+      HerpMeasurementCtrModel(
+        sexCtr: data.sex,
+        ageCtr: data.age,
+        weightCtr:
+            TextEditingController(text: data.weight?.truncateZero() ?? ''),
+        svlCtr: TextEditingController(text: data.svl?.truncateZero() ?? ''),
+        remarkCtr: TextEditingController(text: data.remark ?? ''),
+      );
+
+  void dispose() {
+    weightCtr.dispose();
+    svlCtr.dispose();
+    remarkCtr.dispose();
+  }
+}
+
 class PartFormCtrModel {
   PartFormCtrModel({
     required this.tissueIdCtr,

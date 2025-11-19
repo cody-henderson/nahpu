@@ -321,9 +321,12 @@ CREATE TABLE avianMeasurement (
 
 CREATE TABLE herpMeasurement (
     specimenUuid TEXT NOT NULL,
+    sex INT,
     age INT,
     weight REAL,
-    sex INT,
+    svl REAL,
+    remark TEXT,
+
     FOREIGN KEY(specimenUuid) REFERENCES specimen(uuid)
 );
 
