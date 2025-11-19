@@ -267,8 +267,8 @@ class CommonNumField extends ConsumerWidget {
         errorMaxLines: 3,
       ),
       inputFormatters: [
-        FilteringTextInputFormatter.allow(
-            RegExp('${isSigned ? r'^-?' : ''}${r'\d*'}${isDouble ? r'\.?\d*' : ''}'))
+        FilteringTextInputFormatter.allow(RegExp(
+            '${isSigned ? r'^-?' : ''}${r'\d*'}${isDouble ? r'\.?\d*' : ''}'))
       ],
       keyboardType:
           TextInputType.numberWithOptions(decimal: isDouble, signed: isSigned),
@@ -313,8 +313,11 @@ class CommonTextField extends StatelessWidget {
       ),
       keyboardType: keyboardType,
       onChanged: onChanged,
-      textInputAction:
-          isLastField ? TextInputAction.done : TextInputAction.next,
+      textInputAction: keyboardType == TextInputType.multiline
+          ? TextInputAction.newline
+          : isLastField
+              ? TextInputAction.done
+              : TextInputAction.next,
     );
   }
 }
