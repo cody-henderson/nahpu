@@ -79,9 +79,18 @@ class Database extends _$Database {
     } catch (e) {
       // ignore failures during migration; some older DBs may not need this
       if (kDebugMode) {
-        print('Migration v6: failed to add narrative.writerId: $e');
+        print('Migration v7: failed to add narrative.writerId: $e');
       }
     }
+    // Add time column to narrative table. Best-effort: ignore if already present.
+    try {
+      await m.addColumn(narrative, narrative.time);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Migration v7: failed to add narrative.time: $e');
+      }
+    }
+    
 
     // Timezones
     await m.addColumn(project, project.timeZone);

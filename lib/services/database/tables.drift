@@ -114,6 +114,7 @@ CREATE TABLE narrative (
     id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
     projectUuid TEXT,
     date TEXT,
+    time TEXT,  -- Add this new column
     siteID INT,
     writerId TEXT,
     narrative TEXT,

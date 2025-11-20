@@ -249,23 +249,27 @@ class CollEventFormCtrModel {
 class NarrativeFormCtrModel {
   NarrativeFormCtrModel({
     required this.dateCtr,
+    required this.timeCtr,
     required this.siteCtr,
     required this.writerCtr,
     required this.narrativeCtr,
   });
   DateEditingController dateCtr;
+  TimeEditingController timeCtr;
   int? siteCtr;
   String? writerCtr;
   TextEditingController narrativeCtr;
 
   factory NarrativeFormCtrModel.empty() => NarrativeFormCtrModel(
-      dateCtr: DateEditingController(),
-      siteCtr: null,
-      writerCtr: null,
-      narrativeCtr: TextEditingController());
+    dateCtr: DateEditingController(),
+    timeCtr: TimeEditingController(),
+    siteCtr: null,
+    writerCtr: null,
+    narrativeCtr: TextEditingController());
 
   void dispose() {
     dateCtr.dispose();
+    timeCtr.dispose();
     narrativeCtr.dispose();
   }
 }
