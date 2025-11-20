@@ -144,14 +144,13 @@ class SpecimenRecordWriter {
     return await birds.getMeasurements();
   }
 
-  Future<List<String>> _getMeasurementHerps(
-      String specimenUuid) async {
+  Future<List<String>> _getMeasurementHerps(String specimenUuid) async {
     HerpetofaunaMeasurements herps = HerpetofaunaMeasurements(
       specimenUuid: specimenUuid,
       ref: ref,
     );
     return await herps.getMeasurements();
-  }  
+  }
 
   Future<String> _getSpecimenMedia(String specimenUuid) async {
     String specimenMedia =

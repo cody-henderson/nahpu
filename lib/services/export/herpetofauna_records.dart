@@ -37,15 +37,15 @@ class HerpetofaunaMeasurements extends AppServices {
   }
 
   String _getWeight(double? weight) {
-    return weight == null ?  '' : weight.truncateZero();
-  }  
+    return weight == null ? '' : weight.truncateZero();
+  }
 
   String _getSVL(double? svl) {
-    return svl == null ?  '' : svl.truncateZero();
+    return svl == null ? '' : svl.truncateZero();
   }
 
   List<String> _getSexData() {
     String sex = data.sex != null ? specimenSexList[data.sex!] : '';
-      return [sex];
+    return [sex];
   }
 }
