@@ -11,6 +11,7 @@ import 'package:nahpu/services/specimen_services.dart';
 import 'package:nahpu/services/export/avian_records.dart';
 import 'package:nahpu/services/export/common.dart';
 import 'package:nahpu/services/export/mammalian_records.dart';
+import 'package:nahpu/services/export/herpetofauna_records.dart';
 
 class SpecimenRecordWriter {
   SpecimenRecordWriter({
@@ -83,8 +84,7 @@ class SpecimenRecordWriter {
       case SpecimenRecordType.allMammals:
         return batMeasurementExportList;
       case SpecimenRecordType.herpetofauna:
-        // TODO: Placeholder
-        return mammalMeasurementExportList;
+        return herpMeasurementExportList;
     }
   }
 
@@ -123,8 +123,7 @@ class SpecimenRecordWriter {
       case SpecimenRecordType.allMammals:
         return await _getMeasurementGeneralMammals(specimenUuid, isBat);
       case SpecimenRecordType.herpetofauna:
-        // TODO: Placeholder
-        return await _getMeasurementGeneralMammals(specimenUuid, isBat);
+        return await _getMeasurementHerps(specimenUuid);
     }
   }
 
@@ -144,6 +143,15 @@ class SpecimenRecordWriter {
         AvianMeasurements(specimenUuid: specimenUuid, ref: ref);
     return await birds.getMeasurements();
   }
+
+  Future<List<String>> _getMeasurementHerps(
+      String specimenUuid) async {
+    HerpetofaunaMeasurements herps = HerpetofaunaMeasurements(
+      specimenUuid: specimenUuid,
+      ref: ref,
+    );
+    return await herps.getMeasurements();
+  }  
 
   Future<String> _getSpecimenMedia(String specimenUuid) async {
     String specimenMedia =
