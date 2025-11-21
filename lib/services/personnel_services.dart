@@ -77,9 +77,11 @@ class PersonnelServices extends AppServices {
     return await PersonnelQuery(dbAccess).getAllPersonnel();
   }
 
-  Future<List<PersonnelData>> getPersonnelByProjectUuid(String projectUuid) async {
-    return await PersonnelQuery(dbAccess).getPersonnelByProjectUuid(projectUuid);
-  }  
+  Future<List<PersonnelData>> getPersonnelByProjectUuid(
+      String projectUuid) async {
+    return await PersonnelQuery(dbAccess)
+        .getPersonnelByProjectUuid(projectUuid);
+  }
 
   Future<void> deleteProjectPersonnel(String personnelUuid) async {
     bool isUsedInPersonnel = await PersonnelQuery(dbAccess)
@@ -157,6 +159,8 @@ class PersonnelImageService {
         return _getMammalAvatar();
       case CatalogFmt.bats:
         return _getBatAvatar();
+      case CatalogFmt.herpetofauna:
+        return _getMammalAvatar(); // TODO: Placeholder
     }
   }
 

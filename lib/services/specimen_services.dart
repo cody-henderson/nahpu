@@ -42,10 +42,11 @@ class SpecimenServices extends AppServices {
         _createBirdSpecimen(specimenUuid);
         break;
       case CatalogFmt.bats:
-        _createMammalSpecimen(specimenUuid);
-        break;
       case CatalogFmt.generalMammals:
         _createMammalSpecimen(specimenUuid);
+        break;
+      case CatalogFmt.herpetofauna:
+        _createHerpSpecimen(specimenUuid);
         break;
     }
     invalidateSpecimenList();
@@ -229,6 +230,20 @@ class SpecimenServices extends AppServices {
         .updateMammalMeasurements(specimenUuid, entries);
   }
 
+  void _createHerpSpecimen(String specimenUuid) {
+    HerpSpecimenQuery(dbAccess).createHerpMeasurements(
+        HerpMeasurementCompanion(specimenUuid: db.Value(specimenUuid)));
+  }
+
+  Future<HerpMeasurementData> getHerpMeasurementData(String specimenUuid) {
+    return HerpSpecimenQuery(dbAccess).getHerpMeasurementByUuid(specimenUuid);
+  }
+
+  void updateHerpMeasurement(
+      String specimenUuid, HerpMeasurementCompanion entries) {
+    HerpSpecimenQuery(dbAccess).updateHerpMeasurements(specimenUuid, entries);
+  }
+
   void _createBirdSpecimen(String specimenUuid) {
     AvianSpecimenQuery(dbAccess).createAvianMeasurements(
         AvianMeasurementCompanion(specimenUuid: db.Value(specimenUuid)));
@@ -273,6 +288,10 @@ class SpecimenServices extends AppServices {
     await MammalSpecimenQuery(dbAccess).deleteMammalMeasurements(specimenUuid);
   }
 
+  Future<void> deleteHerpMeasurements(String specimenUuid) async {
+    await HerpSpecimenQuery(dbAccess).deleteHerpMeasurements(specimenUuid);
+  }
+
   Future<void> deleteSpecimen(
       String specimenUuid, CatalogFmt catalogFmt) async {
     await deleteAllSpecimenParts(specimenUuid);
@@ -285,6 +304,9 @@ class SpecimenServices extends AppServices {
         break;
       case CatalogFmt.generalMammals:
         await deleteMammalMeasurements(specimenUuid);
+        break;
+      case CatalogFmt.herpetofauna:
+        await deleteHerpMeasurements(specimenUuid);
         break;
     }
     await SpecimenQuery(dbAccess).deleteAllSpecimenMedias(specimenUuid);
@@ -307,6 +329,9 @@ class SpecimenServices extends AppServices {
           break;
         case CatalogFmt.generalMammals:
           await deleteMammalMeasurements(specimen.uuid);
+          break;
+        case CatalogFmt.herpetofauna:
+          await deleteHerpMeasurements(specimen.uuid);
           break;
       }
     }
@@ -690,21 +715,23 @@ class MammalMeasurementServices {
   final String totalLengthText;
   final String tailLengthText;
 
-  ({String headAndBodyText, String percentTailText, String errorText})? getHBandTailPercentage() {
+  ({String headAndBodyText, String percentTailText, String errorText})?
+      getHBandTailPercentage() {
     double? totalLength =
         totalLengthText.isNotEmpty ? double.tryParse(totalLengthText) : null;
     double? tailLength =
         tailLengthText.isNotEmpty ? double.tryParse(tailLengthText) : null;
     if (totalLength == null || tailLength == null || totalLength < 1) {
       return null;
-    } 
-    
+    }
+
     double? headBodyLength = totalLength - tailLength;
     if (headBodyLength <= 0) {
       return (
         headAndBodyText: '',
         percentTailText: '',
-        errorText: 'Total length should not be less than or equal to tail length.',
+        errorText:
+            'Total length should not be less than or equal to tail length.',
       );
     } else {
       String headAndBodyText = headBodyLength.truncateZeroFixed(1);

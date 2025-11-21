@@ -232,20 +232,28 @@ class ExportFormState extends ConsumerState<ExportForm> {
   }
 
   void _matchTaxonToRecordType() {
-    if (_taxonRecordType == TaxonRecordType.birds) {
-      _specimenRecordType = SpecimenRecordType.birds;
-    } else {
-      switch (_mammalRecordType) {
-        case MammalRecordType.excludeBats:
-          _specimenRecordType = SpecimenRecordType.generalMammals;
-          break;
-        case MammalRecordType.onlyBats:
-          _specimenRecordType = SpecimenRecordType.bats;
-          break;
-        default:
-          _specimenRecordType = SpecimenRecordType.allMammals;
-          break;
-      }
+    switch (_taxonRecordType) {
+      case TaxonRecordType.mammals:
+        switch (_mammalRecordType) {
+          case MammalRecordType.excludeBats:
+            _specimenRecordType = SpecimenRecordType.generalMammals;
+            break;
+          case MammalRecordType.onlyBats:
+            _specimenRecordType = SpecimenRecordType.bats;
+            break;
+          default:
+            _specimenRecordType = SpecimenRecordType.allMammals;
+            break;
+        }
+        break;
+      case TaxonRecordType.birds:
+        _specimenRecordType = SpecimenRecordType.birds;
+        break;
+      case TaxonRecordType.herps:
+        _specimenRecordType = SpecimenRecordType.herpetofauna;
+        break;
+      default:
+        break;
     }
   }
 

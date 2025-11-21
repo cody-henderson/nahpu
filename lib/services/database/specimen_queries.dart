@@ -205,6 +205,34 @@ class AvianSpecimenQuery extends DatabaseAccessor<Database>
   }
 }
 
+class HerpSpecimenQuery extends DatabaseAccessor<Database>
+    with _$SpecimenQueryMixin {
+  HerpSpecimenQuery(super.db);
+
+  Future<int> createHerpMeasurements(HerpMeasurementCompanion form) =>
+      into(herpMeasurement).insert(form);
+
+  Future updateHerpMeasurements(
+      String specimenUuid, HerpMeasurementCompanion entry) {
+    return (update(herpMeasurement)
+          ..where((t) => t.specimenUuid.equals(specimenUuid)))
+        .write(entry);
+  }
+
+  Future<HerpMeasurementData> getHerpMeasurementByUuid(
+      String specimenUuid) async {
+    return await (select(herpMeasurement)
+          ..where((t) => t.specimenUuid.equals(specimenUuid)))
+        .getSingle();
+  }
+
+  Future<void> deleteHerpMeasurements(String specimenUuid) {
+    return (delete(herpMeasurement)
+          ..where((t) => t.specimenUuid.equals(specimenUuid)))
+        .go();
+  }
+}
+
 class SpecimenPartQuery extends DatabaseAccessor<Database>
     with _$SpecimenQueryMixin {
   SpecimenPartQuery(super.db);

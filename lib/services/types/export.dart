@@ -62,16 +62,19 @@ enum SpecimenRecordType {
   generalMammals,
   bats,
   allMammals,
+  herpetofauna,
 }
 
 enum TaxonRecordType {
   birds,
   mammals,
+  herps,
 }
 
 const List<String> taxonRecordTypeList = [
   'Birds',
   'Mammals',
+  'Herpetofauna',
 ];
 
 enum MammalRecordType {
@@ -216,6 +219,14 @@ const avianMeasurementExportList = [
   // Notes
   'specimenRemark',
   'habitatRemark',
+];
+
+const herpMeasurementExportList = [
+  'sex',
+  'age',
+  'weight',
+  'svl',
+  'remark',
 ];
 
 const narrativeExportList = [
