@@ -131,11 +131,12 @@ class EventInfoFieldState extends ConsumerState<EventInfoField> {
     return ref.read(catalogFmtNotifierProvider).when(
       data: (catalogFmt) {
         switch (catalogFmt) {
-          case CatalogFmt.birds:
-            return DateTime.now();
-          default:
-            // General mammals, bats, herpetofauna
+          case CatalogFmt.generalMammals:
+          case CatalogFmt.bats:
             return DateTime.now().subtract(const Duration(days: 1));
+          default:
+            // Birds, herpetofauna
+            return DateTime.now();
         }
       },
       loading: () {
