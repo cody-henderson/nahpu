@@ -15,9 +15,9 @@ Visit our website to learn more: [nahpu.app](https://nahpu.app)
 * **Field and Museum Ready:** Designed for both field data collection and museum curation workflows.
 * **Rich Data Capture:** Record a wide range of specimen data, including images, measurements, and collection details.
 * **Data Export:** Export your data to CSV and other formats for use in other applications.
-* **Offline First:** Works offline, we plan to allow syncing your data when you have an internet connection.
+* **Offline First:** Works offline; we plan to allow syncing your data when you have an internet connection.
 
-## Supported Catalog Format
+## Supported Catalog Formats
 
 * Birds 🦅
 * Extant Mammals 🐿️
