@@ -17,6 +17,14 @@ Visit our website to learn more: [nahpu.app](https://nahpu.app)
 * **Data Export:** Export your data to CSV and other formats for use in other applications.
 * **Offline First:** Works offline, we plan to allow syncing your data when you have an internet connection.
 
+## Supported Catalog Format
+
+* Birds
+* Extant Mammals
+* Herpetofauna (in development)
+* Fishes (in development)
+* Paleo Vertebrates (planned)
+
 ## Technologies Used
 
 Nahpu is built with a modern stack to ensure a high-quality and performant experience:
