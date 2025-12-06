@@ -8493,6 +8493,13 @@ class MammalMeasurement extends Table
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  static const VerificationMeta _showBatFieldsMeta =
+      const VerificationMeta('showBatFields');
+  late final GeneratedColumn<int> showBatFields = GeneratedColumn<int>(
+      'showBatFields', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _totalLengthMeta =
       const VerificationMeta('totalLength');
   late final GeneratedColumn<double> totalLength = GeneratedColumn<double>(
@@ -8681,6 +8688,7 @@ class MammalMeasurement extends Table
   @override
   List<GeneratedColumn> get $columns => [
         specimenUuid,
+        showBatFields,
         totalLength,
         tailLength,
         hindFootLength,
@@ -8727,6 +8735,12 @@ class MammalMeasurement extends Table
               data['specimenUuid']!, _specimenUuidMeta));
     } else if (isInserting) {
       context.missing(_specimenUuidMeta);
+    }
+    if (data.containsKey('showBatFields')) {
+      context.handle(
+          _showBatFieldsMeta,
+          showBatFields.isAcceptableOrUnknown(
+              data['showBatFields']!, _showBatFieldsMeta));
     }
     if (data.containsKey('totalLength')) {
       context.handle(
@@ -8885,6 +8899,8 @@ class MammalMeasurement extends Table
     return MammalMeasurementData(
       specimenUuid: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}specimenUuid'])!,
+      showBatFields: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}showBatFields']),
       totalLength: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}totalLength']),
       tailLength: attachedDatabase.typeMapping
@@ -8957,6 +8973,7 @@ class MammalMeasurement extends Table
 class MammalMeasurementData extends DataClass
     implements Insertable<MammalMeasurementData> {
   final String specimenUuid;
+  final int? showBatFields;
   final double? totalLength;
   final double? tailLength;
   final double? hindFootLength;
@@ -8988,6 +9005,7 @@ class MammalMeasurementData extends DataClass
   final String? remark;
   const MammalMeasurementData(
       {required this.specimenUuid,
+      this.showBatFields,
       this.totalLength,
       this.tailLength,
       this.hindFootLength,
@@ -9019,6 +9037,9 @@ class MammalMeasurementData extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['specimenUuid'] = Variable<String>(specimenUuid);
+    if (!nullToAbsent || showBatFields != null) {
+      map['showBatFields'] = Variable<int>(showBatFields);
+    }
     if (!nullToAbsent || totalLength != null) {
       map['totalLength'] = Variable<double>(totalLength);
     }
@@ -9106,6 +9127,9 @@ class MammalMeasurementData extends DataClass
   MammalMeasurementCompanion toCompanion(bool nullToAbsent) {
     return MammalMeasurementCompanion(
       specimenUuid: Value(specimenUuid),
+      showBatFields: showBatFields == null && nullToAbsent
+          ? const Value.absent()
+          : Value(showBatFields),
       totalLength: totalLength == null && nullToAbsent
           ? const Value.absent()
           : Value(totalLength),
@@ -9189,6 +9213,7 @@ class MammalMeasurementData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MammalMeasurementData(
       specimenUuid: serializer.fromJson<String>(json['specimenUuid']),
+      showBatFields: serializer.fromJson<int?>(json['showBatFields']),
       totalLength: serializer.fromJson<double?>(json['totalLength']),
       tailLength: serializer.fromJson<double?>(json['tailLength']),
       hindFootLength: serializer.fromJson<double?>(json['hindFootLength']),
@@ -9228,6 +9253,7 @@ class MammalMeasurementData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'specimenUuid': serializer.toJson<String>(specimenUuid),
+      'showBatFields': serializer.toJson<int?>(showBatFields),
       'totalLength': serializer.toJson<double?>(totalLength),
       'tailLength': serializer.toJson<double?>(tailLength),
       'hindFootLength': serializer.toJson<double?>(hindFootLength),
@@ -9260,6 +9286,7 @@ class MammalMeasurementData extends DataClass
 
   MammalMeasurementData copyWith(
           {String? specimenUuid,
+          Value<int?> showBatFields = const Value.absent(),
           Value<double?> totalLength = const Value.absent(),
           Value<double?> tailLength = const Value.absent(),
           Value<double?> hindFootLength = const Value.absent(),
@@ -9289,6 +9316,8 @@ class MammalMeasurementData extends DataClass
           Value<String?> remark = const Value.absent()}) =>
       MammalMeasurementData(
         specimenUuid: specimenUuid ?? this.specimenUuid,
+        showBatFields:
+            showBatFields.present ? showBatFields.value : this.showBatFields,
         totalLength: totalLength.present ? totalLength.value : this.totalLength,
         tailLength: tailLength.present ? tailLength.value : this.tailLength,
         hindFootLength:
@@ -9349,6 +9378,9 @@ class MammalMeasurementData extends DataClass
       specimenUuid: data.specimenUuid.present
           ? data.specimenUuid.value
           : this.specimenUuid,
+      showBatFields: data.showBatFields.present
+          ? data.showBatFields.value
+          : this.showBatFields,
       totalLength:
           data.totalLength.present ? data.totalLength.value : this.totalLength,
       tailLength:
@@ -9418,6 +9450,7 @@ class MammalMeasurementData extends DataClass
   String toString() {
     return (StringBuffer('MammalMeasurementData(')
           ..write('specimenUuid: $specimenUuid, ')
+          ..write('showBatFields: $showBatFields, ')
           ..write('totalLength: $totalLength, ')
           ..write('tailLength: $tailLength, ')
           ..write('hindFootLength: $hindFootLength, ')
@@ -9452,6 +9485,7 @@ class MammalMeasurementData extends DataClass
   @override
   int get hashCode => Object.hashAll([
         specimenUuid,
+        showBatFields,
         totalLength,
         tailLength,
         hindFootLength,
@@ -9485,6 +9519,7 @@ class MammalMeasurementData extends DataClass
       identical(this, other) ||
       (other is MammalMeasurementData &&
           other.specimenUuid == this.specimenUuid &&
+          other.showBatFields == this.showBatFields &&
           other.totalLength == this.totalLength &&
           other.tailLength == this.tailLength &&
           other.hindFootLength == this.hindFootLength &&
@@ -9517,6 +9552,7 @@ class MammalMeasurementData extends DataClass
 class MammalMeasurementCompanion
     extends UpdateCompanion<MammalMeasurementData> {
   final Value<String> specimenUuid;
+  final Value<int?> showBatFields;
   final Value<double?> totalLength;
   final Value<double?> tailLength;
   final Value<double?> hindFootLength;
@@ -9547,6 +9583,7 @@ class MammalMeasurementCompanion
   final Value<int> rowid;
   const MammalMeasurementCompanion({
     this.specimenUuid = const Value.absent(),
+    this.showBatFields = const Value.absent(),
     this.totalLength = const Value.absent(),
     this.tailLength = const Value.absent(),
     this.hindFootLength = const Value.absent(),
@@ -9578,6 +9615,7 @@ class MammalMeasurementCompanion
   });
   MammalMeasurementCompanion.insert({
     required String specimenUuid,
+    this.showBatFields = const Value.absent(),
     this.totalLength = const Value.absent(),
     this.tailLength = const Value.absent(),
     this.hindFootLength = const Value.absent(),
@@ -9609,6 +9647,7 @@ class MammalMeasurementCompanion
   }) : specimenUuid = Value(specimenUuid);
   static Insertable<MammalMeasurementData> custom({
     Expression<String>? specimenUuid,
+    Expression<int>? showBatFields,
     Expression<double>? totalLength,
     Expression<double>? tailLength,
     Expression<double>? hindFootLength,
@@ -9640,6 +9679,7 @@ class MammalMeasurementCompanion
   }) {
     return RawValuesInsertable({
       if (specimenUuid != null) 'specimenUuid': specimenUuid,
+      if (showBatFields != null) 'showBatFields': showBatFields,
       if (totalLength != null) 'totalLength': totalLength,
       if (tailLength != null) 'tailLength': tailLength,
       if (hindFootLength != null) 'hindFootLength': hindFootLength,
@@ -9678,6 +9718,7 @@ class MammalMeasurementCompanion
 
   MammalMeasurementCompanion copyWith(
       {Value<String>? specimenUuid,
+      Value<int?>? showBatFields,
       Value<double?>? totalLength,
       Value<double?>? tailLength,
       Value<double?>? hindFootLength,
@@ -9708,6 +9749,7 @@ class MammalMeasurementCompanion
       Value<int>? rowid}) {
     return MammalMeasurementCompanion(
       specimenUuid: specimenUuid ?? this.specimenUuid,
+      showBatFields: showBatFields ?? this.showBatFields,
       totalLength: totalLength ?? this.totalLength,
       tailLength: tailLength ?? this.tailLength,
       hindFootLength: hindFootLength ?? this.hindFootLength,
@@ -9744,6 +9786,9 @@ class MammalMeasurementCompanion
     final map = <String, Expression>{};
     if (specimenUuid.present) {
       map['specimenUuid'] = Variable<String>(specimenUuid.value);
+    }
+    if (showBatFields.present) {
+      map['showBatFields'] = Variable<int>(showBatFields.value);
     }
     if (totalLength.present) {
       map['totalLength'] = Variable<double>(totalLength.value);
@@ -9836,6 +9881,7 @@ class MammalMeasurementCompanion
   String toString() {
     return (StringBuffer('MammalMeasurementCompanion(')
           ..write('specimenUuid: $specimenUuid, ')
+          ..write('showBatFields: $showBatFields, ')
           ..write('totalLength: $totalLength, ')
           ..write('tailLength: $tailLength, ')
           ..write('hindFootLength: $hindFootLength, ')
@@ -17255,6 +17301,7 @@ typedef $PersonnelListProcessedTableManager = ProcessedTableManager<
 typedef $MammalMeasurementCreateCompanionBuilder = MammalMeasurementCompanion
     Function({
   required String specimenUuid,
+  Value<int?> showBatFields,
   Value<double?> totalLength,
   Value<double?> tailLength,
   Value<double?> hindFootLength,
@@ -17287,6 +17334,7 @@ typedef $MammalMeasurementCreateCompanionBuilder = MammalMeasurementCompanion
 typedef $MammalMeasurementUpdateCompanionBuilder = MammalMeasurementCompanion
     Function({
   Value<String> specimenUuid,
+  Value<int?> showBatFields,
   Value<double?> totalLength,
   Value<double?> tailLength,
   Value<double?> hindFootLength,
@@ -17328,6 +17376,9 @@ class $MammalMeasurementFilterComposer
   });
   ColumnFilters<String> get specimenUuid => $composableBuilder(
       column: $table.specimenUuid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get showBatFields => $composableBuilder(
+      column: $table.showBatFields, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<double> get totalLength => $composableBuilder(
       column: $table.totalLength, builder: (column) => ColumnFilters(column));
@@ -17436,6 +17487,10 @@ class $MammalMeasurementOrderingComposer
   });
   ColumnOrderings<String> get specimenUuid => $composableBuilder(
       column: $table.specimenUuid,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get showBatFields => $composableBuilder(
+      column: $table.showBatFields,
       builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<double> get totalLength => $composableBuilder(
@@ -17548,6 +17603,9 @@ class $MammalMeasurementAnnotationComposer
   GeneratedColumn<String> get specimenUuid => $composableBuilder(
       column: $table.specimenUuid, builder: (column) => column);
 
+  GeneratedColumn<int> get showBatFields => $composableBuilder(
+      column: $table.showBatFields, builder: (column) => column);
+
   GeneratedColumn<double> get totalLength => $composableBuilder(
       column: $table.totalLength, builder: (column) => column);
 
@@ -17657,6 +17715,7 @@ class $MammalMeasurementTableManager extends RootTableManager<
               $MammalMeasurementAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> specimenUuid = const Value.absent(),
+            Value<int?> showBatFields = const Value.absent(),
             Value<double?> totalLength = const Value.absent(),
             Value<double?> tailLength = const Value.absent(),
             Value<double?> hindFootLength = const Value.absent(),
@@ -17688,6 +17747,7 @@ class $MammalMeasurementTableManager extends RootTableManager<
           }) =>
               MammalMeasurementCompanion(
             specimenUuid: specimenUuid,
+            showBatFields: showBatFields,
             totalLength: totalLength,
             tailLength: tailLength,
             hindFootLength: hindFootLength,
@@ -17719,6 +17779,7 @@ class $MammalMeasurementTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             required String specimenUuid,
+            Value<int?> showBatFields = const Value.absent(),
             Value<double?> totalLength = const Value.absent(),
             Value<double?> tailLength = const Value.absent(),
             Value<double?> hindFootLength = const Value.absent(),
@@ -17750,6 +17811,7 @@ class $MammalMeasurementTableManager extends RootTableManager<
           }) =>
               MammalMeasurementCompanion.insert(
             specimenUuid: specimenUuid,
+            showBatFields: showBatFields,
             totalLength: totalLength,
             tailLength: tailLength,
             hindFootLength: hindFootLength,

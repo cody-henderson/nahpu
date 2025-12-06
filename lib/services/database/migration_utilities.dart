@@ -265,3 +265,17 @@ Future<void> moveRelativeCaptureTimes(Migrator m) async {
         AND captureTime IN ('Dawn', 'Morning', 'Afternoon', 'Dusk', 'Night')   
     ''');
 }
+
+Future<void> setShowBatFieldsBoolean(Migrator m) async {
+  final db = m.database as Database;
+  return db.customStatement('''
+      UPDATE mammalMeasurement AS mm
+      SET showBatFields = 
+        CASE
+          WHEN s.taxonGroup = 'Bats' THEN 1 
+          ELSE 0 
+        END
+      FROM specimen AS s
+      WHERE mm.specimenUuid = s.uuid
+    ''');
+}
