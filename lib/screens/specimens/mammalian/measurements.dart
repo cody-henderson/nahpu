@@ -31,6 +31,7 @@ class MammalMeasurementFormsState
   TextEditingController headBodyLengthCtr = TextEditingController();
   TextEditingController tailHeadBodyPercentCtr = TextEditingController();
   String? _hblErrorText;
+  bool _showBatFields = false;
 
   @override
   void initState() {
@@ -189,8 +190,26 @@ class MammalMeasurementFormsState
                   }
                 },
               ),
+            ]),
+        AdaptiveLayout(
+            useHorizontalLayout: widget.useHorizontalLayout,
+            children: [
+              SwitchField(
+                  label: 'Show bat fields',
+                  value: _showBatFields,
+                  onPressed: (value) {
+                    setState(() {
+                      _showBatFields = value;
+                      SpecimenServices(ref: ref).updateMammalMeasurement(
+                        widget.specimenUuid,
+                        MammalMeasurementCompanion(
+                          showBatFields: db.Value(value ? 1 : 0),
+                        ),
+                      );
+                    });
+                  }),
               Visibility(
-                visible: ctr.showBatFieldsCtr,
+                visible: _showBatFields,
                 child: CommonNumField(
                   controller: ctr.forearmCtr,
                   labelText: 'Forearm Length (mm)',
@@ -349,6 +368,7 @@ class MammalMeasurementFormsState
     setState(() {
       ctr = MammalMeasurementCtrModel.fromData(data);
       _getHBTailPercent();
+      _showBatFields = ctr.showBatFieldsCtr ?? false;
     });
   }
 

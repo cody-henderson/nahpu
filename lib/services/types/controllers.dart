@@ -423,7 +423,7 @@ class MammalMeasurementCtrModel {
     required this.remarksCtr,
   });
 
-  bool showBatFieldsCtr;
+  bool? showBatFieldsCtr;
   TextEditingController totalLengthCtr;
   TextEditingController tailLengthCtr;
   TextEditingController hindFootCtr;
@@ -452,7 +452,7 @@ class MammalMeasurementCtrModel {
   TextEditingController remarksCtr;
 
   factory MammalMeasurementCtrModel.empty() => MammalMeasurementCtrModel(
-      showBatFieldsCtr: false,
+      showBatFieldsCtr: null,
       totalLengthCtr: TextEditingController(),
       tailLengthCtr: TextEditingController(),
       hindFootCtr: TextEditingController(),
