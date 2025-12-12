@@ -99,21 +99,14 @@ class MainFormsState extends ConsumerState<MainForms> {
     switch (widget.catalogFmt) {
       case CatalogFmt.birds:
         return BirdMeasurementForms(
-          useHorizontalLayout: useHorizontalLayout,
-          specimenUuid: widget.specimenUuid
-        );
+            useHorizontalLayout: useHorizontalLayout,
+            specimenUuid: widget.specimenUuid);
       case CatalogFmt.generalMammals:
-        return MammalMeasurementForms(
-          useHorizontalLayout: useHorizontalLayout,
-          specimenUuid: widget.specimenUuid,
-          isBats: false
-        );      
       case CatalogFmt.bats:
         return MammalMeasurementForms(
           useHorizontalLayout: useHorizontalLayout,
           specimenUuid: widget.specimenUuid,
-          isBats: true
-        );              
+        );
       case CatalogFmt.herpetofauna:
         return HerpMeasurementForms(
           useHorizontalLayout: useHorizontalLayout,
