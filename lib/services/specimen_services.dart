@@ -41,8 +41,7 @@ class SpecimenServices extends AppServices {
       case CatalogFmt.birds:
         _createBirdSpecimen(specimenUuid);
         break;
-      case CatalogFmt.bats:
-      case CatalogFmt.generalMammals:
+      case CatalogFmt.mammals:
         _createMammalSpecimen(specimenUuid);
         break;
       case CatalogFmt.herpetofauna:
@@ -299,10 +298,7 @@ class SpecimenServices extends AppServices {
       case CatalogFmt.birds:
         await deleteAvianMeasurements(specimenUuid);
         break;
-      case CatalogFmt.bats:
-        await deleteMammalMeasurements(specimenUuid);
-        break;
-      case CatalogFmt.generalMammals:
+      case CatalogFmt.mammals:
         await deleteMammalMeasurements(specimenUuid);
         break;
       case CatalogFmt.herpetofauna:
@@ -324,10 +320,7 @@ class SpecimenServices extends AppServices {
         case CatalogFmt.birds:
           await deleteAvianMeasurements(specimen.uuid);
           break;
-        case CatalogFmt.bats:
-          await deleteMammalMeasurements(specimen.uuid);
-          break;
-        case CatalogFmt.generalMammals:
+        case CatalogFmt.mammals:
           await deleteMammalMeasurements(specimen.uuid);
           break;
         case CatalogFmt.herpetofauna:

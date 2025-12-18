@@ -71,7 +71,7 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
                     ),
                     // Only show for Mammals taxon
                     Visibility(
-                      visible: catalogFmt == CatalogFmt.generalMammals,
+                      visible: catalogFmt == CatalogFmt.mammals,
                       child: CommonSettingSection(
                         title: 'Measurement records',
                         children: [

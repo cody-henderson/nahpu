@@ -101,8 +101,7 @@ class MainFormsState extends ConsumerState<MainForms> {
         return BirdMeasurementForms(
             useHorizontalLayout: useHorizontalLayout,
             specimenUuid: widget.specimenUuid);
-      case CatalogFmt.generalMammals:
-      case CatalogFmt.bats:
+      case CatalogFmt.mammals:
         return MammalMeasurementForms(
           useHorizontalLayout: useHorizontalLayout,
           specimenUuid: widget.specimenUuid,
