@@ -216,8 +216,7 @@ String matchCatalogFmtToIconPath(CatalogFmt fmt) {
     case CatalogFmt.birds:
       return 'assets/icons/bird.svg';
     case CatalogFmt.herpetofauna:
-      // TODO: Placeholder
-      return 'assets/icons/clue.svg';
+      return 'assets/icons/snake.svg';
   }
 }
 

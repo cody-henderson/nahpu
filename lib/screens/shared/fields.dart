@@ -90,6 +90,25 @@ class CommonTimeField extends ConsumerStatefulWidget {
 
 class CommonTimeFieldState extends ConsumerState<CommonTimeField> {
   @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onTimeChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onTimeChanged);
+    super.dispose();
+  }
+
+  void _onTimeChanged() {
+    // Call onTap whenever the time value changes
+    if (widget.controller.time != null) {
+      widget.onTap();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
