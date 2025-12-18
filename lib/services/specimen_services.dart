@@ -644,6 +644,7 @@ class SpecimenPartServices extends AppServices {
 }
 
 const String collectorFieldKey = 'isCollectorFieldAlwaysShown';
+const String batFieldsKey = 'isBatFieldsAlwaysShown';
 
 class SpecimenSettingServices {
   SpecimenSettingServices({required this.ref});
@@ -652,12 +653,12 @@ class SpecimenSettingServices {
 
   SharedPreferences get _prefs => ref.read(settingProvider);
 
-  Future<void> setCollectorFieldAlwaysShown(bool value) async {
-    await _prefs.setBool(collectorFieldKey, value);
+  Future<void> setSpecimenSettingField(String key, bool value) async {
+    await _prefs.setBool(key, value);
   }
 
-  bool isCollectorFieldAlwaysShown() {
-    return _prefs.getBool(collectorFieldKey) ?? false;
+  bool getSpecimenSettingField(String key) {
+    return _prefs.getBool(key) ?? false;
   }
 }
 

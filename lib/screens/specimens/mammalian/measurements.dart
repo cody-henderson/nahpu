@@ -197,6 +197,9 @@ class MammalMeasurementFormsState
               SwitchField(
                   label: 'Show bat fields',
                   value: _showBatFields,
+                  // Disable the button when bat fields are
+                  // always shown based on app-wide setting
+                  disabled: isBatFieldsAlwaysShown,
                   onPressed: (value) {
                     setState(() {
                       _showBatFields = value;
@@ -361,6 +364,11 @@ class MammalMeasurementFormsState
     );
   }
 
+  bool get isBatFieldsAlwaysShown {
+    return SpecimenSettingServices(ref: ref)
+        .getSpecimenSettingField(batFieldsKey);
+  }
+
   Future<void> _updateCtr(String specimenUuid) async {
     MammalMeasurementData data =
         await SpecimenServices(ref: ref).getMammalMeasurementData(specimenUuid);
@@ -368,7 +376,8 @@ class MammalMeasurementFormsState
     setState(() {
       ctr = MammalMeasurementCtrModel.fromData(data);
       _getHBTailPercent();
-      _showBatFields = ctr.showBatFieldsCtr ?? false;
+      _showBatFields =
+          isBatFieldsAlwaysShown || (ctr.showBatFieldsCtr ?? false);
     });
   }
 

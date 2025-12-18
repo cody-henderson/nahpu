@@ -116,8 +116,8 @@ class CaptureRecordFieldsState extends ConsumerState<CaptureRecordFields> {
   }
 
   bool get _isCollectorFieldVisible {
-    bool isCollectorFieldAlwaysShown =
-        SpecimenSettingServices(ref: ref).isCollectorFieldAlwaysShown();
+    bool isCollectorFieldAlwaysShown = SpecimenSettingServices(ref: ref)
+        .getSpecimenSettingField(collectorFieldKey);
     return widget.specimenCtr.collPersonnelCtr != null ||
         _showMore ||
         isCollectorFieldAlwaysShown;
