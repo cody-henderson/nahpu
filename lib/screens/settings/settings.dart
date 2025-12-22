@@ -61,7 +61,7 @@ class CatalogSettings extends StatelessWidget {
       title: 'Catalogs',
       isDivided: true,
       children: [
-        CatalogFmtSection(selectedFmt: matchCatFmtToTaxonGroup(catalogFmt)),
+        CatalogFmtSection(selectedFmt: catalogFmt),
         const CollEventSection(),
         CommonSettingTile(
           title: 'Sites',
@@ -135,7 +135,7 @@ class DatabaseSettingSections extends StatelessWidget {
 class CatalogFmtSection extends StatelessWidget {
   const CatalogFmtSection({super.key, required this.selectedFmt});
 
-  final String selectedFmt;
+  final CatalogFmt selectedFmt;
 
   @override
   Widget build(BuildContext context) {
@@ -143,14 +143,12 @@ class CatalogFmtSection extends StatelessWidget {
         isNavigation: true,
         icon: MdiIcons.fileCabinet,
         title: 'Format',
-        value: selectedFmt,
+        value: matchCatFmtToTaxonGroup(selectedFmt),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CatalogFmtSelection(
-                selectedFmt: selectedFmt,
-              ),
+              builder: (context) => CatalogFmtSelection(),
             ),
           );
         });

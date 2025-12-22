@@ -5,7 +5,6 @@ import 'package:nahpu/screens/settings/common.dart';
 import 'package:nahpu/screens/shared/common.dart';
 import 'package:nahpu/screens/shared/layout.dart';
 import 'package:nahpu/services/specimen_services.dart';
-import 'package:nahpu/services/types/specimens.dart';
 
 class SpecimenSelection extends ConsumerStatefulWidget {
   const SpecimenSelection({super.key});
@@ -16,14 +15,11 @@ class SpecimenSelection extends ConsumerStatefulWidget {
 
 class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
   bool _isAlwaysShownCollectorField = false;
-  bool _isBatFieldsAlwaysShown = false;
 
   @override
   void initState() {
     _isAlwaysShownCollectorField = SpecimenSettingServices(ref: ref)
         .getSpecimenSettingField(collectorFieldKey);
-    _isBatFieldsAlwaysShown =
-        SpecimenSettingServices(ref: ref).getSpecimenSettingField(batFieldsKey);
 
     super.initState();
   }
@@ -32,90 +28,56 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
   Widget build(BuildContext context) {
     final services = SpecimenSettingServices(ref: ref);
 
-    return ref.watch(catalogFmtNotifierProvider).when(
-        data: (catalogFmt) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Specimen Settings'),
-            ),
-            body: SafeArea(child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                bool isMobile = constraints.maxWidth < 600;
-                return CommonSettingList(
-                  sections: [
-                    CommonSettingSection(
-                      title: 'Capture records',
-                      children: [
-                        SwitchSettings(
-                          value: _isAlwaysShownCollectorField,
-                          onChanged: (bool value) async {
-                            try {
-                              await services.setSpecimenSettingField(
-                                  collectorFieldKey, value);
-                              setState(() {
-                                _isAlwaysShownCollectorField = value;
-                              });
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(e.toString()),
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          label: 'Always show collector field',
-                        )
-                      ],
-                    ),
-                    // Only show for Mammals taxon
-                    Visibility(
-                      visible: catalogFmt == CatalogFmt.mammals,
-                      child: CommonSettingSection(
-                        title: 'Measurement records',
-                        children: [
-                          SwitchSettings(
-                            value: _isBatFieldsAlwaysShown,
-                            onChanged: (bool value) async {
-                              try {
-                                await services.setSpecimenSettingField(
-                                    batFieldsKey, value);
-                                setState(() {
-                                  _isBatFieldsAlwaysShown = value;
-                                });
-                              } catch (e) {
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(e.toString()),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            label: 'Always show bat measurement fields',
-                          )
-                        ],
-                      ),
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Specimen Settings'),
+      ),
+      body: SafeArea(child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          bool isMobile = constraints.maxWidth < 600;
+          return CommonSettingList(
+            sections: [
+              CommonSettingSection(
+                title: 'Capture records',
+                children: [
+                  SwitchSettings(
+                    value: _isAlwaysShownCollectorField,
+                    onChanged: (bool value) async {
+                      try {
+                        await services.setSpecimenSettingField(
+                            collectorFieldKey, value);
+                        setState(() {
+                          _isAlwaysShownCollectorField = value;
+                        });
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(e.toString()),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    label: 'Always show collector field',
+                  )
+                ],
+              ),
+              // Only show for Mammals taxon
 
-                    TissueIDFields(
-                      isMobile: isMobile,
-                    ),
-                    SpecimenFormats(
-                      isMobile: isMobile,
-                    ),
-                    const SpecimenTypeSettings(),
-                    const TreatmentOptionSettings(),
-                  ],
-                );
-              },
-            )),
+              TissueIDFields(
+                isMobile: isMobile,
+              ),
+              SpecimenFormats(
+                isMobile: isMobile,
+              ),
+              const SpecimenTypeSettings(),
+              const TreatmentOptionSettings(),
+            ],
           );
         },
-        loading: () => const CommonProgressIndicator(),
-        error: (e, __) => Text(e.toString()));
+      )),
+    );
   }
 }
 
