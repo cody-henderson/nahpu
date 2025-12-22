@@ -342,16 +342,17 @@ class CommonTextField extends StatelessWidget {
 }
 
 class SwitchField extends StatelessWidget {
-  const SwitchField({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.onPressed,
-  });
+  const SwitchField(
+      {super.key,
+      required this.label,
+      required this.value,
+      required this.onPressed,
+      this.disabled});
 
   final String label;
   final bool value;
   final void Function(bool) onPressed;
+  final bool? disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -361,7 +362,7 @@ class SwitchField extends StatelessWidget {
         Text(label),
         Switch(
           value: value,
-          onChanged: onPressed,
+          onChanged: (disabled ?? false) ? null : onPressed,
         ),
       ],
     );

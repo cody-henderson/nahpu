@@ -131,8 +131,7 @@ class EventInfoFieldState extends ConsumerState<EventInfoField> {
     return ref.read(catalogFmtNotifierProvider).when(
       data: (catalogFmt) {
         switch (catalogFmt) {
-          case CatalogFmt.generalMammals:
-          case CatalogFmt.bats:
+          case CatalogFmt.mammals:
             return DateTime.now().subtract(const Duration(days: 1));
           default:
             // Birds, herpetofauna
@@ -370,7 +369,7 @@ class EventTimeField extends ConsumerWidget {
     return ref.read(catalogFmtNotifierProvider).when(
           data: (catalogFmt) {
             switch (catalogFmt) {
-              case CatalogFmt.generalMammals:
+              case CatalogFmt.mammals:
                 return const TimeOfDay(hour: 7, minute: 0);
               default:
                 // Birds, bats, herpetofauna

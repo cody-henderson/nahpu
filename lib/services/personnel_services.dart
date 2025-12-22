@@ -139,9 +139,6 @@ const List<String> availableMammalAvatar = [
   'handika_crocidura.png',
   'handika_dasypus.png',
   'handika_haeromys.png',
-];
-
-const List<String> availableBatAvatar = [
   'handika_rhinolophus.png',
   'hnadika_rousettus.png',
 ];
@@ -155,10 +152,8 @@ class PersonnelImageService {
     switch (catalogFmt) {
       case CatalogFmt.birds:
         return _getBirdAvatar();
-      case CatalogFmt.generalMammals:
+      case CatalogFmt.mammals:
         return _getMammalAvatar();
-      case CatalogFmt.bats:
-        return _getBatAvatar();
       case CatalogFmt.herpetofauna:
         return _getMammalAvatar(); // TODO: Placeholder
     }
@@ -172,11 +167,6 @@ class PersonnelImageService {
   String _getMammalAvatar() {
     final index = random.nextInt(availableMammalAvatar.length);
     return '$avatarPath${availableMammalAvatar[index]}';
-  }
-
-  String _getBatAvatar() {
-    final index = random.nextInt(availableBatAvatar.length);
-    return '$avatarPath${availableBatAvatar[index]}';
   }
 }
 

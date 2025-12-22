@@ -16,12 +16,10 @@ class MammalMeasurementForms extends ConsumerStatefulWidget {
     super.key,
     required this.useHorizontalLayout,
     required this.specimenUuid,
-    required this.isBats,
   });
 
   final bool useHorizontalLayout;
   final String specimenUuid;
-  final bool isBats;
 
   @override
   MammalMeasurementFormsState createState() => MammalMeasurementFormsState();
@@ -33,6 +31,7 @@ class MammalMeasurementFormsState
   TextEditingController headBodyLengthCtr = TextEditingController();
   TextEditingController tailHeadBodyPercentCtr = TextEditingController();
   String? _hblErrorText;
+  bool _showBatFields = false;
 
   @override
   void initState() {
@@ -65,15 +64,15 @@ class MammalMeasurementFormsState
               isDouble: true,
               errorText: _hblErrorText,
               onChanged: (String? value) {
-                  setState(() {
-                    _getHBTailPercent();
-                    SpecimenServices(ref: ref).updateMammalMeasurement(
-                      widget.specimenUuid,
-                      MammalMeasurementCompanion(
-                        totalLength: db.Value(double.tryParse(value ?? '') ?? 0),
-                      ),
-                    );
-                  });
+                setState(() {
+                  _getHBTailPercent();
+                  SpecimenServices(ref: ref).updateMammalMeasurement(
+                    widget.specimenUuid,
+                    MammalMeasurementCompanion(
+                      totalLength: db.Value(double.tryParse(value ?? '') ?? 0),
+                    ),
+                  );
+                });
               },
             ),
             CommonNumField(
@@ -84,15 +83,15 @@ class MammalMeasurementFormsState
               isLastField: false,
               errorText: _hblErrorText,
               onChanged: (String? value) {
-                  setState(() {
-                    _getHBTailPercent();
-                    SpecimenServices(ref: ref).updateMammalMeasurement(
-                      widget.specimenUuid,
-                      MammalMeasurementCompanion(
-                        tailLength: db.Value(double.tryParse(value ?? '') ?? 0),
-                      ),
-                    );
-                  });
+                setState(() {
+                  _getHBTailPercent();
+                  SpecimenServices(ref: ref).updateMammalMeasurement(
+                    widget.specimenUuid,
+                    MammalMeasurementCompanion(
+                      tailLength: db.Value(double.tryParse(value ?? '') ?? 0),
+                    ),
+                  );
+                });
               },
             ),
           ],
@@ -191,8 +190,29 @@ class MammalMeasurementFormsState
                   }
                 },
               ),
+            ]),
+        AdaptiveLayout(
+            useHorizontalLayout: widget.useHorizontalLayout,
+            children: [
+              SwitchField(
+                  label: 'Show bat fields',
+                  value: _showBatFields,
+                  // Disable the button when bat fields are
+                  // always shown based on app-wide setting
+                  disabled: isBatFieldsAlwaysShown,
+                  onPressed: (value) {
+                    setState(() {
+                      _showBatFields = value;
+                      SpecimenServices(ref: ref).updateMammalMeasurement(
+                        widget.specimenUuid,
+                        MammalMeasurementCompanion(
+                          showBatFields: db.Value(value ? 1 : 0),
+                        ),
+                      );
+                    });
+                  }),
               Visibility(
-                visible: widget.isBats,
+                visible: _showBatFields,
                 child: CommonNumField(
                   controller: ctr.forearmCtr,
                   labelText: 'Forearm Length (mm)',
@@ -344,6 +364,11 @@ class MammalMeasurementFormsState
     );
   }
 
+  bool get isBatFieldsAlwaysShown {
+    return SpecimenSettingServices(ref: ref)
+        .getSpecimenSettingField(batFieldsKey);
+  }
+
   Future<void> _updateCtr(String specimenUuid) async {
     MammalMeasurementData data =
         await SpecimenServices(ref: ref).getMammalMeasurementData(specimenUuid);
@@ -351,6 +376,8 @@ class MammalMeasurementFormsState
     setState(() {
       ctr = MammalMeasurementCtrModel.fromData(data);
       _getHBTailPercent();
+      _showBatFields =
+          isBatFieldsAlwaysShown || (ctr.showBatFieldsCtr ?? false);
     });
   }
 
@@ -360,8 +387,11 @@ class MammalMeasurementFormsState
       tailLengthText: ctr.tailLengthCtr.text,
     );
 
-    ({String headAndBodyText, String percentTailText, String errorText})? results =
-        service.getHBandTailPercentage();
+    ({
+      String headAndBodyText,
+      String percentTailText,
+      String errorText
+    })? results = service.getHBandTailPercentage();
 
     headBodyLengthCtr.text = results?.headAndBodyText ?? '';
     tailHeadBodyPercentCtr.text = results?.percentTailText ?? '';

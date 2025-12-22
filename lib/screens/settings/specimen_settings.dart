@@ -18,14 +18,16 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
 
   @override
   void initState() {
-    _isAlwaysShownCollectorField =
-        SpecimenSettingServices(ref: ref).isCollectorFieldAlwaysShown();
+    _isAlwaysShownCollectorField = SpecimenSettingServices(ref: ref)
+        .getSpecimenSettingField(collectorFieldKey);
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final services = SpecimenSettingServices(ref: ref);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Specimen Settings'),
@@ -42,7 +44,8 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
                     value: _isAlwaysShownCollectorField,
                     onChanged: (bool value) async {
                       try {
-                        await services.setCollectorFieldAlwaysShown(value);
+                        await services.setSpecimenSettingField(
+                            collectorFieldKey, value);
                         setState(() {
                           _isAlwaysShownCollectorField = value;
                         });
@@ -60,6 +63,8 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
                   )
                 ],
               ),
+              // Only show for Mammals taxon
+
               TissueIDFields(
                 isMobile: isMobile,
               ),

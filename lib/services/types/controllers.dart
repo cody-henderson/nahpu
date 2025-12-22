@@ -398,6 +398,7 @@ class SpecimenFormCtrModel {
 
 class MammalMeasurementCtrModel {
   MammalMeasurementCtrModel({
+    required this.showBatFieldsCtr,
     required this.totalLengthCtr,
     required this.tailLengthCtr,
     required this.hindFootCtr,
@@ -426,6 +427,7 @@ class MammalMeasurementCtrModel {
     required this.remarksCtr,
   });
 
+  bool? showBatFieldsCtr;
   TextEditingController totalLengthCtr;
   TextEditingController tailLengthCtr;
   TextEditingController hindFootCtr;
@@ -454,6 +456,7 @@ class MammalMeasurementCtrModel {
   TextEditingController remarksCtr;
 
   factory MammalMeasurementCtrModel.empty() => MammalMeasurementCtrModel(
+      showBatFieldsCtr: null,
       totalLengthCtr: TextEditingController(),
       tailLengthCtr: TextEditingController(),
       hindFootCtr: TextEditingController(),
@@ -483,6 +486,7 @@ class MammalMeasurementCtrModel {
 
   factory MammalMeasurementCtrModel.fromData(MammalMeasurementData data) =>
       MammalMeasurementCtrModel(
+        showBatFieldsCtr: data.showBatFields == 1,
         totalLengthCtr:
             TextEditingController(text: data.totalLength?.truncateZero() ?? ''),
         tailLengthCtr:

@@ -244,10 +244,8 @@ class SpecimenPdfWriter extends PdfServices {
       String specimenUuid, String taxonGroup) async {
     CatalogFmt group = matchTaxonGroupToCatFmt(taxonGroup);
     switch (group) {
-      case CatalogFmt.generalMammals:
-        return _getMammalMeasurements(specimenUuid, false);
-      case CatalogFmt.bats:
-        return _getMammalMeasurements(specimenUuid, true);
+      case CatalogFmt.mammals:
+        return _getMammalMeasurements(specimenUuid, taxonGroup);
       case CatalogFmt.birds:
         return _getAvianMeasurements(specimenUuid);
       case CatalogFmt.herpetofauna:
@@ -256,7 +254,7 @@ class SpecimenPdfWriter extends PdfServices {
   }
 
   Future<pw.Widget> _getMammalMeasurements(
-      String specimenUuid, bool isBat) async {
+      String specimenUuid, String taxonGroup) async {
     MammalMeasurementData measurements =
         await SpecimenServices(ref: ref).getMammalMeasurementData(specimenUuid);
     String specimenAge = measurements.age != null
@@ -284,7 +282,7 @@ class SpecimenPdfWriter extends PdfServices {
                   'Hind foot length: ${measurements.hindFootLength?.truncateZero() ?? '?'} mm'),
               textContent(
                   'Ear length: ${measurements.earLength?.truncateZero() ?? '?'} mm'),
-              isBat
+              taxonGroup == "Bats"
                   ? textContent(
                       'Forearm length: ${measurements.forearm?.truncateZero() ?? '?'} mm')
                   : pw.SizedBox.shrink(),

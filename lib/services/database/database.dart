@@ -97,6 +97,10 @@ class Database extends _$Database {
 
     // Herpetofauna measurements
     await m.createTable(herpMeasurement);
+
+    // Boolean for showing bat-specific measurements
+    await m.addColumn(mammalMeasurement, mammalMeasurement.showBatFields);
+    await setShowBatFieldsBoolean(m);
   }
 
   Future<void> _migrateFromVersion5(Migrator m) async {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nahpu/services/types/export.dart';
 
-enum CatalogFmt { generalMammals, birds, bats, herpetofauna }
+enum CatalogFmt { mammals, birds, herpetofauna }
 
 // Database read through index.
 // and stored as integer.
@@ -107,13 +107,13 @@ CatalogFmt matchTaxonGroupToCatFmt(String? taxonGroup) {
     case 'Birds':
       return CatalogFmt.birds;
     case 'General Mammals':
-      return CatalogFmt.generalMammals;
-    case 'Bats':
-      return CatalogFmt.bats;
+      return CatalogFmt.mammals;
+    case 'Mammals':
+      return CatalogFmt.mammals;
     case 'Herpetofauna':
       return CatalogFmt.herpetofauna;
     default:
-      return CatalogFmt.generalMammals;
+      return CatalogFmt.mammals;
   }
 }
 
@@ -121,10 +121,8 @@ SpecimenRecordType matchCatalogFmtToRecordType(CatalogFmt catalogFmt) {
   switch (catalogFmt) {
     case CatalogFmt.birds:
       return SpecimenRecordType.birds;
-    case CatalogFmt.generalMammals:
+    case CatalogFmt.mammals:
       return SpecimenRecordType.generalMammals;
-    case CatalogFmt.bats:
-      return SpecimenRecordType.bats;
     case CatalogFmt.herpetofauna:
       return SpecimenRecordType.herpetofauna;
   }
@@ -164,10 +162,8 @@ String matchCatFmtToTaxonGroup(CatalogFmt catalogFmt) {
   switch (catalogFmt) {
     case CatalogFmt.birds:
       return 'Birds';
-    case CatalogFmt.generalMammals:
+    case CatalogFmt.mammals:
       return 'General Mammals';
-    case CatalogFmt.bats:
-      return 'Bats';
     case CatalogFmt.herpetofauna:
       return 'Herpetofauna';
   }
@@ -177,9 +173,7 @@ IconData matchCatFmtToPartIcon(CatalogFmt catalogFmt) {
   switch (catalogFmt) {
     case CatalogFmt.birds:
       return MdiIcons.owl;
-    case CatalogFmt.generalMammals:
-      return MdiIcons.pawOutline;
-    case CatalogFmt.bats:
+    case CatalogFmt.mammals:
       return MdiIcons.pawOutline;
     case CatalogFmt.herpetofauna:
       return MdiIcons.snake;
@@ -190,10 +184,8 @@ IconData matchCatFmtToIcon(CatalogFmt catalogFmt, bool isSelected) {
   switch (catalogFmt) {
     case CatalogFmt.birds:
       return MdiIcons.owl;
-    case CatalogFmt.generalMammals:
+    case CatalogFmt.mammals:
       return isSelected ? MdiIcons.paw : MdiIcons.pawOutline;
-    case CatalogFmt.bats:
-      return MdiIcons.bat;
     case CatalogFmt.herpetofauna:
       return MdiIcons.snake;
   }
@@ -219,10 +211,8 @@ const Map<String, String> partIconPath = {
 
 String matchCatalogFmtToIconPath(CatalogFmt fmt) {
   switch (fmt) {
-    case CatalogFmt.generalMammals:
+    case CatalogFmt.mammals:
       return 'assets/icons/mouse.svg';
-    case CatalogFmt.bats:
-      return 'assets/icons/bat.svg';
     case CatalogFmt.birds:
       return 'assets/icons/bird.svg';
     case CatalogFmt.herpetofauna:
