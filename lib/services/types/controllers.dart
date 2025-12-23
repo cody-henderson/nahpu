@@ -261,11 +261,11 @@ class NarrativeFormCtrModel {
   TextEditingController narrativeCtr;
 
   factory NarrativeFormCtrModel.empty() => NarrativeFormCtrModel(
-    dateCtr: DateEditingController(),
-    timeCtr: TimeEditingController(),
-    siteCtr: null,
-    writerCtr: null,
-    narrativeCtr: TextEditingController());
+      dateCtr: DateEditingController(),
+      timeCtr: TimeEditingController(),
+      siteCtr: null,
+      writerCtr: null,
+      narrativeCtr: TextEditingController());
 
   void dispose() {
     dateCtr.dispose();
@@ -404,6 +404,13 @@ class MammalMeasurementCtrModel {
     required this.hindFootCtr,
     required this.earCtr,
     required this.forearmCtr,
+    required this.tibiaCtr,
+    required this.showEchoFieldsCtr,
+    required this.echolocationCtr,
+    required this.frequencyMaxCtr,
+    required this.frequencyMinCtr,
+    required this.frequencyAtMaxEnergyCtr,
+    required this.durationCtr,
     required this.weightCtr,
     required this.accuracyCtr,
     required this.sexCtr,
@@ -433,6 +440,13 @@ class MammalMeasurementCtrModel {
   TextEditingController hindFootCtr;
   TextEditingController earCtr;
   TextEditingController forearmCtr;
+  TextEditingController tibiaCtr;
+  bool? showEchoFieldsCtr;
+  int? echolocationCtr;
+  TextEditingController frequencyMaxCtr;
+  TextEditingController frequencyMinCtr;
+  TextEditingController frequencyAtMaxEnergyCtr;
+  TextEditingController durationCtr;
   TextEditingController weightCtr;
   String? accuracyCtr;
   int? sexCtr;
@@ -462,6 +476,13 @@ class MammalMeasurementCtrModel {
       hindFootCtr: TextEditingController(),
       earCtr: TextEditingController(),
       forearmCtr: TextEditingController(),
+      tibiaCtr: TextEditingController(),
+      showEchoFieldsCtr: null,
+      echolocationCtr: null,
+      frequencyMaxCtr: TextEditingController(),
+      frequencyMinCtr: TextEditingController(),
+      frequencyAtMaxEnergyCtr: TextEditingController(),
+      durationCtr: TextEditingController(),
       weightCtr: TextEditingController(),
       accuracyCtr: null,
       sexCtr: null,
@@ -497,6 +518,17 @@ class MammalMeasurementCtrModel {
             TextEditingController(text: data.earLength?.truncateZero() ?? ''),
         forearmCtr:
             TextEditingController(text: data.forearm?.truncateZero() ?? ''),
+        tibiaCtr: TextEditingController(text: data.tibia?.truncateZero() ?? ''),
+        showEchoFieldsCtr: data.showEchoFields == 1,
+        echolocationCtr: data.echolocation,
+        frequencyMaxCtr: TextEditingController(
+            text: data.frequencyMax?.truncateZero() ?? ''),
+        frequencyMinCtr: TextEditingController(
+            text: data.frequencyMin?.truncateZero() ?? ''),
+        frequencyAtMaxEnergyCtr: TextEditingController(
+            text: data.frequencyAtMaxEnergy?.truncateZero() ?? ''),
+        durationCtr:
+            TextEditingController(text: data.duration?.truncateZero() ?? ''),
         weightCtr:
             TextEditingController(text: data.weight?.truncateZero() ?? ''),
         accuracyCtr: data.accuracy?.toString(),

@@ -8573,6 +8573,54 @@ class MammalMeasurement extends Table
       type: DriftSqlType.double,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _tibiaMeta = const VerificationMeta('tibia');
+  late final GeneratedColumn<double> tibia = GeneratedColumn<double>(
+      'tibia', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _showEchoFieldsMeta =
+      const VerificationMeta('showEchoFields');
+  late final GeneratedColumn<int> showEchoFields = GeneratedColumn<int>(
+      'showEchoFields', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _echolocationMeta =
+      const VerificationMeta('echolocation');
+  late final GeneratedColumn<int> echolocation = GeneratedColumn<int>(
+      'echolocation', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _frequencyMaxMeta =
+      const VerificationMeta('frequencyMax');
+  late final GeneratedColumn<double> frequencyMax = GeneratedColumn<double>(
+      'frequencyMax', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _frequencyMinMeta =
+      const VerificationMeta('frequencyMin');
+  late final GeneratedColumn<double> frequencyMin = GeneratedColumn<double>(
+      'frequencyMin', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _frequencyAtMaxEnergyMeta =
+      const VerificationMeta('frequencyAtMaxEnergy');
+  late final GeneratedColumn<double> frequencyAtMaxEnergy =
+      GeneratedColumn<double>('frequencyAtMaxEnergy', aliasedName, true,
+          type: DriftSqlType.double,
+          requiredDuringInsert: false,
+          $customConstraints: '');
+  static const VerificationMeta _durationMeta =
+      const VerificationMeta('duration');
+  late final GeneratedColumn<double> duration = GeneratedColumn<double>(
+      'duration', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _weightMeta = const VerificationMeta('weight');
   late final GeneratedColumn<double> weight = GeneratedColumn<double>(
       'weight', aliasedName, true,
@@ -8732,6 +8780,13 @@ class MammalMeasurement extends Table
         hindFootLength,
         earLength,
         forearm,
+        tibia,
+        showEchoFields,
+        echolocation,
+        frequencyMax,
+        frequencyMin,
+        frequencyAtMaxEnergy,
+        duration,
         weight,
         accuracy,
         accuracySpecify,
@@ -8805,6 +8860,44 @@ class MammalMeasurement extends Table
     if (data.containsKey('forearm')) {
       context.handle(_forearmMeta,
           forearm.isAcceptableOrUnknown(data['forearm']!, _forearmMeta));
+    }
+    if (data.containsKey('tibia')) {
+      context.handle(
+          _tibiaMeta, tibia.isAcceptableOrUnknown(data['tibia']!, _tibiaMeta));
+    }
+    if (data.containsKey('showEchoFields')) {
+      context.handle(
+          _showEchoFieldsMeta,
+          showEchoFields.isAcceptableOrUnknown(
+              data['showEchoFields']!, _showEchoFieldsMeta));
+    }
+    if (data.containsKey('echolocation')) {
+      context.handle(
+          _echolocationMeta,
+          echolocation.isAcceptableOrUnknown(
+              data['echolocation']!, _echolocationMeta));
+    }
+    if (data.containsKey('frequencyMax')) {
+      context.handle(
+          _frequencyMaxMeta,
+          frequencyMax.isAcceptableOrUnknown(
+              data['frequencyMax']!, _frequencyMaxMeta));
+    }
+    if (data.containsKey('frequencyMin')) {
+      context.handle(
+          _frequencyMinMeta,
+          frequencyMin.isAcceptableOrUnknown(
+              data['frequencyMin']!, _frequencyMinMeta));
+    }
+    if (data.containsKey('frequencyAtMaxEnergy')) {
+      context.handle(
+          _frequencyAtMaxEnergyMeta,
+          frequencyAtMaxEnergy.isAcceptableOrUnknown(
+              data['frequencyAtMaxEnergy']!, _frequencyAtMaxEnergyMeta));
+    }
+    if (data.containsKey('duration')) {
+      context.handle(_durationMeta,
+          duration.isAcceptableOrUnknown(data['duration']!, _durationMeta));
     }
     if (data.containsKey('weight')) {
       context.handle(_weightMeta,
@@ -8949,6 +9042,20 @@ class MammalMeasurement extends Table
           .read(DriftSqlType.double, data['${effectivePrefix}earLength']),
       forearm: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}forearm']),
+      tibia: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}tibia']),
+      showEchoFields: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}showEchoFields']),
+      echolocation: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}echolocation']),
+      frequencyMax: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}frequencyMax']),
+      frequencyMin: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}frequencyMin']),
+      frequencyAtMaxEnergy: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}frequencyAtMaxEnergy']),
+      duration: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}duration']),
       weight: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}weight']),
       accuracy: attachedDatabase.typeMapping
@@ -9017,6 +9124,13 @@ class MammalMeasurementData extends DataClass
   final double? hindFootLength;
   final double? earLength;
   final double? forearm;
+  final double? tibia;
+  final int? showEchoFields;
+  final int? echolocation;
+  final double? frequencyMax;
+  final double? frequencyMin;
+  final double? frequencyAtMaxEnergy;
+  final double? duration;
   final double? weight;
   final String? accuracy;
   final String? accuracySpecify;
@@ -9049,6 +9163,13 @@ class MammalMeasurementData extends DataClass
       this.hindFootLength,
       this.earLength,
       this.forearm,
+      this.tibia,
+      this.showEchoFields,
+      this.echolocation,
+      this.frequencyMax,
+      this.frequencyMin,
+      this.frequencyAtMaxEnergy,
+      this.duration,
       this.weight,
       this.accuracy,
       this.accuracySpecify,
@@ -9092,6 +9213,27 @@ class MammalMeasurementData extends DataClass
     }
     if (!nullToAbsent || forearm != null) {
       map['forearm'] = Variable<double>(forearm);
+    }
+    if (!nullToAbsent || tibia != null) {
+      map['tibia'] = Variable<double>(tibia);
+    }
+    if (!nullToAbsent || showEchoFields != null) {
+      map['showEchoFields'] = Variable<int>(showEchoFields);
+    }
+    if (!nullToAbsent || echolocation != null) {
+      map['echolocation'] = Variable<int>(echolocation);
+    }
+    if (!nullToAbsent || frequencyMax != null) {
+      map['frequencyMax'] = Variable<double>(frequencyMax);
+    }
+    if (!nullToAbsent || frequencyMin != null) {
+      map['frequencyMin'] = Variable<double>(frequencyMin);
+    }
+    if (!nullToAbsent || frequencyAtMaxEnergy != null) {
+      map['frequencyAtMaxEnergy'] = Variable<double>(frequencyAtMaxEnergy);
+    }
+    if (!nullToAbsent || duration != null) {
+      map['duration'] = Variable<double>(duration);
     }
     if (!nullToAbsent || weight != null) {
       map['weight'] = Variable<double>(weight);
@@ -9183,6 +9325,26 @@ class MammalMeasurementData extends DataClass
       forearm: forearm == null && nullToAbsent
           ? const Value.absent()
           : Value(forearm),
+      tibia:
+          tibia == null && nullToAbsent ? const Value.absent() : Value(tibia),
+      showEchoFields: showEchoFields == null && nullToAbsent
+          ? const Value.absent()
+          : Value(showEchoFields),
+      echolocation: echolocation == null && nullToAbsent
+          ? const Value.absent()
+          : Value(echolocation),
+      frequencyMax: frequencyMax == null && nullToAbsent
+          ? const Value.absent()
+          : Value(frequencyMax),
+      frequencyMin: frequencyMin == null && nullToAbsent
+          ? const Value.absent()
+          : Value(frequencyMin),
+      frequencyAtMaxEnergy: frequencyAtMaxEnergy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(frequencyAtMaxEnergy),
+      duration: duration == null && nullToAbsent
+          ? const Value.absent()
+          : Value(duration),
       weight:
           weight == null && nullToAbsent ? const Value.absent() : Value(weight),
       accuracy: accuracy == null && nullToAbsent
@@ -9257,6 +9419,14 @@ class MammalMeasurementData extends DataClass
       hindFootLength: serializer.fromJson<double?>(json['hindFootLength']),
       earLength: serializer.fromJson<double?>(json['earLength']),
       forearm: serializer.fromJson<double?>(json['forearm']),
+      tibia: serializer.fromJson<double?>(json['tibia']),
+      showEchoFields: serializer.fromJson<int?>(json['showEchoFields']),
+      echolocation: serializer.fromJson<int?>(json['echolocation']),
+      frequencyMax: serializer.fromJson<double?>(json['frequencyMax']),
+      frequencyMin: serializer.fromJson<double?>(json['frequencyMin']),
+      frequencyAtMaxEnergy:
+          serializer.fromJson<double?>(json['frequencyAtMaxEnergy']),
+      duration: serializer.fromJson<double?>(json['duration']),
       weight: serializer.fromJson<double?>(json['weight']),
       accuracy: serializer.fromJson<String?>(json['accuracy']),
       accuracySpecify: serializer.fromJson<String?>(json['accuracySpecify']),
@@ -9297,6 +9467,13 @@ class MammalMeasurementData extends DataClass
       'hindFootLength': serializer.toJson<double?>(hindFootLength),
       'earLength': serializer.toJson<double?>(earLength),
       'forearm': serializer.toJson<double?>(forearm),
+      'tibia': serializer.toJson<double?>(tibia),
+      'showEchoFields': serializer.toJson<int?>(showEchoFields),
+      'echolocation': serializer.toJson<int?>(echolocation),
+      'frequencyMax': serializer.toJson<double?>(frequencyMax),
+      'frequencyMin': serializer.toJson<double?>(frequencyMin),
+      'frequencyAtMaxEnergy': serializer.toJson<double?>(frequencyAtMaxEnergy),
+      'duration': serializer.toJson<double?>(duration),
       'weight': serializer.toJson<double?>(weight),
       'accuracy': serializer.toJson<String?>(accuracy),
       'accuracySpecify': serializer.toJson<String?>(accuracySpecify),
@@ -9330,6 +9507,13 @@ class MammalMeasurementData extends DataClass
           Value<double?> hindFootLength = const Value.absent(),
           Value<double?> earLength = const Value.absent(),
           Value<double?> forearm = const Value.absent(),
+          Value<double?> tibia = const Value.absent(),
+          Value<int?> showEchoFields = const Value.absent(),
+          Value<int?> echolocation = const Value.absent(),
+          Value<double?> frequencyMax = const Value.absent(),
+          Value<double?> frequencyMin = const Value.absent(),
+          Value<double?> frequencyAtMaxEnergy = const Value.absent(),
+          Value<double?> duration = const Value.absent(),
           Value<double?> weight = const Value.absent(),
           Value<String?> accuracy = const Value.absent(),
           Value<String?> accuracySpecify = const Value.absent(),
@@ -9362,6 +9546,19 @@ class MammalMeasurementData extends DataClass
             hindFootLength.present ? hindFootLength.value : this.hindFootLength,
         earLength: earLength.present ? earLength.value : this.earLength,
         forearm: forearm.present ? forearm.value : this.forearm,
+        tibia: tibia.present ? tibia.value : this.tibia,
+        showEchoFields:
+            showEchoFields.present ? showEchoFields.value : this.showEchoFields,
+        echolocation:
+            echolocation.present ? echolocation.value : this.echolocation,
+        frequencyMax:
+            frequencyMax.present ? frequencyMax.value : this.frequencyMax,
+        frequencyMin:
+            frequencyMin.present ? frequencyMin.value : this.frequencyMin,
+        frequencyAtMaxEnergy: frequencyAtMaxEnergy.present
+            ? frequencyAtMaxEnergy.value
+            : this.frequencyAtMaxEnergy,
+        duration: duration.present ? duration.value : this.duration,
         weight: weight.present ? weight.value : this.weight,
         accuracy: accuracy.present ? accuracy.value : this.accuracy,
         accuracySpecify: accuracySpecify.present
@@ -9428,6 +9625,23 @@ class MammalMeasurementData extends DataClass
           : this.hindFootLength,
       earLength: data.earLength.present ? data.earLength.value : this.earLength,
       forearm: data.forearm.present ? data.forearm.value : this.forearm,
+      tibia: data.tibia.present ? data.tibia.value : this.tibia,
+      showEchoFields: data.showEchoFields.present
+          ? data.showEchoFields.value
+          : this.showEchoFields,
+      echolocation: data.echolocation.present
+          ? data.echolocation.value
+          : this.echolocation,
+      frequencyMax: data.frequencyMax.present
+          ? data.frequencyMax.value
+          : this.frequencyMax,
+      frequencyMin: data.frequencyMin.present
+          ? data.frequencyMin.value
+          : this.frequencyMin,
+      frequencyAtMaxEnergy: data.frequencyAtMaxEnergy.present
+          ? data.frequencyAtMaxEnergy.value
+          : this.frequencyAtMaxEnergy,
+      duration: data.duration.present ? data.duration.value : this.duration,
       weight: data.weight.present ? data.weight.value : this.weight,
       accuracy: data.accuracy.present ? data.accuracy.value : this.accuracy,
       accuracySpecify: data.accuracySpecify.present
@@ -9494,6 +9708,13 @@ class MammalMeasurementData extends DataClass
           ..write('hindFootLength: $hindFootLength, ')
           ..write('earLength: $earLength, ')
           ..write('forearm: $forearm, ')
+          ..write('tibia: $tibia, ')
+          ..write('showEchoFields: $showEchoFields, ')
+          ..write('echolocation: $echolocation, ')
+          ..write('frequencyMax: $frequencyMax, ')
+          ..write('frequencyMin: $frequencyMin, ')
+          ..write('frequencyAtMaxEnergy: $frequencyAtMaxEnergy, ')
+          ..write('duration: $duration, ')
           ..write('weight: $weight, ')
           ..write('accuracy: $accuracy, ')
           ..write('accuracySpecify: $accuracySpecify, ')
@@ -9529,6 +9750,13 @@ class MammalMeasurementData extends DataClass
         hindFootLength,
         earLength,
         forearm,
+        tibia,
+        showEchoFields,
+        echolocation,
+        frequencyMax,
+        frequencyMin,
+        frequencyAtMaxEnergy,
+        duration,
         weight,
         accuracy,
         accuracySpecify,
@@ -9563,6 +9791,13 @@ class MammalMeasurementData extends DataClass
           other.hindFootLength == this.hindFootLength &&
           other.earLength == this.earLength &&
           other.forearm == this.forearm &&
+          other.tibia == this.tibia &&
+          other.showEchoFields == this.showEchoFields &&
+          other.echolocation == this.echolocation &&
+          other.frequencyMax == this.frequencyMax &&
+          other.frequencyMin == this.frequencyMin &&
+          other.frequencyAtMaxEnergy == this.frequencyAtMaxEnergy &&
+          other.duration == this.duration &&
           other.weight == this.weight &&
           other.accuracy == this.accuracy &&
           other.accuracySpecify == this.accuracySpecify &&
@@ -9596,6 +9831,13 @@ class MammalMeasurementCompanion
   final Value<double?> hindFootLength;
   final Value<double?> earLength;
   final Value<double?> forearm;
+  final Value<double?> tibia;
+  final Value<int?> showEchoFields;
+  final Value<int?> echolocation;
+  final Value<double?> frequencyMax;
+  final Value<double?> frequencyMin;
+  final Value<double?> frequencyAtMaxEnergy;
+  final Value<double?> duration;
   final Value<double?> weight;
   final Value<String?> accuracy;
   final Value<String?> accuracySpecify;
@@ -9627,6 +9869,13 @@ class MammalMeasurementCompanion
     this.hindFootLength = const Value.absent(),
     this.earLength = const Value.absent(),
     this.forearm = const Value.absent(),
+    this.tibia = const Value.absent(),
+    this.showEchoFields = const Value.absent(),
+    this.echolocation = const Value.absent(),
+    this.frequencyMax = const Value.absent(),
+    this.frequencyMin = const Value.absent(),
+    this.frequencyAtMaxEnergy = const Value.absent(),
+    this.duration = const Value.absent(),
     this.weight = const Value.absent(),
     this.accuracy = const Value.absent(),
     this.accuracySpecify = const Value.absent(),
@@ -9659,6 +9908,13 @@ class MammalMeasurementCompanion
     this.hindFootLength = const Value.absent(),
     this.earLength = const Value.absent(),
     this.forearm = const Value.absent(),
+    this.tibia = const Value.absent(),
+    this.showEchoFields = const Value.absent(),
+    this.echolocation = const Value.absent(),
+    this.frequencyMax = const Value.absent(),
+    this.frequencyMin = const Value.absent(),
+    this.frequencyAtMaxEnergy = const Value.absent(),
+    this.duration = const Value.absent(),
     this.weight = const Value.absent(),
     this.accuracy = const Value.absent(),
     this.accuracySpecify = const Value.absent(),
@@ -9691,6 +9947,13 @@ class MammalMeasurementCompanion
     Expression<double>? hindFootLength,
     Expression<double>? earLength,
     Expression<double>? forearm,
+    Expression<double>? tibia,
+    Expression<int>? showEchoFields,
+    Expression<int>? echolocation,
+    Expression<double>? frequencyMax,
+    Expression<double>? frequencyMin,
+    Expression<double>? frequencyAtMaxEnergy,
+    Expression<double>? duration,
     Expression<double>? weight,
     Expression<String>? accuracy,
     Expression<String>? accuracySpecify,
@@ -9723,6 +9986,14 @@ class MammalMeasurementCompanion
       if (hindFootLength != null) 'hindFootLength': hindFootLength,
       if (earLength != null) 'earLength': earLength,
       if (forearm != null) 'forearm': forearm,
+      if (tibia != null) 'tibia': tibia,
+      if (showEchoFields != null) 'showEchoFields': showEchoFields,
+      if (echolocation != null) 'echolocation': echolocation,
+      if (frequencyMax != null) 'frequencyMax': frequencyMax,
+      if (frequencyMin != null) 'frequencyMin': frequencyMin,
+      if (frequencyAtMaxEnergy != null)
+        'frequencyAtMaxEnergy': frequencyAtMaxEnergy,
+      if (duration != null) 'duration': duration,
       if (weight != null) 'weight': weight,
       if (accuracy != null) 'accuracy': accuracy,
       if (accuracySpecify != null) 'accuracySpecify': accuracySpecify,
@@ -9762,6 +10033,13 @@ class MammalMeasurementCompanion
       Value<double?>? hindFootLength,
       Value<double?>? earLength,
       Value<double?>? forearm,
+      Value<double?>? tibia,
+      Value<int?>? showEchoFields,
+      Value<int?>? echolocation,
+      Value<double?>? frequencyMax,
+      Value<double?>? frequencyMin,
+      Value<double?>? frequencyAtMaxEnergy,
+      Value<double?>? duration,
       Value<double?>? weight,
       Value<String?>? accuracy,
       Value<String?>? accuracySpecify,
@@ -9793,6 +10071,13 @@ class MammalMeasurementCompanion
       hindFootLength: hindFootLength ?? this.hindFootLength,
       earLength: earLength ?? this.earLength,
       forearm: forearm ?? this.forearm,
+      tibia: tibia ?? this.tibia,
+      showEchoFields: showEchoFields ?? this.showEchoFields,
+      echolocation: echolocation ?? this.echolocation,
+      frequencyMax: frequencyMax ?? this.frequencyMax,
+      frequencyMin: frequencyMin ?? this.frequencyMin,
+      frequencyAtMaxEnergy: frequencyAtMaxEnergy ?? this.frequencyAtMaxEnergy,
+      duration: duration ?? this.duration,
       weight: weight ?? this.weight,
       accuracy: accuracy ?? this.accuracy,
       accuracySpecify: accuracySpecify ?? this.accuracySpecify,
@@ -9842,6 +10127,28 @@ class MammalMeasurementCompanion
     }
     if (forearm.present) {
       map['forearm'] = Variable<double>(forearm.value);
+    }
+    if (tibia.present) {
+      map['tibia'] = Variable<double>(tibia.value);
+    }
+    if (showEchoFields.present) {
+      map['showEchoFields'] = Variable<int>(showEchoFields.value);
+    }
+    if (echolocation.present) {
+      map['echolocation'] = Variable<int>(echolocation.value);
+    }
+    if (frequencyMax.present) {
+      map['frequencyMax'] = Variable<double>(frequencyMax.value);
+    }
+    if (frequencyMin.present) {
+      map['frequencyMin'] = Variable<double>(frequencyMin.value);
+    }
+    if (frequencyAtMaxEnergy.present) {
+      map['frequencyAtMaxEnergy'] =
+          Variable<double>(frequencyAtMaxEnergy.value);
+    }
+    if (duration.present) {
+      map['duration'] = Variable<double>(duration.value);
     }
     if (weight.present) {
       map['weight'] = Variable<double>(weight.value);
@@ -9925,6 +10232,13 @@ class MammalMeasurementCompanion
           ..write('hindFootLength: $hindFootLength, ')
           ..write('earLength: $earLength, ')
           ..write('forearm: $forearm, ')
+          ..write('tibia: $tibia, ')
+          ..write('showEchoFields: $showEchoFields, ')
+          ..write('echolocation: $echolocation, ')
+          ..write('frequencyMax: $frequencyMax, ')
+          ..write('frequencyMin: $frequencyMin, ')
+          ..write('frequencyAtMaxEnergy: $frequencyAtMaxEnergy, ')
+          ..write('duration: $duration, ')
           ..write('weight: $weight, ')
           ..write('accuracy: $accuracy, ')
           ..write('accuracySpecify: $accuracySpecify, ')
@@ -17360,6 +17674,13 @@ typedef $MammalMeasurementCreateCompanionBuilder = MammalMeasurementCompanion
   Value<double?> hindFootLength,
   Value<double?> earLength,
   Value<double?> forearm,
+  Value<double?> tibia,
+  Value<int?> showEchoFields,
+  Value<int?> echolocation,
+  Value<double?> frequencyMax,
+  Value<double?> frequencyMin,
+  Value<double?> frequencyAtMaxEnergy,
+  Value<double?> duration,
   Value<double?> weight,
   Value<String?> accuracy,
   Value<String?> accuracySpecify,
@@ -17393,6 +17714,13 @@ typedef $MammalMeasurementUpdateCompanionBuilder = MammalMeasurementCompanion
   Value<double?> hindFootLength,
   Value<double?> earLength,
   Value<double?> forearm,
+  Value<double?> tibia,
+  Value<int?> showEchoFields,
+  Value<int?> echolocation,
+  Value<double?> frequencyMax,
+  Value<double?> frequencyMin,
+  Value<double?> frequencyAtMaxEnergy,
+  Value<double?> duration,
   Value<double?> weight,
   Value<String?> accuracy,
   Value<String?> accuracySpecify,
@@ -17448,6 +17776,29 @@ class $MammalMeasurementFilterComposer
 
   ColumnFilters<double> get forearm => $composableBuilder(
       column: $table.forearm, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get tibia => $composableBuilder(
+      column: $table.tibia, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get showEchoFields => $composableBuilder(
+      column: $table.showEchoFields,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get echolocation => $composableBuilder(
+      column: $table.echolocation, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get frequencyMax => $composableBuilder(
+      column: $table.frequencyMax, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get frequencyMin => $composableBuilder(
+      column: $table.frequencyMin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get frequencyAtMaxEnergy => $composableBuilder(
+      column: $table.frequencyAtMaxEnergy,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<double> get weight => $composableBuilder(
       column: $table.weight, builder: (column) => ColumnFilters(column));
@@ -17562,6 +17913,32 @@ class $MammalMeasurementOrderingComposer
   ColumnOrderings<double> get forearm => $composableBuilder(
       column: $table.forearm, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<double> get tibia => $composableBuilder(
+      column: $table.tibia, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get showEchoFields => $composableBuilder(
+      column: $table.showEchoFields,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get echolocation => $composableBuilder(
+      column: $table.echolocation,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get frequencyMax => $composableBuilder(
+      column: $table.frequencyMax,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get frequencyMin => $composableBuilder(
+      column: $table.frequencyMin,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get frequencyAtMaxEnergy => $composableBuilder(
+      column: $table.frequencyAtMaxEnergy,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<double> get weight => $composableBuilder(
       column: $table.weight, builder: (column) => ColumnOrderings(column));
 
@@ -17674,6 +18051,27 @@ class $MammalMeasurementAnnotationComposer
   GeneratedColumn<double> get forearm =>
       $composableBuilder(column: $table.forearm, builder: (column) => column);
 
+  GeneratedColumn<double> get tibia =>
+      $composableBuilder(column: $table.tibia, builder: (column) => column);
+
+  GeneratedColumn<int> get showEchoFields => $composableBuilder(
+      column: $table.showEchoFields, builder: (column) => column);
+
+  GeneratedColumn<int> get echolocation => $composableBuilder(
+      column: $table.echolocation, builder: (column) => column);
+
+  GeneratedColumn<double> get frequencyMax => $composableBuilder(
+      column: $table.frequencyMax, builder: (column) => column);
+
+  GeneratedColumn<double> get frequencyMin => $composableBuilder(
+      column: $table.frequencyMin, builder: (column) => column);
+
+  GeneratedColumn<double> get frequencyAtMaxEnergy => $composableBuilder(
+      column: $table.frequencyAtMaxEnergy, builder: (column) => column);
+
+  GeneratedColumn<double> get duration =>
+      $composableBuilder(column: $table.duration, builder: (column) => column);
+
   GeneratedColumn<double> get weight =>
       $composableBuilder(column: $table.weight, builder: (column) => column);
 
@@ -17774,6 +18172,13 @@ class $MammalMeasurementTableManager extends RootTableManager<
             Value<double?> hindFootLength = const Value.absent(),
             Value<double?> earLength = const Value.absent(),
             Value<double?> forearm = const Value.absent(),
+            Value<double?> tibia = const Value.absent(),
+            Value<int?> showEchoFields = const Value.absent(),
+            Value<int?> echolocation = const Value.absent(),
+            Value<double?> frequencyMax = const Value.absent(),
+            Value<double?> frequencyMin = const Value.absent(),
+            Value<double?> frequencyAtMaxEnergy = const Value.absent(),
+            Value<double?> duration = const Value.absent(),
             Value<double?> weight = const Value.absent(),
             Value<String?> accuracy = const Value.absent(),
             Value<String?> accuracySpecify = const Value.absent(),
@@ -17806,6 +18211,13 @@ class $MammalMeasurementTableManager extends RootTableManager<
             hindFootLength: hindFootLength,
             earLength: earLength,
             forearm: forearm,
+            tibia: tibia,
+            showEchoFields: showEchoFields,
+            echolocation: echolocation,
+            frequencyMax: frequencyMax,
+            frequencyMin: frequencyMin,
+            frequencyAtMaxEnergy: frequencyAtMaxEnergy,
+            duration: duration,
             weight: weight,
             accuracy: accuracy,
             accuracySpecify: accuracySpecify,
@@ -17838,6 +18250,13 @@ class $MammalMeasurementTableManager extends RootTableManager<
             Value<double?> hindFootLength = const Value.absent(),
             Value<double?> earLength = const Value.absent(),
             Value<double?> forearm = const Value.absent(),
+            Value<double?> tibia = const Value.absent(),
+            Value<int?> showEchoFields = const Value.absent(),
+            Value<int?> echolocation = const Value.absent(),
+            Value<double?> frequencyMax = const Value.absent(),
+            Value<double?> frequencyMin = const Value.absent(),
+            Value<double?> frequencyAtMaxEnergy = const Value.absent(),
+            Value<double?> duration = const Value.absent(),
             Value<double?> weight = const Value.absent(),
             Value<String?> accuracy = const Value.absent(),
             Value<String?> accuracySpecify = const Value.absent(),
@@ -17870,6 +18289,13 @@ class $MammalMeasurementTableManager extends RootTableManager<
             hindFootLength: hindFootLength,
             earLength: earLength,
             forearm: forearm,
+            tibia: tibia,
+            showEchoFields: showEchoFields,
+            echolocation: echolocation,
+            frequencyMax: frequencyMax,
+            frequencyMin: frequencyMin,
+            frequencyAtMaxEnergy: frequencyAtMaxEnergy,
+            duration: duration,
             weight: weight,
             accuracy: accuracy,
             accuracySpecify: accuracySpecify,
