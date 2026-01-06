@@ -90,7 +90,6 @@ class Database extends _$Database {
         print('Migration v7: failed to add narrative.time: $e');
       }
     }
-    
 
     // Timezones
     await m.addColumn(project, project.timeZone);
@@ -101,6 +100,16 @@ class Database extends _$Database {
     // Boolean for showing bat-specific measurements
     await m.addColumn(mammalMeasurement, mammalMeasurement.showBatFields);
     await setShowBatFieldsBoolean(m);
+
+    // New bat measurements
+    await m.addColumn(mammalMeasurement, mammalMeasurement.tibia);
+    await m.addColumn(mammalMeasurement, mammalMeasurement.showEchoFields);
+    await m.addColumn(mammalMeasurement, mammalMeasurement.echolocation);
+    await m.addColumn(mammalMeasurement, mammalMeasurement.frequencyMax);
+    await m.addColumn(mammalMeasurement, mammalMeasurement.frequencyMin);
+    await m.addColumn(
+        mammalMeasurement, mammalMeasurement.frequencyAtMaxEnergy);
+    await m.addColumn(mammalMeasurement, mammalMeasurement.duration);
   }
 
   Future<void> _migrateFromVersion5(Migrator m) async {

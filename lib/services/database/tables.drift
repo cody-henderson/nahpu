@@ -8,6 +8,7 @@ New to v7:
 1. Add timeZone to the project table
 2. Add herpetofauna measurement table
 3. Add showBatFields boolean field to mammalMeasurment table
+4. Add additional bat measurement fields
 
 New to v6:
 1. Add collectionDate to the specimen table
@@ -254,6 +255,13 @@ CREATE TABLE mammalMeasurement (
     hindFootLength REAL,
     earLength REAL,
     forearm REAL,
+    tibia REAL,
+    showEchoFields INT,
+    echolocation INT,
+    frequencyMax REAL,
+    frequencyMin REAL,
+    frequencyAtMaxEnergy REAL,
+    duration REAL,
     weight REAL,
     accuracy TEXT,
     accuracySpecify TEXT,
