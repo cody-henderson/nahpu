@@ -74,8 +74,9 @@ class SiteNameField extends ConsumerWidget {
       site.stateProvince,
       site.county,
       site.municipality,
+      site.locality,
     ];
-    
+
     // Filter out null or empty strings
     final String siteName = localityList
         .where((e) => e != null && e.isNotEmpty)
@@ -85,15 +86,17 @@ class SiteNameField extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return Container(
-      width: double.infinity,
+    return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Text(
-        siteName,
-        textAlign: TextAlign.left,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
+      child: TextField(
+        controller: TextEditingController(text: siteName),
+        enabled: true,
+        readOnly: true,
+        maxLines: null,
+        decoration: const InputDecoration(
+          labelText: 'Site Name',
+          hintText: 'Broad locality',
+        ),
       ),
     );
   }
