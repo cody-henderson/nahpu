@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/services/providers/sites.dart';
 import 'package:nahpu/services/providers/personnel.dart';
 import 'package:nahpu/screens/shared/features.dart';
+import 'package:nahpu/screens/shared/layout.dart';
 import 'package:nahpu/screens/shared/fields.dart';
 import 'package:nahpu/services/database/database.dart';
 import 'package:nahpu/services/types/controllers.dart';
@@ -86,8 +87,7 @@ class SiteNameField extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+    return CommonPadding(
       child: TextField(
         controller: TextEditingController(text: siteName),
         enabled: true,
