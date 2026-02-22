@@ -12,10 +12,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'collevents.g.dart';
 
-const String collEventMethodPrefKey = 'collEventMethods';
-const String collEventMethodFmtPrefKey = 'collEventMethodFmt';
-const String collPersonnelRolePrefKey = 'collPersonnelRoles';
-const String collPersonnelRoleFmtPrefKey = 'collPersonnelRoleFmt';
+const String collMethodPrefKey = 'collEventMethods';
+const String collMethodFmtPrefKey = 'collEventMethodFmt';
+const String collRolePrefKey = 'collPersonnelRoles';
+const String collRoleFmtPrefKey = 'collPersonnelRoleFmt';
 
 @riverpod
 class CollEventEntry extends _$CollEventEntry {
@@ -71,12 +71,12 @@ final weatherDataProvider = FutureProvider.family.autoDispose<WeatherData, int>(
 class CollEventMethod extends _$CollEventMethod {
   Future<List<String>> _fetchSettings() async {
     final prefs = ref.watch(settingProvider);
-    final methodList = prefs.getStringList(collEventMethodPrefKey);
+    final methodList = prefs.getStringList(collMethodPrefKey);
 
     List<String> currentMethods = methodList ?? defaultCollMethods;
 
     if (methodList == null) {
-      await prefs.setStringList(collEventMethodPrefKey, currentMethods);
+      await prefs.setStringList(collMethodPrefKey, currentMethods);
     }
 
     return currentMethods;
@@ -92,14 +92,14 @@ class CollEventMethod extends _$CollEventMethod {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      final methodList = prefs.getStringList(collEventMethodPrefKey);
+      final methodList = prefs.getStringList(collMethodPrefKey);
       if (methodList != null && isListContains(methodList, newMethod)) {
         return methodList;
       }
       // Add new method to list or create new list if null
       // and then add a new method to the list
       List<String> newList = [...methodList ?? [], newMethod];
-      await prefs.setStringList(collEventMethodPrefKey, newList);
+      await prefs.setStringList(collMethodPrefKey, newList);
       return newList;
     });
   }
@@ -109,7 +109,7 @@ class CollEventMethod extends _$CollEventMethod {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      await prefs.setStringList(collEventMethodPrefKey, newMethods);
+      await prefs.setStringList(collMethodPrefKey, newMethods);
       return newMethods;
     });
   }
@@ -119,12 +119,12 @@ class CollEventMethod extends _$CollEventMethod {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      final methodList = prefs.getStringList(collEventMethodPrefKey);
+      final methodList = prefs.getStringList(collMethodPrefKey);
       if (methodList == null || methodList.isEmpty) return [];
 
       // Remove method from list
       List<String> newList = [...methodList]..remove(method);
-      await prefs.setStringList(collEventMethodPrefKey, newList);
+      await prefs.setStringList(collMethodPrefKey, newList);
       return newList;
     });
   }
@@ -133,7 +133,7 @@ class CollEventMethod extends _$CollEventMethod {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      await prefs.remove(collEventMethodPrefKey);
+      await prefs.remove(collMethodPrefKey);
       return [];
     });
   }
@@ -143,12 +143,12 @@ class CollEventMethod extends _$CollEventMethod {
 class CollPersonnelRole extends _$CollPersonnelRole {
   Future<List<String>> _fetchSettings() async {
     final prefs = ref.watch(settingProvider);
-    final roleList = prefs.getStringList(collPersonnelRolePrefKey);
+    final roleList = prefs.getStringList(collRolePrefKey);
 
-    List<String> currentRoles = roleList ?? defaultCollPersonnelRoles;
+    List<String> currentRoles = roleList ?? defaultCollRoles;
 
     if (roleList == null) {
-      await prefs.setStringList(collPersonnelRolePrefKey, currentRoles);
+      await prefs.setStringList(collRolePrefKey, currentRoles);
     }
 
     return currentRoles;
@@ -164,14 +164,14 @@ class CollPersonnelRole extends _$CollPersonnelRole {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      final roleList = prefs.getStringList(collPersonnelRolePrefKey);
+      final roleList = prefs.getStringList(collRolePrefKey);
       if (roleList != null && isListContains(roleList, newRole)) {
         return roleList;
       }
       // Add new role to list or create new list if null
       // and then add a new role to the list
       List<String> newList = [...roleList ?? [], newRole];
-      await prefs.setStringList(collPersonnelRolePrefKey, newList);
+      await prefs.setStringList(collRolePrefKey, newList);
       return newList;
     });
   }
@@ -181,7 +181,7 @@ class CollPersonnelRole extends _$CollPersonnelRole {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      await prefs.setStringList(collPersonnelRolePrefKey, newRoles);
+      await prefs.setStringList(collRolePrefKey, newRoles);
       return newRoles;
     });
   }
@@ -191,11 +191,11 @@ class CollPersonnelRole extends _$CollPersonnelRole {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      final roleList = prefs.getStringList(collPersonnelRolePrefKey);
+      final roleList = prefs.getStringList(collRolePrefKey);
 
       if (!roleList!.contains(role)) return roleList;
       List<String> newList = [...roleList]..remove(role);
-      await prefs.setStringList(collPersonnelRolePrefKey, newList);
+      await prefs.setStringList(collRolePrefKey, newList);
       return newList;
     });
   }
@@ -204,7 +204,7 @@ class CollPersonnelRole extends _$CollPersonnelRole {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final prefs = ref.watch(settingProvider);
-      await prefs.remove(collPersonnelRolePrefKey);
+      await prefs.remove(collRolePrefKey);
       return [];
     });
   }
