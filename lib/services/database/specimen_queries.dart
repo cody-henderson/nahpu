@@ -26,6 +26,12 @@ class SpecimenQuery extends DatabaseAccessor<Database>
         .get();
   }
 
+  Future<List<String>> getColumnNames() async {
+    List<String> columnNames =
+        db.specimen.$columns.map((e) => e.$name).toList();
+    return columnNames;
+  }
+
   Future<List<String>> getAllSpecimenUuids(String projectUuid) {
     return (select(specimen, distinct: true)
           ..where((t) => t.projectUuid.equals(projectUuid)))

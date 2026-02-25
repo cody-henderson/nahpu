@@ -101,6 +101,10 @@ class SpecimenServices extends AppServices {
     return SpecimenQuery(dbAccess).getUniqueTaxonGroup(currentProjectUuid);
   }
 
+  Future<List<String>> getColumnNames() async {
+    return SpecimenQuery(dbAccess).getColumnNames();
+  }
+
   Future<void> createSpecimenMediaFromList(
     String specimenUuid,
     List<String> filePaths,
