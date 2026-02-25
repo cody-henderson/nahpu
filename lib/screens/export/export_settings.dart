@@ -1,32 +1,29 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nahpu/screens/shared/fields.dart';
 import 'package:nahpu/services/types/controllers.dart';
 import 'package:nahpu/services/types/export.dart';
 import 'package:nahpu/screens/shared/file_operation.dart';
 import 'package:nahpu/screens/shared/buttons.dart';
 import 'package:nahpu/services/io_services.dart';
-import 'package:nahpu/services/export/db_writer.dart';
+import 'package:nahpu/services/kdl_services.dart';
 
-const String _dbExtension = 'sqlite3';
+const String _settingsExtension = 'kdl';
 
-class ExportDbForm extends ConsumerStatefulWidget {
-  const ExportDbForm({super.key});
+class ExportSettingsForm extends ConsumerStatefulWidget {
+  const ExportSettingsForm({super.key});
 
   @override
-  ExportDbFormState createState() => ExportDbFormState();
+  ExportSettingsFormState createState() => ExportSettingsFormState();
 }
 
-class ExportDbFormState extends ConsumerState<ExportDbForm> {
+class ExportSettingsFormState extends ConsumerState<ExportSettingsForm> {
   DbExportFmt exportFmt = DbExportFmt.sqlite3;
   FileOpCtrModel exportCtr = FileOpCtrModel.empty();
   String _fileStem = 'backup';
   Directory? _selectedDir;
   bool _hasSaved = false;
   bool _isRunning = false;
-  bool _isWithProjectData = false;
-  bool _isWithAppSettings = false;
   late File _savePath;
 
   @override
@@ -44,50 +41,12 @@ class ExportDbFormState extends ConsumerState<ExportDbForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Backup database'),
+        title: const Text('Backup app settings'),
         automaticallyImplyLeading: false,
       ),
       body: FileOperationPage(
         children: [
-          FileFormatIcon(path: _getDbIconPath()),
-          DropdownButtonFormField(
-            initialValue: exportFmt,
-            decoration: const InputDecoration(
-              labelText: 'Database format',
-            ),
-            items: dbExportFmt.entries
-                .map(
-                  (e) => DropdownMenuItem(
-                    value: e.key,
-                    child: Text(e.value),
-                  ),
-                )
-                .toList(),
-            onChanged: (DbExportFmt? value) {
-              if (value != null) {
-                setState(() {
-                  exportFmt = value;
-                  _hasSaved = false;
-                });
-              }
-            },
-          ),
-          SwitchField(
-              label: 'Include project data',
-              value: _isWithProjectData,
-              onPressed: (value) {
-                setState(() {
-                  _isWithProjectData = !_isWithProjectData;
-                });
-              }),
-          SwitchField(
-              label: 'Include app settings',
-              value: _isWithAppSettings,
-              onPressed: (value) {
-                setState(() {
-                  _isWithAppSettings = !_isWithAppSettings;
-                });
-              }),
+          FileFormatIcon(path: 'assets/icons/settings.svg'),
           FileNameField(
             controller: exportCtr,
             onChanged: (String? value) {
@@ -146,23 +105,14 @@ class ExportDbFormState extends ConsumerState<ExportDbForm> {
     );
   }
 
-  String _getDbIconPath() {
-    if (_isWithProjectData || _isWithAppSettings) {
-      return 'assets/icons/zip.svg';
-    } else {
-      return 'assets/icons/sqlite.svg';
-    }
-  }
-
   Future<void> _writeDb() async {
     try {
       _savePath = await AppIOServices(
         dir: _selectedDir,
         fileStem: _fileStem,
-        ext: _dbExtension,
+        ext: _settingsExtension,
       ).getSavePath();
-      final currentSavePath = await DbExport(ref: ref, filePath: _savePath)
-          .write(_isWithProjectData, _isWithAppSettings);
+      final currentSavePath = await KdlServices().write(_savePath.path);
       setState(() {
         _hasSaved = true;
         _savePath = currentSavePath;
