@@ -52,11 +52,11 @@ class EventFormats extends ConsumerWidget {
               TextCaseFmtDropDown(
                   ref: ref,
                   label: 'Collection methods',
-                  textCasePrefString: collEventMethodFmtPrefKey),
+                  textCasePrefString: collMethodFmtPrefKey),
               TextCaseFmtDropDown(
                   ref: ref,
                   label: 'Personnel roles',
-                  textCasePrefString: collPersonnelRoleFmtPrefKey),
+                  textCasePrefString: collRoleFmtPrefKey),
             ],
           ))
     ]);
@@ -73,7 +73,7 @@ class CollMethodSettings extends ConsumerWidget {
       title: 'Collection methods',
       controller: controller,
       ref: ref,
-      textCasePrefString: collEventMethodFmtPrefKey,
+      textCasePrefString: collMethodFmtPrefKey,
       chipList: ref.watch(collEventMethodProvider).when(
             data: (data) {
               return data.map((e) {
@@ -125,7 +125,7 @@ class PersonnelRoleSetting extends ConsumerWidget {
       title: 'Personnel roles',
       controller: controller,
       ref: ref,
-      textCasePrefString: collPersonnelRoleFmtPrefKey,
+      textCasePrefString: collRoleFmtPrefKey,
       chipList: ref.watch(collPersonnelRoleProvider).when(
             data: (data) {
               return data.map((e) {
