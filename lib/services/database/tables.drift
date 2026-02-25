@@ -337,7 +337,6 @@ CREATE TABLE herpMeasurement (
     weight REAL,
     svl REAL,
     remark TEXT,
-
     FOREIGN KEY(specimenUuid) REFERENCES specimen(uuid)
 );
 
