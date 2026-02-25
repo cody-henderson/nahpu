@@ -285,7 +285,7 @@ class CollEvenPersonnelServices extends AppServices {
   Future<void> getAllRoles() async {
     List<String> data = await CollPersonnelQuery(dbAccess).getDistinctRoles();
     final notifier = ref.read(collPersonnelRoleProvider.notifier);
-    List<String> roles = data.isEmpty ? defaultCollPersonnelRoles : data;
+    List<String> roles = data.isEmpty ? defaultCollRoles : data;
     notifier.replaceAll(roles);
     _invalidateCollPersonnel();
   }

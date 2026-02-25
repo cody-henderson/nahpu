@@ -180,7 +180,7 @@ class TreatmentOptions extends _$TreatmentOptions {
     final prefs = ref.watch(settingProvider);
     final treatmentList = prefs.getStringList(treatmentPrefKey);
 
-    List<String> currentTreatments = treatmentList ?? defaultSpecimenTreatment;
+    List<String> currentTreatments = treatmentList ?? defaultTreatment;
 
     if (treatmentList == null) {
       await prefs.setStringList(treatmentPrefKey, currentTreatments);

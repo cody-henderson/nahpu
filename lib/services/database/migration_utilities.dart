@@ -6,6 +6,8 @@ import 'package:nahpu/services/database/specimen_queries.dart';
 import 'package:nahpu/services/database/narrative_queries.dart';
 import 'package:intl/intl.dart';
 
+// ignore_for_file: experimental_member_use
+
 Future<void> castMammalType(Migrator m) async {
   final mammalMeasurement = (m.database as Database).mammalMeasurement;
 

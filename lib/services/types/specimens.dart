@@ -56,7 +56,7 @@ const List<String> defaultSpecimenType = [
   'Kidney',
 ];
 
-const List<String> defaultSpecimenTreatment = [
+const List<String> defaultTreatment = [
   'None',
   'ETOH',
   'Formalin',

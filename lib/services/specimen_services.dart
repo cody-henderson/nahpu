@@ -592,7 +592,7 @@ class SpecimenPartServices extends AppServices {
         await SpecimenPartQuery(dbAccess).getDistinctTreatments();
     final notifier = ref.read(treatmentOptionsProvider.notifier);
     List<String> finalList =
-        treatmentList.isEmpty ? defaultSpecimenTreatment : treatmentList;
+        treatmentList.isEmpty ? defaultTreatment : treatmentList;
     notifier.replaceAll(finalList);
     _invalidateTreatmentOptions();
   }

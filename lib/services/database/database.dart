@@ -9,6 +9,8 @@ import 'package:path/path.dart' as p;
 
 part 'database.g.dart';
 
+// ignore_for_file: experimental_member_use
+
 /// The database schema version.
 /// Steps to update the schema:
 /// 1. Write the new schema in the [tables.drift] file.
