@@ -152,10 +152,13 @@ class Database extends _$Database {
     await m.renameColumn(associatedData, 'secondaryId', associatedData.name);
     await m.renameColumn(associatedData, 'fileId', associatedData.url);
     // Remove secondaryIdRef
+    // ignore: experimental_member_use
     await m.alterTable(TableMigration(associatedData));
 
     // Sites
+    // ignore: experimental_member_use
     await m.alterTable(TableMigration(coordinate));
+    // ignore: experimental_member_use
     await m.alterTable(TableMigration(coordinate, columnTransformer: {
       coordinate.elevationInMeter: coordinate.elevationInMeter.cast<double>(),
     }));
@@ -180,7 +183,9 @@ class Database extends _$Database {
     await m.deleteTable('fileMetadata');
     await m.deleteTable('personnelPhoto');
     // delete column from media table and personnel tables
+    // ignore: experimental_member_use
     await m.alterTable(TableMigration(personnel));
+    // ignore: experimental_member_use
     await m.alterTable(TableMigration(media));
   }
 

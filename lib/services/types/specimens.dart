@@ -163,7 +163,7 @@ String matchCatFmtToTaxonGroup(CatalogFmt catalogFmt) {
     case CatalogFmt.birds:
       return 'Birds';
     case CatalogFmt.mammals:
-      return 'General Mammals';
+      return 'Mammals';
     case CatalogFmt.herpetofauna:
       return 'Herpetofauna';
   }

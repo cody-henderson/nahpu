@@ -45,7 +45,7 @@ class EventFormats extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CommonSettingSection(title: 'Formats', children: [
       Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
           child: AdaptiveLayout(
             useHorizontalLayout: !isMobile,
             children: [

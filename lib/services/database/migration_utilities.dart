@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 Future<void> castMammalType(Migrator m) async {
   final mammalMeasurement = (m.database as Database).mammalMeasurement;
 
+  // ignore: experimental_member_use
   await m.alterTable(TableMigration(mammalMeasurement, columnTransformer: {
     mammalMeasurement.totalLength: mammalMeasurement.totalLength.cast<double>(),
     mammalMeasurement.tailLength: mammalMeasurement.tailLength.cast<double>(),
