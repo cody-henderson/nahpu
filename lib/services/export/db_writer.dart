@@ -142,6 +142,15 @@ class DbWriter extends AppServices {
       files.removeWhere((file) => file.path.endsWith('.db'));
     }
 
+    // Process app settings file
+    if (files.any((file) => file.path.endsWith('.kdl'))) {
+      FileSystemEntity settingsFileEntity =
+          files.firstWhere((file) => file.path.endsWith('.kdl'));
+      File settingsFile = File(settingsFileEntity.path);
+      KdlServices().readAndUpdateSettings(settingsFile.path);
+      files.remove(settingsFile);
+    }
+
     for (var file in files) {
       if (file is File) {
         final filename = p.relative(file.path, from: tempDir.path);

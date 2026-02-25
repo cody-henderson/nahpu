@@ -39,7 +39,15 @@ class SharedPref {
     required this.defaultValue,
   });
 
-  static Future<SharedPref> create(
+  static SharedPref create(String key, PrefType type, dynamic value) {
+    SharedPref sp =
+        SharedPref._internal(key: key, type: type, defaultValue: null);
+    sp.value = value;
+
+    return sp;
+  }
+
+  static Future<SharedPref> createAndGetValue(
       String key, PrefType type, dynamic defaultValue) async {
     SharedPref sp =
         SharedPref._internal(key: key, type: type, defaultValue: defaultValue);
@@ -65,6 +73,24 @@ class SharedPref {
           break;
         case PrefType.strList:
           value = prefs.getStringList(key);
+          break;
+      }
+    }
+  }
+
+  void updateSharedPref() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (value != null) {
+      switch (type) {
+        case PrefType.string:
+          prefs.setString(key, value as String);
+          break;
+        case PrefType.bool:
+          prefs.setBool(key, value as bool);
+          break;
+        case PrefType.strList:
+          prefs.setStringList(key, value.cast<String>());
           break;
       }
     }
@@ -100,7 +126,8 @@ class KdlServices {
     List<SharedPref> sPList = [];
 
     for (var pref in prefs) {
-      sPList.add(await SharedPref.create(pref.key, pref.type, pref.def));
+      sPList.add(
+          await SharedPref.createAndGetValue(pref.key, pref.type, pref.def));
     }
 
     KdlDocument kdl = KdlDocument();
@@ -112,5 +139,29 @@ class KdlServices {
     kdlFile.writeAsString(kdl.toString());
 
     return kdlFile;
+  }
+
+  Future<void> readAndUpdateSettings(String filePath) async {
+    final kdlString = await File(filePath).readAsString();
+    final kdl = KdlDocument.parse(kdlString);
+
+    // Build list of settings to update
+    List<SharedPref> sPList = [];
+    for (var pref in prefs) {
+      try {
+        dynamic value = (pref.type == PrefType.strList)
+            ? kdl.args(pref.key).toList()
+            : kdl.args(pref.key).singleOrNull;
+        sPList.add(SharedPref.create(pref.key, pref.type, value));
+      } catch (e) {
+        // Setting not found, skip
+        continue;
+      }
+    }
+
+    // Update settings
+    for (var pref in sPList) {
+      pref.updateSharedPref();
+    }
   }
 }
