@@ -97,8 +97,7 @@ const List<String> idConfidenceList = [
 
 const List<String> taxonGroupList = [
   'Birds',
-  'General Mammals',
-  'Bats',
+  'Mammals',
   'Herpetofauna',
 ];
 
@@ -107,7 +106,6 @@ CatalogFmt matchTaxonGroupToCatFmt(String? taxonGroup) {
     case 'Birds':
       return CatalogFmt.birds;
     case 'General Mammals':
-      return CatalogFmt.mammals;
     case 'Mammals':
       return CatalogFmt.mammals;
     case 'Herpetofauna':
@@ -148,6 +146,7 @@ SpecimenRecordType matchTaxonGroupToRecordType(String taxonGroup) {
     case 'Birds':
       return SpecimenRecordType.birds;
     case 'General Mammals':
+    case 'Mammals':
       return SpecimenRecordType.generalMammals;
     case 'Bats':
       return SpecimenRecordType.bats;
