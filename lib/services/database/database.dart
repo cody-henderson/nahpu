@@ -9,8 +9,6 @@ import 'package:path/path.dart' as p;
 
 part 'database.g.dart';
 
-// ignore_for_file: experimental_member_use
-
 /// The database schema version.
 /// Steps to update the schema:
 /// 1. Write the new schema in the [tables.drift] file.
@@ -151,14 +149,13 @@ class Database extends _$Database {
     await m.addColumn(associatedData, associatedData.specimenUuid);
     await m.renameColumn(associatedData, 'secondaryId', associatedData.name);
     await m.renameColumn(associatedData, 'fileId', associatedData.url);
+
     // Remove secondaryIdRef
-    await m.alterTable(TableMigration(associatedData));
+    await alterTableHelper(m, associatedData);
 
     // Sites
-    await m.alterTable(TableMigration(coordinate));
-    await m.alterTable(TableMigration(coordinate, columnTransformer: {
-      coordinate.elevationInMeter: coordinate.elevationInMeter.cast<double>(),
-    }));
+    await alterTableHelper(m, coordinate);
+    await castColumnsIntToReal(m, coordinate, ['elevationInMeter']);
   }
 
   Future<void> _migrateFromVersion3(Migrator m) async {
@@ -179,10 +176,10 @@ class Database extends _$Database {
 
     await m.deleteTable('fileMetadata');
     await m.deleteTable('personnelPhoto');
-    // delete column from media table and personnel tables
 
-    await m.alterTable(TableMigration(personnel));
-    await m.alterTable(TableMigration(media));
+    // delete column from media table and personnel tables
+    await alterTableHelper(m, personnel);
+    await alterTableHelper(m, media);
   }
 
   Future<void> _migrateV3only(Migrator m) async {
@@ -207,7 +204,7 @@ class Database extends _$Database {
     await m.deleteTable('bird_measurement');
     await m.createTable(avianMeasurement);
 
-    castMammalType(m);
+    await castMammalType(m);
   }
 
   Future<void> exportInto(File file) async {
