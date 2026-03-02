@@ -45,18 +45,18 @@ class EventFormats extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CommonSettingSection(title: 'Formats', children: [
       Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
           child: AdaptiveLayout(
             useHorizontalLayout: !isMobile,
             children: [
               TextCaseFmtDropDown(
                   ref: ref,
                   label: 'Collection methods',
-                  textCasePrefString: collEventMethodFmtPrefKey),
+                  textCasePrefString: collMethodFmtPrefKey),
               TextCaseFmtDropDown(
                   ref: ref,
                   label: 'Personnel roles',
-                  textCasePrefString: collPersonnelRoleFmtPrefKey),
+                  textCasePrefString: collRoleFmtPrefKey),
             ],
           ))
     ]);
@@ -73,7 +73,7 @@ class CollMethodSettings extends ConsumerWidget {
       title: 'Collection methods',
       controller: controller,
       ref: ref,
-      textCasePrefString: collEventMethodFmtPrefKey,
+      textCasePrefString: collMethodFmtPrefKey,
       chipList: ref.watch(collEventMethodProvider).when(
             data: (data) {
               return data.map((e) {
@@ -125,7 +125,7 @@ class PersonnelRoleSetting extends ConsumerWidget {
       title: 'Personnel roles',
       controller: controller,
       ref: ref,
-      textCasePrefString: collPersonnelRoleFmtPrefKey,
+      textCasePrefString: collRoleFmtPrefKey,
       chipList: ref.watch(collPersonnelRoleProvider).when(
             data: (data) {
               return data.map((e) {

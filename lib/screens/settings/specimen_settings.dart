@@ -64,7 +64,6 @@ class SpecimenSelectionState extends ConsumerState<SpecimenSelection> {
                 ],
               ),
               // Only show for Mammals taxon
-
               TissueIDFields(
                 isMobile: isMobile,
               ),
@@ -90,7 +89,7 @@ class SpecimenFormats extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CommonSettingSection(title: 'Formats', children: [
       Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
           child: AdaptiveLayout(
             useHorizontalLayout: !isMobile,
             children: [
@@ -235,7 +234,7 @@ class TissueIDFields extends ConsumerWidget {
       title: 'Tissue ID',
       children: [
         Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
             child: AdaptiveLayout(
               useHorizontalLayout: !isMobile,
               children: const [
@@ -269,7 +268,7 @@ class TissuePrefixFieldState extends ConsumerState<TissuePrefixField> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 320),
+      constraints: const BoxConstraints(maxWidth: 480),
       child: TextField(
           controller: prefixCtr,
           decoration: const InputDecoration(
@@ -310,7 +309,7 @@ class TissueNumFieldState extends ConsumerState<TissueNumField> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 320),
+      constraints: const BoxConstraints(maxWidth: 480),
       child: TextField(
         controller: tissueNumCtr,
         keyboardType: TextInputType.number,

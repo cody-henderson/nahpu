@@ -149,16 +149,13 @@ class Database extends _$Database {
     await m.addColumn(associatedData, associatedData.specimenUuid);
     await m.renameColumn(associatedData, 'secondaryId', associatedData.name);
     await m.renameColumn(associatedData, 'fileId', associatedData.url);
-    // ignore: experimental_member_use
-    await m.alterTable(TableMigration(associatedData));
+
+    // Remove secondaryIdRef
+    await alterTableHelper(m, associatedData);
 
     // Sites
-    // ignore: experimental_member_use
-    await m.alterTable(TableMigration(coordinate));
-    // ignore: experimental_member_use
-    await m.alterTable(TableMigration(coordinate, columnTransformer: {
-      coordinate.elevationInMeter: coordinate.elevationInMeter.cast<double>(),
-    }));
+    await alterTableHelper(m, coordinate);
+    await castColumnsIntToReal(m, coordinate, ['elevationInMeter']);
   }
 
   Future<void> _migrateFromVersion3(Migrator m) async {
@@ -179,11 +176,10 @@ class Database extends _$Database {
 
     await m.deleteTable('fileMetadata');
     await m.deleteTable('personnelPhoto');
+
     // delete column from media table and personnel tables
-    // ignore: experimental_member_use
-    await m.alterTable(TableMigration(personnel));
-    // ignore: experimental_member_use
-    await m.alterTable(TableMigration(media));
+    await alterTableHelper(m, personnel);
+    await alterTableHelper(m, media);
   }
 
   Future<void> _migrateV3only(Migrator m) async {
@@ -208,7 +204,7 @@ class Database extends _$Database {
     await m.deleteTable('bird_measurement');
     await m.createTable(avianMeasurement);
 
-    castMammalType(m);
+    await castMammalType(m);
   }
 
   Future<void> exportInto(File file) async {

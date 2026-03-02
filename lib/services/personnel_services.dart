@@ -155,7 +155,7 @@ class PersonnelImageService {
       case CatalogFmt.mammals:
         return _getMammalAvatar();
       case CatalogFmt.herpetofauna:
-        return _getMammalAvatar(); // TODO: Placeholder
+        return _getMammalAvatar();
     }
   }
 

@@ -78,18 +78,17 @@ class GeneralRecordFieldState extends ConsumerState<GeneralRecordField> {
             specimenUuid: widget.specimenUuid,
           ),
           AdaptiveLayout(
-            useHorizontalLayout: widget.useHorizontalLayout,
-            children: [
-              SpecimenCollectionDateField(
-                specimenCtr: widget.specimenCtr,
-                specimenUuid: widget.specimenUuid,
-              ),  
-              SpecimenCollectionTimeField(
-                specimenCtr: widget.specimenCtr,
-                specimenUuid: widget.specimenUuid,
-              ),
-            ]
-          ),      
+              useHorizontalLayout: widget.useHorizontalLayout,
+              children: [
+                SpecimenCollectionDateField(
+                  specimenCtr: widget.specimenCtr,
+                  specimenUuid: widget.specimenUuid,
+                ),
+                SpecimenCollectionTimeField(
+                  specimenCtr: widget.specimenCtr,
+                  specimenUuid: widget.specimenUuid,
+                ),
+              ]),
           AdaptiveLayout(
             useHorizontalLayout: widget.useHorizontalLayout,
             children: [
@@ -231,30 +230,26 @@ class SpecimenCollectionDateField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CommonDateField(
-      controller: specimenCtr.collDateCtr,
-      labelText: 'Collection date',
-      hintText: 'Enter date',
-      initialDate: DateTime.now(),
-      lastDate: DateTime.now(),
-      onTap: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-            collectionDate: db.Value(
+        controller: specimenCtr.collDateCtr,
+        labelText: 'Collection date',
+        hintText: 'Enter date',
+        initialDate: DateTime.now(),
+        lastDate: DateTime.now(),
+        onTap: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+            specimenUuid,
+            SpecimenCompanion(
+                collectionDate: db.Value(
               specimenCtr.collDateCtr.date,
-            )
-          ),
-        );
-      },
-      onClear: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-            collectionDate: db.Value(null)
-          ),
-        );
-      }
-    );
+            )),
+          );
+        },
+        onClear: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+            specimenUuid,
+            SpecimenCompanion(collectionDate: db.Value(null)),
+          );
+        });
   }
 }
 
@@ -271,28 +266,23 @@ class SpecimenCollectionTimeField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CommonTimeField(
-      controller: specimenCtr.collTimeCtr,
-      labelText: 'Collection time',
-      hintText: 'Enter time',
-      initialTime: TimeOfDay.now(),
-      onTap: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-              collectionTime: db.Value(
-            specimenCtr.collTimeCtr.time,
-          )),
-        );
-      },
-      onClear: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-              collectionTime: db.Value(null)
-          )
-        );
-      }
-    );
+        controller: specimenCtr.collTimeCtr,
+        labelText: 'Collection time',
+        hintText: 'Enter time',
+        initialTime: TimeOfDay.now(),
+        onTap: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+            specimenUuid,
+            SpecimenCompanion(
+                collectionTime: db.Value(
+              specimenCtr.collTimeCtr.time,
+            )),
+          );
+        },
+        onClear: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+              specimenUuid, SpecimenCompanion(collectionTime: db.Value(null)));
+        });
   }
 }
 
@@ -308,28 +298,26 @@ class SpecimenConditionField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return CommonPadding(
-      child: DropdownButtonFormField(
-        initialValue: specimenCtr.conditionCtr,
-        onChanged: (String? value) {
-          SpecimenServices(ref: ref).updateSpecimen(
-            specimenUuid,
-            SpecimenCompanion(condition: db.Value(value)),
-          );
-        },
-        decoration: const InputDecoration(
-          labelText: 'Condition',
-          hintText: 'Choose a condition',
-        ),
-        items: conditionList
-            .map((String condition) => DropdownMenuItem(
-                  value: condition,
-                  child: CommonDropdownText(text: condition),
-                ))
-            .toList(),
-      )
-    );
+        child: DropdownButtonFormField(
+      initialValue: specimenCtr.conditionCtr,
+      onChanged: (String? value) {
+        SpecimenServices(ref: ref).updateSpecimen(
+          specimenUuid,
+          SpecimenCompanion(condition: db.Value(value)),
+        );
+      },
+      decoration: const InputDecoration(
+        labelText: 'Condition',
+        hintText: 'Choose a condition',
+      ),
+      items: conditionList
+          .map((String condition) => DropdownMenuItem(
+                value: condition,
+                child: CommonDropdownText(text: condition),
+              ))
+          .toList(),
+    ));
   }
 }
 
@@ -346,28 +334,25 @@ class PrepDateField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CommonDateField(
-      controller: specimenCtr.prepDateCtr,
-      labelText: 'Prep. date',
-      hintText: 'Enter date',
-      initialDate: DateTime.now(),
-      lastDate: DateTime.now(),
-      onTap: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-            prepDate: db.Value(specimenCtr.prepDateCtr.date),
-          ),
-        );
-      },
-      onClear: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-            prepDate: db.Value(null)
-          ),
-        );
-      }      
-    );
+        controller: specimenCtr.prepDateCtr,
+        labelText: 'Prep. date',
+        hintText: 'Enter date',
+        initialDate: DateTime.now(),
+        lastDate: DateTime.now(),
+        onTap: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+            specimenUuid,
+            SpecimenCompanion(
+              prepDate: db.Value(specimenCtr.prepDateCtr.date),
+            ),
+          );
+        },
+        onClear: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+            specimenUuid,
+            SpecimenCompanion(prepDate: db.Value(null)),
+          );
+        });
   }
 }
 
@@ -384,27 +369,22 @@ class PrepTimeField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CommonTimeField(
-      controller: specimenCtr.prepTimeCtr,
-      labelText: 'Prep. time',
-      hintText: 'Enter time',
-      initialTime: TimeOfDay.now(),
-      onTap: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-            prepTime: db.Value(specimenCtr.prepTimeCtr.time),
-          ),
-        );
-      },
-      onClear: () {
-        SpecimenServices(ref: ref).updateSpecimen(
-          specimenUuid,
-          SpecimenCompanion(
-              prepTime: db.Value(null)
-          )
-        );
-      }
-    );
+        controller: specimenCtr.prepTimeCtr,
+        labelText: 'Prep. time',
+        hintText: 'Enter time',
+        initialTime: TimeOfDay.now(),
+        onTap: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+            specimenUuid,
+            SpecimenCompanion(
+              prepTime: db.Value(specimenCtr.prepTimeCtr.time),
+            ),
+          );
+        },
+        onClear: () {
+          SpecimenServices(ref: ref).updateSpecimen(
+              specimenUuid, SpecimenCompanion(prepTime: db.Value(null)));
+        });
   }
 }
 
@@ -444,9 +424,11 @@ class PersonnelRecordsState extends ConsumerState<PersonnelRecords> {
               : const SizedBox.shrink(),
           DropdownButtonFormField<String>(
             initialValue: widget.specimenCtr.catalogerCtr,
+            isExpanded: true,
             decoration: const InputDecoration(
               labelText: 'Cataloger',
               hintText: 'Choose a person with field number',
+              hintStyle: TextStyle(overflow: TextOverflow.ellipsis),
             ),
             items: ref.watch(projectPersonnelProvider).when(
                   data: (data) => data
@@ -494,9 +476,11 @@ class PersonnelRecordsState extends ConsumerState<PersonnelRecords> {
           ),
           DropdownButtonFormField<String>(
             initialValue: widget.specimenCtr.preparatorCtr,
+            isExpanded: true,
             decoration: const InputDecoration(
               labelText: 'Preparator',
               hintText: 'Choose a preparator (default is cataloger)',
+              hintStyle: TextStyle(overflow: TextOverflow.ellipsis),
             ),
             items: ref.watch(projectPersonnelProvider).when(
                   data: (data) => data
@@ -698,16 +682,15 @@ class CollRecordInfoContent extends StatelessWidget {
             ' You can add a taxon in the taxon registry section in the project dashboard.',
       ),
       InfoContent(
-        header: 'Condition field',
-        content: 'The condition field is a qualitative measure of the freshness'
-            ' of the specimen at time of prep.'
-            ' Condition can depend on factors including time since death,' 
-            ' temperature, sun exposure (especially for salvage specimens), etc.'
-            ' If the collection time (i.e., time of death) and prep times are known,'
-            ' these can also be added for a more quantitative'
-            ' measure of condition at time of prep.'
-            
-      ),
+          header: 'Condition field',
+          content:
+              'The condition field is a qualitative measure of the freshness'
+              ' of the specimen at time of prep.'
+              ' Condition can depend on factors including time since death,'
+              ' temperature, sun exposure (especially for salvage specimens), etc.'
+              ' If the collection time (i.e., time of death) and prep times are known,'
+              ' these can also be added for a more quantitative'
+              ' measure of condition at time of prep.'),
     ]);
   }
 }

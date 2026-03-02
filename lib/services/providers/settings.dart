@@ -6,6 +6,8 @@ import 'package:nahpu/services/utility_services.dart';
 
 part 'settings.g.dart';
 
+const String themeModePrefKey = 'themeMode';
+
 @Riverpod(keepAlive: true)
 SharedPreferences setting(Ref ref) {
   return throw UnimplementedError();
@@ -15,12 +17,13 @@ SharedPreferences setting(Ref ref) {
 class ThemeSetting extends _$ThemeSetting {
   Future<ThemeMode> _fetchSetting() async {
     final prefs = ref.watch(settingProvider);
-    final savedTheme = prefs.getString('themeMode');
+    final savedTheme = prefs.getString(themeModePrefKey);
 
     // Set to default system theme if no setting is found
     final ThemeMode currentTheme = _matchThemeMode(savedTheme);
     if (savedTheme == null) {
-      await prefs.setString('themeMode', _matchThemeModeToString(currentTheme));
+      await prefs.setString(
+          themeModePrefKey, _matchThemeModeToString(currentTheme));
     }
 
     return currentTheme;
@@ -37,7 +40,7 @@ class ThemeSetting extends _$ThemeSetting {
       String value = mode.toLowerCase();
       final prefs = ref.watch(settingProvider);
       final themeMode = _matchThemeMode(value);
-      await prefs.setString('themeMode', value);
+      await prefs.setString(themeModePrefKey, value);
       return themeMode;
     });
   }
