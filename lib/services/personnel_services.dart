@@ -153,8 +153,8 @@ class PersonnelImageService {
       case CatalogFmt.birds:
         return _getBirdAvatar();
       case CatalogFmt.mammals:
-        return _getMammalAvatar();
       case CatalogFmt.herpetofauna:
+      case CatalogFmt.fossils:
         return _getMammalAvatar();
     }
   }

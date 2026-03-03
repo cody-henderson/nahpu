@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nahpu/services/types/export.dart';
 
-enum CatalogFmt { mammals, birds, herpetofauna }
+enum CatalogFmt { mammals, birds, herpetofauna, fossils }
 
 // Database read through index.
 // and stored as integer.
@@ -123,6 +123,8 @@ SpecimenRecordType matchCatalogFmtToRecordType(CatalogFmt catalogFmt) {
       return SpecimenRecordType.generalMammals;
     case CatalogFmt.herpetofauna:
       return SpecimenRecordType.herpetofauna;
+    case CatalogFmt.fossils:
+      return SpecimenRecordType.fossils;
   }
 }
 
@@ -165,6 +167,8 @@ String matchCatFmtToTaxonGroup(CatalogFmt catalogFmt) {
       return 'Mammals';
     case CatalogFmt.herpetofauna:
       return 'Herpetofauna';
+    case CatalogFmt.fossils:
+      return 'Fossils';
   }
 }
 
@@ -176,6 +180,8 @@ IconData matchCatFmtToPartIcon(CatalogFmt catalogFmt) {
       return MdiIcons.pawOutline;
     case CatalogFmt.herpetofauna:
       return MdiIcons.snake;
+    case CatalogFmt.fossils:
+      return MdiIcons.bone;
   }
 }
 
@@ -187,6 +193,8 @@ IconData matchCatFmtToIcon(CatalogFmt catalogFmt, bool isSelected) {
       return isSelected ? MdiIcons.paw : MdiIcons.pawOutline;
     case CatalogFmt.herpetofauna:
       return MdiIcons.snake;
+    case CatalogFmt.fossils:
+      return MdiIcons.bone;
   }
 }
 
@@ -216,6 +224,8 @@ String matchCatalogFmtToIconPath(CatalogFmt fmt) {
       return 'assets/icons/bird.svg';
     case CatalogFmt.herpetofauna:
       return 'assets/icons/snake.svg';
+    case CatalogFmt.fossils:
+      return 'assets/icons/clue.svg'; // TODO: Placeholder
   }
 }
 

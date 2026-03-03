@@ -245,6 +245,7 @@ class SpecimenPdfWriter extends PdfServices {
     CatalogFmt group = matchTaxonGroupToCatFmt(taxonGroup);
     switch (group) {
       case CatalogFmt.mammals:
+      case CatalogFmt.fossils: // TODO: Placeholder
         return _getMammalMeasurements(specimenUuid, taxonGroup);
       case CatalogFmt.birds:
         return _getAvianMeasurements(specimenUuid);

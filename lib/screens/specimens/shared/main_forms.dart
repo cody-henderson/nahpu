@@ -102,6 +102,7 @@ class MainFormsState extends ConsumerState<MainForms> {
             useHorizontalLayout: useHorizontalLayout,
             specimenUuid: widget.specimenUuid);
       case CatalogFmt.mammals:
+      case CatalogFmt.fossils: // TODO: Placeholder
         return MammalMeasurementForms(
           useHorizontalLayout: useHorizontalLayout,
           specimenUuid: widget.specimenUuid,

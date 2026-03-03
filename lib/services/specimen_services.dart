@@ -42,6 +42,7 @@ class SpecimenServices extends AppServices {
         _createBirdSpecimen(specimenUuid);
         break;
       case CatalogFmt.mammals:
+      case CatalogFmt.fossils: // TODO: Placeholder
         _createMammalSpecimen(specimenUuid);
         break;
       case CatalogFmt.herpetofauna:
@@ -303,6 +304,7 @@ class SpecimenServices extends AppServices {
         await deleteAvianMeasurements(specimenUuid);
         break;
       case CatalogFmt.mammals:
+      case CatalogFmt.fossils: // TODO: Placeholder
         await deleteMammalMeasurements(specimenUuid);
         break;
       case CatalogFmt.herpetofauna:
@@ -325,6 +327,7 @@ class SpecimenServices extends AppServices {
           await deleteAvianMeasurements(specimen.uuid);
           break;
         case CatalogFmt.mammals:
+        case CatalogFmt.fossils: // TODO: Placeholder
           await deleteMammalMeasurements(specimen.uuid);
           break;
         case CatalogFmt.herpetofauna:
