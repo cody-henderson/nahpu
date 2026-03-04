@@ -31,6 +31,10 @@ const int kSchemaVersion = 7;
 class Database extends _$Database {
   Database() : super(_openConnection());
 
+  Database.forTesting(DatabaseConnection super.connection);
+
+  Database.forMigrationTesting(super.e);
+
   @override
   int get schemaVersion => kSchemaVersion;
 
