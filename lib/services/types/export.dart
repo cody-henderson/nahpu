@@ -71,6 +71,7 @@ enum SpecimenRecordType {
   bats,
   allMammals,
   herpetofauna,
+  fossils
 }
 
 enum TaxonRecordType {

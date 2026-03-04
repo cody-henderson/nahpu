@@ -76,6 +76,7 @@ class SpecimenRecordWriter {
   List<String> _getMeasurementHeader() {
     switch (recordType) {
       case SpecimenRecordType.generalMammals:
+      case SpecimenRecordType.fossils: // TODO: Placeholder
         return mammalMeasurementExportList;
       case SpecimenRecordType.birds:
         return avianMeasurementExportList;
@@ -115,6 +116,7 @@ class SpecimenRecordWriter {
         recordType == SpecimenRecordType.allMammals;
     switch (recordType) {
       case SpecimenRecordType.generalMammals:
+      case SpecimenRecordType.fossils: // TODO: Placeholder
         return await _getMeasurementGeneralMammals(specimenUuid, isBat);
       case SpecimenRecordType.birds:
         return await _getMeasurementBirds(specimenUuid);
