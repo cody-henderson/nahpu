@@ -5698,6 +5698,19 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
+  static const VerificationMeta _kingdomMeta =
+      const VerificationMeta('kingdom');
+  late final GeneratedColumn<String> kingdom = GeneratedColumn<String>(
+      'kingdom', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _phylumMeta = const VerificationMeta('phylum');
+  late final GeneratedColumn<String> phylum = GeneratedColumn<String>(
+      'phylum', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _taxonClassMeta =
       const VerificationMeta('taxonClass');
   late final GeneratedColumn<String> taxonClass = GeneratedColumn<String>(
@@ -5712,10 +5725,37 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _superFamilyMeta =
+      const VerificationMeta('superFamily');
+  late final GeneratedColumn<String> superFamily = GeneratedColumn<String>(
+      'superFamily', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _taxonFamilyMeta =
       const VerificationMeta('taxonFamily');
   late final GeneratedColumn<String> taxonFamily = GeneratedColumn<String>(
       'taxonFamily', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _subFamilyMeta =
+      const VerificationMeta('subFamily');
+  late final GeneratedColumn<String> subFamily = GeneratedColumn<String>(
+      'subFamily', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _tribeMeta = const VerificationMeta('tribe');
+  late final GeneratedColumn<String> tribe = GeneratedColumn<String>(
+      'tribe', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _subTribeMeta =
+      const VerificationMeta('subTribe');
+  late final GeneratedColumn<String> subTribe = GeneratedColumn<String>(
+      'subTribe', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
@@ -5725,10 +5765,37 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _subGenusMeta =
+      const VerificationMeta('subGenus');
+  late final GeneratedColumn<String> subGenus = GeneratedColumn<String>(
+      'subGenus', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _infragenericEpithetMeta =
+      const VerificationMeta('infragenericEpithet');
+  late final GeneratedColumn<String> infragenericEpithet =
+      GeneratedColumn<String>('infragenericEpithet', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints: '');
   static const VerificationMeta _specificEpithetMeta =
       const VerificationMeta('specificEpithet');
   late final GeneratedColumn<String> specificEpithet = GeneratedColumn<String>(
       'specificEpithet', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _infraspecificEpithetMeta =
+      const VerificationMeta('infraspecificEpithet');
+  late final GeneratedColumn<String> infraspecificEpithet =
+      GeneratedColumn<String>('infraspecificEpithet', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints: '');
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+      'source', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
@@ -5746,6 +5813,13 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _verbatimScientificNameMeta =
+      const VerificationMeta('verbatimScientificName');
+  late final GeneratedColumn<String> verbatimScientificName =
+      GeneratedColumn<String>('verbatimScientificName', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints: '');
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
       'notes', aliasedName, true,
@@ -5790,13 +5864,24 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        kingdom,
+        phylum,
         taxonClass,
         taxonOrder,
+        superFamily,
         taxonFamily,
+        subFamily,
+        tribe,
+        subTribe,
         genus,
+        subGenus,
+        infragenericEpithet,
         specificEpithet,
+        infraspecificEpithet,
+        source,
         authors,
         commonName,
+        verbatimScientificName,
         notes,
         citesStatus,
         redListCategory,
@@ -5817,6 +5902,14 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
+    if (data.containsKey('kingdom')) {
+      context.handle(_kingdomMeta,
+          kingdom.isAcceptableOrUnknown(data['kingdom']!, _kingdomMeta));
+    }
+    if (data.containsKey('phylum')) {
+      context.handle(_phylumMeta,
+          phylum.isAcceptableOrUnknown(data['phylum']!, _phylumMeta));
+    }
     if (data.containsKey('taxonClass')) {
       context.handle(
           _taxonClassMeta,
@@ -5829,21 +5922,59 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
           taxonOrder.isAcceptableOrUnknown(
               data['taxonOrder']!, _taxonOrderMeta));
     }
+    if (data.containsKey('superFamily')) {
+      context.handle(
+          _superFamilyMeta,
+          superFamily.isAcceptableOrUnknown(
+              data['superFamily']!, _superFamilyMeta));
+    }
     if (data.containsKey('taxonFamily')) {
       context.handle(
           _taxonFamilyMeta,
           taxonFamily.isAcceptableOrUnknown(
               data['taxonFamily']!, _taxonFamilyMeta));
     }
+    if (data.containsKey('subFamily')) {
+      context.handle(_subFamilyMeta,
+          subFamily.isAcceptableOrUnknown(data['subFamily']!, _subFamilyMeta));
+    }
+    if (data.containsKey('tribe')) {
+      context.handle(
+          _tribeMeta, tribe.isAcceptableOrUnknown(data['tribe']!, _tribeMeta));
+    }
+    if (data.containsKey('subTribe')) {
+      context.handle(_subTribeMeta,
+          subTribe.isAcceptableOrUnknown(data['subTribe']!, _subTribeMeta));
+    }
     if (data.containsKey('genus')) {
       context.handle(
           _genusMeta, genus.isAcceptableOrUnknown(data['genus']!, _genusMeta));
+    }
+    if (data.containsKey('subGenus')) {
+      context.handle(_subGenusMeta,
+          subGenus.isAcceptableOrUnknown(data['subGenus']!, _subGenusMeta));
+    }
+    if (data.containsKey('infragenericEpithet')) {
+      context.handle(
+          _infragenericEpithetMeta,
+          infragenericEpithet.isAcceptableOrUnknown(
+              data['infragenericEpithet']!, _infragenericEpithetMeta));
     }
     if (data.containsKey('specificEpithet')) {
       context.handle(
           _specificEpithetMeta,
           specificEpithet.isAcceptableOrUnknown(
               data['specificEpithet']!, _specificEpithetMeta));
+    }
+    if (data.containsKey('infraspecificEpithet')) {
+      context.handle(
+          _infraspecificEpithetMeta,
+          infraspecificEpithet.isAcceptableOrUnknown(
+              data['infraspecificEpithet']!, _infraspecificEpithetMeta));
+    }
+    if (data.containsKey('source')) {
+      context.handle(_sourceMeta,
+          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
     }
     if (data.containsKey('authors')) {
       context.handle(_authorsMeta,
@@ -5854,6 +5985,12 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
           _commonNameMeta,
           commonName.isAcceptableOrUnknown(
               data['commonName']!, _commonNameMeta));
+    }
+    if (data.containsKey('verbatimScientificName')) {
+      context.handle(
+          _verbatimScientificNameMeta,
+          verbatimScientificName.isAcceptableOrUnknown(
+              data['verbatimScientificName']!, _verbatimScientificNameMeta));
     }
     if (data.containsKey('notes')) {
       context.handle(
@@ -5898,20 +6035,43 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
     return TaxonomyData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      kingdom: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}kingdom']),
+      phylum: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}phylum']),
       taxonClass: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}taxonClass']),
       taxonOrder: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}taxonOrder']),
+      superFamily: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}superFamily']),
       taxonFamily: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}taxonFamily']),
+      subFamily: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}subFamily']),
+      tribe: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tribe']),
+      subTribe: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}subTribe']),
       genus: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}genus']),
+      subGenus: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}subGenus']),
+      infragenericEpithet: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}infragenericEpithet']),
       specificEpithet: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}specificEpithet']),
+      infraspecificEpithet: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}infraspecificEpithet']),
+      source: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source']),
       authors: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}authors']),
       commonName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}commonName']),
+      verbatimScientificName: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}verbatimScientificName']),
       notes: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       citesStatus: attachedDatabase.typeMapping
@@ -5941,13 +6101,24 @@ class Taxonomy extends Table with TableInfo<Taxonomy, TaxonomyData> {
 
 class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
   final int id;
+  final String? kingdom;
+  final String? phylum;
   final String? taxonClass;
   final String? taxonOrder;
+  final String? superFamily;
   final String? taxonFamily;
+  final String? subFamily;
+  final String? tribe;
+  final String? subTribe;
   final String? genus;
+  final String? subGenus;
+  final String? infragenericEpithet;
   final String? specificEpithet;
+  final String? infraspecificEpithet;
+  final String? source;
   final String? authors;
   final String? commonName;
+  final String? verbatimScientificName;
   final String? notes;
   final String? citesStatus;
   final String? redListCategory;
@@ -5956,13 +6127,24 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
   final int? mediaId;
   const TaxonomyData(
       {required this.id,
+      this.kingdom,
+      this.phylum,
       this.taxonClass,
       this.taxonOrder,
+      this.superFamily,
       this.taxonFamily,
+      this.subFamily,
+      this.tribe,
+      this.subTribe,
       this.genus,
+      this.subGenus,
+      this.infragenericEpithet,
       this.specificEpithet,
+      this.infraspecificEpithet,
+      this.source,
       this.authors,
       this.commonName,
+      this.verbatimScientificName,
       this.notes,
       this.citesStatus,
       this.redListCategory,
@@ -5973,26 +6155,59 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    if (!nullToAbsent || kingdom != null) {
+      map['kingdom'] = Variable<String>(kingdom);
+    }
+    if (!nullToAbsent || phylum != null) {
+      map['phylum'] = Variable<String>(phylum);
+    }
     if (!nullToAbsent || taxonClass != null) {
       map['taxonClass'] = Variable<String>(taxonClass);
     }
     if (!nullToAbsent || taxonOrder != null) {
       map['taxonOrder'] = Variable<String>(taxonOrder);
     }
+    if (!nullToAbsent || superFamily != null) {
+      map['superFamily'] = Variable<String>(superFamily);
+    }
     if (!nullToAbsent || taxonFamily != null) {
       map['taxonFamily'] = Variable<String>(taxonFamily);
+    }
+    if (!nullToAbsent || subFamily != null) {
+      map['subFamily'] = Variable<String>(subFamily);
+    }
+    if (!nullToAbsent || tribe != null) {
+      map['tribe'] = Variable<String>(tribe);
+    }
+    if (!nullToAbsent || subTribe != null) {
+      map['subTribe'] = Variable<String>(subTribe);
     }
     if (!nullToAbsent || genus != null) {
       map['genus'] = Variable<String>(genus);
     }
+    if (!nullToAbsent || subGenus != null) {
+      map['subGenus'] = Variable<String>(subGenus);
+    }
+    if (!nullToAbsent || infragenericEpithet != null) {
+      map['infragenericEpithet'] = Variable<String>(infragenericEpithet);
+    }
     if (!nullToAbsent || specificEpithet != null) {
       map['specificEpithet'] = Variable<String>(specificEpithet);
+    }
+    if (!nullToAbsent || infraspecificEpithet != null) {
+      map['infraspecificEpithet'] = Variable<String>(infraspecificEpithet);
+    }
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
     }
     if (!nullToAbsent || authors != null) {
       map['authors'] = Variable<String>(authors);
     }
     if (!nullToAbsent || commonName != null) {
       map['commonName'] = Variable<String>(commonName);
+    }
+    if (!nullToAbsent || verbatimScientificName != null) {
+      map['verbatimScientificName'] = Variable<String>(verbatimScientificName);
     }
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
@@ -6018,26 +6233,56 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
   TaxonomyCompanion toCompanion(bool nullToAbsent) {
     return TaxonomyCompanion(
       id: Value(id),
+      kingdom: kingdom == null && nullToAbsent
+          ? const Value.absent()
+          : Value(kingdom),
+      phylum:
+          phylum == null && nullToAbsent ? const Value.absent() : Value(phylum),
       taxonClass: taxonClass == null && nullToAbsent
           ? const Value.absent()
           : Value(taxonClass),
       taxonOrder: taxonOrder == null && nullToAbsent
           ? const Value.absent()
           : Value(taxonOrder),
+      superFamily: superFamily == null && nullToAbsent
+          ? const Value.absent()
+          : Value(superFamily),
       taxonFamily: taxonFamily == null && nullToAbsent
           ? const Value.absent()
           : Value(taxonFamily),
+      subFamily: subFamily == null && nullToAbsent
+          ? const Value.absent()
+          : Value(subFamily),
+      tribe:
+          tribe == null && nullToAbsent ? const Value.absent() : Value(tribe),
+      subTribe: subTribe == null && nullToAbsent
+          ? const Value.absent()
+          : Value(subTribe),
       genus:
           genus == null && nullToAbsent ? const Value.absent() : Value(genus),
+      subGenus: subGenus == null && nullToAbsent
+          ? const Value.absent()
+          : Value(subGenus),
+      infragenericEpithet: infragenericEpithet == null && nullToAbsent
+          ? const Value.absent()
+          : Value(infragenericEpithet),
       specificEpithet: specificEpithet == null && nullToAbsent
           ? const Value.absent()
           : Value(specificEpithet),
+      infraspecificEpithet: infraspecificEpithet == null && nullToAbsent
+          ? const Value.absent()
+          : Value(infraspecificEpithet),
+      source:
+          source == null && nullToAbsent ? const Value.absent() : Value(source),
       authors: authors == null && nullToAbsent
           ? const Value.absent()
           : Value(authors),
       commonName: commonName == null && nullToAbsent
           ? const Value.absent()
           : Value(commonName),
+      verbatimScientificName: verbatimScientificName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(verbatimScientificName),
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
       citesStatus: citesStatus == null && nullToAbsent
@@ -6063,13 +6308,27 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TaxonomyData(
       id: serializer.fromJson<int>(json['id']),
+      kingdom: serializer.fromJson<String?>(json['kingdom']),
+      phylum: serializer.fromJson<String?>(json['phylum']),
       taxonClass: serializer.fromJson<String?>(json['taxonClass']),
       taxonOrder: serializer.fromJson<String?>(json['taxonOrder']),
+      superFamily: serializer.fromJson<String?>(json['superFamily']),
       taxonFamily: serializer.fromJson<String?>(json['taxonFamily']),
+      subFamily: serializer.fromJson<String?>(json['subFamily']),
+      tribe: serializer.fromJson<String?>(json['tribe']),
+      subTribe: serializer.fromJson<String?>(json['subTribe']),
       genus: serializer.fromJson<String?>(json['genus']),
+      subGenus: serializer.fromJson<String?>(json['subGenus']),
+      infragenericEpithet:
+          serializer.fromJson<String?>(json['infragenericEpithet']),
       specificEpithet: serializer.fromJson<String?>(json['specificEpithet']),
+      infraspecificEpithet:
+          serializer.fromJson<String?>(json['infraspecificEpithet']),
+      source: serializer.fromJson<String?>(json['source']),
       authors: serializer.fromJson<String?>(json['authors']),
       commonName: serializer.fromJson<String?>(json['commonName']),
+      verbatimScientificName:
+          serializer.fromJson<String?>(json['verbatimScientificName']),
       notes: serializer.fromJson<String?>(json['notes']),
       citesStatus: serializer.fromJson<String?>(json['citesStatus']),
       redListCategory: serializer.fromJson<String?>(json['redListCategory']),
@@ -6083,13 +6342,25 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'kingdom': serializer.toJson<String?>(kingdom),
+      'phylum': serializer.toJson<String?>(phylum),
       'taxonClass': serializer.toJson<String?>(taxonClass),
       'taxonOrder': serializer.toJson<String?>(taxonOrder),
+      'superFamily': serializer.toJson<String?>(superFamily),
       'taxonFamily': serializer.toJson<String?>(taxonFamily),
+      'subFamily': serializer.toJson<String?>(subFamily),
+      'tribe': serializer.toJson<String?>(tribe),
+      'subTribe': serializer.toJson<String?>(subTribe),
       'genus': serializer.toJson<String?>(genus),
+      'subGenus': serializer.toJson<String?>(subGenus),
+      'infragenericEpithet': serializer.toJson<String?>(infragenericEpithet),
       'specificEpithet': serializer.toJson<String?>(specificEpithet),
+      'infraspecificEpithet': serializer.toJson<String?>(infraspecificEpithet),
+      'source': serializer.toJson<String?>(source),
       'authors': serializer.toJson<String?>(authors),
       'commonName': serializer.toJson<String?>(commonName),
+      'verbatimScientificName':
+          serializer.toJson<String?>(verbatimScientificName),
       'notes': serializer.toJson<String?>(notes),
       'citesStatus': serializer.toJson<String?>(citesStatus),
       'redListCategory': serializer.toJson<String?>(redListCategory),
@@ -6101,13 +6372,24 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
 
   TaxonomyData copyWith(
           {int? id,
+          Value<String?> kingdom = const Value.absent(),
+          Value<String?> phylum = const Value.absent(),
           Value<String?> taxonClass = const Value.absent(),
           Value<String?> taxonOrder = const Value.absent(),
+          Value<String?> superFamily = const Value.absent(),
           Value<String?> taxonFamily = const Value.absent(),
+          Value<String?> subFamily = const Value.absent(),
+          Value<String?> tribe = const Value.absent(),
+          Value<String?> subTribe = const Value.absent(),
           Value<String?> genus = const Value.absent(),
+          Value<String?> subGenus = const Value.absent(),
+          Value<String?> infragenericEpithet = const Value.absent(),
           Value<String?> specificEpithet = const Value.absent(),
+          Value<String?> infraspecificEpithet = const Value.absent(),
+          Value<String?> source = const Value.absent(),
           Value<String?> authors = const Value.absent(),
           Value<String?> commonName = const Value.absent(),
+          Value<String?> verbatimScientificName = const Value.absent(),
           Value<String?> notes = const Value.absent(),
           Value<String?> citesStatus = const Value.absent(),
           Value<String?> redListCategory = const Value.absent(),
@@ -6116,15 +6398,32 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
           Value<int?> mediaId = const Value.absent()}) =>
       TaxonomyData(
         id: id ?? this.id,
+        kingdom: kingdom.present ? kingdom.value : this.kingdom,
+        phylum: phylum.present ? phylum.value : this.phylum,
         taxonClass: taxonClass.present ? taxonClass.value : this.taxonClass,
         taxonOrder: taxonOrder.present ? taxonOrder.value : this.taxonOrder,
+        superFamily: superFamily.present ? superFamily.value : this.superFamily,
         taxonFamily: taxonFamily.present ? taxonFamily.value : this.taxonFamily,
+        subFamily: subFamily.present ? subFamily.value : this.subFamily,
+        tribe: tribe.present ? tribe.value : this.tribe,
+        subTribe: subTribe.present ? subTribe.value : this.subTribe,
         genus: genus.present ? genus.value : this.genus,
+        subGenus: subGenus.present ? subGenus.value : this.subGenus,
+        infragenericEpithet: infragenericEpithet.present
+            ? infragenericEpithet.value
+            : this.infragenericEpithet,
         specificEpithet: specificEpithet.present
             ? specificEpithet.value
             : this.specificEpithet,
+        infraspecificEpithet: infraspecificEpithet.present
+            ? infraspecificEpithet.value
+            : this.infraspecificEpithet,
+        source: source.present ? source.value : this.source,
         authors: authors.present ? authors.value : this.authors,
         commonName: commonName.present ? commonName.value : this.commonName,
+        verbatimScientificName: verbatimScientificName.present
+            ? verbatimScientificName.value
+            : this.verbatimScientificName,
         notes: notes.present ? notes.value : this.notes,
         citesStatus: citesStatus.present ? citesStatus.value : this.citesStatus,
         redListCategory: redListCategory.present
@@ -6139,19 +6438,37 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
   TaxonomyData copyWithCompanion(TaxonomyCompanion data) {
     return TaxonomyData(
       id: data.id.present ? data.id.value : this.id,
+      kingdom: data.kingdom.present ? data.kingdom.value : this.kingdom,
+      phylum: data.phylum.present ? data.phylum.value : this.phylum,
       taxonClass:
           data.taxonClass.present ? data.taxonClass.value : this.taxonClass,
       taxonOrder:
           data.taxonOrder.present ? data.taxonOrder.value : this.taxonOrder,
+      superFamily:
+          data.superFamily.present ? data.superFamily.value : this.superFamily,
       taxonFamily:
           data.taxonFamily.present ? data.taxonFamily.value : this.taxonFamily,
+      subFamily: data.subFamily.present ? data.subFamily.value : this.subFamily,
+      tribe: data.tribe.present ? data.tribe.value : this.tribe,
+      subTribe: data.subTribe.present ? data.subTribe.value : this.subTribe,
       genus: data.genus.present ? data.genus.value : this.genus,
+      subGenus: data.subGenus.present ? data.subGenus.value : this.subGenus,
+      infragenericEpithet: data.infragenericEpithet.present
+          ? data.infragenericEpithet.value
+          : this.infragenericEpithet,
       specificEpithet: data.specificEpithet.present
           ? data.specificEpithet.value
           : this.specificEpithet,
+      infraspecificEpithet: data.infraspecificEpithet.present
+          ? data.infraspecificEpithet.value
+          : this.infraspecificEpithet,
+      source: data.source.present ? data.source.value : this.source,
       authors: data.authors.present ? data.authors.value : this.authors,
       commonName:
           data.commonName.present ? data.commonName.value : this.commonName,
+      verbatimScientificName: data.verbatimScientificName.present
+          ? data.verbatimScientificName.value
+          : this.verbatimScientificName,
       notes: data.notes.present ? data.notes.value : this.notes,
       citesStatus:
           data.citesStatus.present ? data.citesStatus.value : this.citesStatus,
@@ -6172,13 +6489,24 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
   String toString() {
     return (StringBuffer('TaxonomyData(')
           ..write('id: $id, ')
+          ..write('kingdom: $kingdom, ')
+          ..write('phylum: $phylum, ')
           ..write('taxonClass: $taxonClass, ')
           ..write('taxonOrder: $taxonOrder, ')
+          ..write('superFamily: $superFamily, ')
           ..write('taxonFamily: $taxonFamily, ')
+          ..write('subFamily: $subFamily, ')
+          ..write('tribe: $tribe, ')
+          ..write('subTribe: $subTribe, ')
           ..write('genus: $genus, ')
+          ..write('subGenus: $subGenus, ')
+          ..write('infragenericEpithet: $infragenericEpithet, ')
           ..write('specificEpithet: $specificEpithet, ')
+          ..write('infraspecificEpithet: $infraspecificEpithet, ')
+          ..write('source: $source, ')
           ..write('authors: $authors, ')
           ..write('commonName: $commonName, ')
+          ..write('verbatimScientificName: $verbatimScientificName, ')
           ..write('notes: $notes, ')
           ..write('citesStatus: $citesStatus, ')
           ..write('redListCategory: $redListCategory, ')
@@ -6190,33 +6518,56 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      taxonClass,
-      taxonOrder,
-      taxonFamily,
-      genus,
-      specificEpithet,
-      authors,
-      commonName,
-      notes,
-      citesStatus,
-      redListCategory,
-      countryStatus,
-      sortingOrder,
-      mediaId);
+  int get hashCode => Object.hashAll([
+        id,
+        kingdom,
+        phylum,
+        taxonClass,
+        taxonOrder,
+        superFamily,
+        taxonFamily,
+        subFamily,
+        tribe,
+        subTribe,
+        genus,
+        subGenus,
+        infragenericEpithet,
+        specificEpithet,
+        infraspecificEpithet,
+        source,
+        authors,
+        commonName,
+        verbatimScientificName,
+        notes,
+        citesStatus,
+        redListCategory,
+        countryStatus,
+        sortingOrder,
+        mediaId
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is TaxonomyData &&
           other.id == this.id &&
+          other.kingdom == this.kingdom &&
+          other.phylum == this.phylum &&
           other.taxonClass == this.taxonClass &&
           other.taxonOrder == this.taxonOrder &&
+          other.superFamily == this.superFamily &&
           other.taxonFamily == this.taxonFamily &&
+          other.subFamily == this.subFamily &&
+          other.tribe == this.tribe &&
+          other.subTribe == this.subTribe &&
           other.genus == this.genus &&
+          other.subGenus == this.subGenus &&
+          other.infragenericEpithet == this.infragenericEpithet &&
           other.specificEpithet == this.specificEpithet &&
+          other.infraspecificEpithet == this.infraspecificEpithet &&
+          other.source == this.source &&
           other.authors == this.authors &&
           other.commonName == this.commonName &&
+          other.verbatimScientificName == this.verbatimScientificName &&
           other.notes == this.notes &&
           other.citesStatus == this.citesStatus &&
           other.redListCategory == this.redListCategory &&
@@ -6227,13 +6578,24 @@ class TaxonomyData extends DataClass implements Insertable<TaxonomyData> {
 
 class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
   final Value<int> id;
+  final Value<String?> kingdom;
+  final Value<String?> phylum;
   final Value<String?> taxonClass;
   final Value<String?> taxonOrder;
+  final Value<String?> superFamily;
   final Value<String?> taxonFamily;
+  final Value<String?> subFamily;
+  final Value<String?> tribe;
+  final Value<String?> subTribe;
   final Value<String?> genus;
+  final Value<String?> subGenus;
+  final Value<String?> infragenericEpithet;
   final Value<String?> specificEpithet;
+  final Value<String?> infraspecificEpithet;
+  final Value<String?> source;
   final Value<String?> authors;
   final Value<String?> commonName;
+  final Value<String?> verbatimScientificName;
   final Value<String?> notes;
   final Value<String?> citesStatus;
   final Value<String?> redListCategory;
@@ -6242,13 +6604,24 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
   final Value<int?> mediaId;
   const TaxonomyCompanion({
     this.id = const Value.absent(),
+    this.kingdom = const Value.absent(),
+    this.phylum = const Value.absent(),
     this.taxonClass = const Value.absent(),
     this.taxonOrder = const Value.absent(),
+    this.superFamily = const Value.absent(),
     this.taxonFamily = const Value.absent(),
+    this.subFamily = const Value.absent(),
+    this.tribe = const Value.absent(),
+    this.subTribe = const Value.absent(),
     this.genus = const Value.absent(),
+    this.subGenus = const Value.absent(),
+    this.infragenericEpithet = const Value.absent(),
     this.specificEpithet = const Value.absent(),
+    this.infraspecificEpithet = const Value.absent(),
+    this.source = const Value.absent(),
     this.authors = const Value.absent(),
     this.commonName = const Value.absent(),
+    this.verbatimScientificName = const Value.absent(),
     this.notes = const Value.absent(),
     this.citesStatus = const Value.absent(),
     this.redListCategory = const Value.absent(),
@@ -6258,13 +6631,24 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
   });
   TaxonomyCompanion.insert({
     this.id = const Value.absent(),
+    this.kingdom = const Value.absent(),
+    this.phylum = const Value.absent(),
     this.taxonClass = const Value.absent(),
     this.taxonOrder = const Value.absent(),
+    this.superFamily = const Value.absent(),
     this.taxonFamily = const Value.absent(),
+    this.subFamily = const Value.absent(),
+    this.tribe = const Value.absent(),
+    this.subTribe = const Value.absent(),
     this.genus = const Value.absent(),
+    this.subGenus = const Value.absent(),
+    this.infragenericEpithet = const Value.absent(),
     this.specificEpithet = const Value.absent(),
+    this.infraspecificEpithet = const Value.absent(),
+    this.source = const Value.absent(),
     this.authors = const Value.absent(),
     this.commonName = const Value.absent(),
+    this.verbatimScientificName = const Value.absent(),
     this.notes = const Value.absent(),
     this.citesStatus = const Value.absent(),
     this.redListCategory = const Value.absent(),
@@ -6274,13 +6658,24 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
   });
   static Insertable<TaxonomyData> custom({
     Expression<int>? id,
+    Expression<String>? kingdom,
+    Expression<String>? phylum,
     Expression<String>? taxonClass,
     Expression<String>? taxonOrder,
+    Expression<String>? superFamily,
     Expression<String>? taxonFamily,
+    Expression<String>? subFamily,
+    Expression<String>? tribe,
+    Expression<String>? subTribe,
     Expression<String>? genus,
+    Expression<String>? subGenus,
+    Expression<String>? infragenericEpithet,
     Expression<String>? specificEpithet,
+    Expression<String>? infraspecificEpithet,
+    Expression<String>? source,
     Expression<String>? authors,
     Expression<String>? commonName,
+    Expression<String>? verbatimScientificName,
     Expression<String>? notes,
     Expression<String>? citesStatus,
     Expression<String>? redListCategory,
@@ -6290,13 +6685,27 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (kingdom != null) 'kingdom': kingdom,
+      if (phylum != null) 'phylum': phylum,
       if (taxonClass != null) 'taxonClass': taxonClass,
       if (taxonOrder != null) 'taxonOrder': taxonOrder,
+      if (superFamily != null) 'superFamily': superFamily,
       if (taxonFamily != null) 'taxonFamily': taxonFamily,
+      if (subFamily != null) 'subFamily': subFamily,
+      if (tribe != null) 'tribe': tribe,
+      if (subTribe != null) 'subTribe': subTribe,
       if (genus != null) 'genus': genus,
+      if (subGenus != null) 'subGenus': subGenus,
+      if (infragenericEpithet != null)
+        'infragenericEpithet': infragenericEpithet,
       if (specificEpithet != null) 'specificEpithet': specificEpithet,
+      if (infraspecificEpithet != null)
+        'infraspecificEpithet': infraspecificEpithet,
+      if (source != null) 'source': source,
       if (authors != null) 'authors': authors,
       if (commonName != null) 'commonName': commonName,
+      if (verbatimScientificName != null)
+        'verbatimScientificName': verbatimScientificName,
       if (notes != null) 'notes': notes,
       if (citesStatus != null) 'citesStatus': citesStatus,
       if (redListCategory != null) 'redListCategory': redListCategory,
@@ -6308,13 +6717,24 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
 
   TaxonomyCompanion copyWith(
       {Value<int>? id,
+      Value<String?>? kingdom,
+      Value<String?>? phylum,
       Value<String?>? taxonClass,
       Value<String?>? taxonOrder,
+      Value<String?>? superFamily,
       Value<String?>? taxonFamily,
+      Value<String?>? subFamily,
+      Value<String?>? tribe,
+      Value<String?>? subTribe,
       Value<String?>? genus,
+      Value<String?>? subGenus,
+      Value<String?>? infragenericEpithet,
       Value<String?>? specificEpithet,
+      Value<String?>? infraspecificEpithet,
+      Value<String?>? source,
       Value<String?>? authors,
       Value<String?>? commonName,
+      Value<String?>? verbatimScientificName,
       Value<String?>? notes,
       Value<String?>? citesStatus,
       Value<String?>? redListCategory,
@@ -6323,13 +6743,25 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
       Value<int?>? mediaId}) {
     return TaxonomyCompanion(
       id: id ?? this.id,
+      kingdom: kingdom ?? this.kingdom,
+      phylum: phylum ?? this.phylum,
       taxonClass: taxonClass ?? this.taxonClass,
       taxonOrder: taxonOrder ?? this.taxonOrder,
+      superFamily: superFamily ?? this.superFamily,
       taxonFamily: taxonFamily ?? this.taxonFamily,
+      subFamily: subFamily ?? this.subFamily,
+      tribe: tribe ?? this.tribe,
+      subTribe: subTribe ?? this.subTribe,
       genus: genus ?? this.genus,
+      subGenus: subGenus ?? this.subGenus,
+      infragenericEpithet: infragenericEpithet ?? this.infragenericEpithet,
       specificEpithet: specificEpithet ?? this.specificEpithet,
+      infraspecificEpithet: infraspecificEpithet ?? this.infraspecificEpithet,
+      source: source ?? this.source,
       authors: authors ?? this.authors,
       commonName: commonName ?? this.commonName,
+      verbatimScientificName:
+          verbatimScientificName ?? this.verbatimScientificName,
       notes: notes ?? this.notes,
       citesStatus: citesStatus ?? this.citesStatus,
       redListCategory: redListCategory ?? this.redListCategory,
@@ -6345,26 +6777,61 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
+    if (kingdom.present) {
+      map['kingdom'] = Variable<String>(kingdom.value);
+    }
+    if (phylum.present) {
+      map['phylum'] = Variable<String>(phylum.value);
+    }
     if (taxonClass.present) {
       map['taxonClass'] = Variable<String>(taxonClass.value);
     }
     if (taxonOrder.present) {
       map['taxonOrder'] = Variable<String>(taxonOrder.value);
     }
+    if (superFamily.present) {
+      map['superFamily'] = Variable<String>(superFamily.value);
+    }
     if (taxonFamily.present) {
       map['taxonFamily'] = Variable<String>(taxonFamily.value);
+    }
+    if (subFamily.present) {
+      map['subFamily'] = Variable<String>(subFamily.value);
+    }
+    if (tribe.present) {
+      map['tribe'] = Variable<String>(tribe.value);
+    }
+    if (subTribe.present) {
+      map['subTribe'] = Variable<String>(subTribe.value);
     }
     if (genus.present) {
       map['genus'] = Variable<String>(genus.value);
     }
+    if (subGenus.present) {
+      map['subGenus'] = Variable<String>(subGenus.value);
+    }
+    if (infragenericEpithet.present) {
+      map['infragenericEpithet'] = Variable<String>(infragenericEpithet.value);
+    }
     if (specificEpithet.present) {
       map['specificEpithet'] = Variable<String>(specificEpithet.value);
+    }
+    if (infraspecificEpithet.present) {
+      map['infraspecificEpithet'] =
+          Variable<String>(infraspecificEpithet.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
     }
     if (authors.present) {
       map['authors'] = Variable<String>(authors.value);
     }
     if (commonName.present) {
       map['commonName'] = Variable<String>(commonName.value);
+    }
+    if (verbatimScientificName.present) {
+      map['verbatimScientificName'] =
+          Variable<String>(verbatimScientificName.value);
     }
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
@@ -6391,13 +6858,24 @@ class TaxonomyCompanion extends UpdateCompanion<TaxonomyData> {
   String toString() {
     return (StringBuffer('TaxonomyCompanion(')
           ..write('id: $id, ')
+          ..write('kingdom: $kingdom, ')
+          ..write('phylum: $phylum, ')
           ..write('taxonClass: $taxonClass, ')
           ..write('taxonOrder: $taxonOrder, ')
+          ..write('superFamily: $superFamily, ')
           ..write('taxonFamily: $taxonFamily, ')
+          ..write('subFamily: $subFamily, ')
+          ..write('tribe: $tribe, ')
+          ..write('subTribe: $subTribe, ')
           ..write('genus: $genus, ')
+          ..write('subGenus: $subGenus, ')
+          ..write('infragenericEpithet: $infragenericEpithet, ')
           ..write('specificEpithet: $specificEpithet, ')
+          ..write('infraspecificEpithet: $infraspecificEpithet, ')
+          ..write('source: $source, ')
           ..write('authors: $authors, ')
           ..write('commonName: $commonName, ')
+          ..write('verbatimScientificName: $verbatimScientificName, ')
           ..write('notes: $notes, ')
           ..write('citesStatus: $citesStatus, ')
           ..write('redListCategory: $redListCategory, ')
@@ -16323,13 +16801,24 @@ typedef $SiteMediaProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function()>;
 typedef $TaxonomyCreateCompanionBuilder = TaxonomyCompanion Function({
   Value<int> id,
+  Value<String?> kingdom,
+  Value<String?> phylum,
   Value<String?> taxonClass,
   Value<String?> taxonOrder,
+  Value<String?> superFamily,
   Value<String?> taxonFamily,
+  Value<String?> subFamily,
+  Value<String?> tribe,
+  Value<String?> subTribe,
   Value<String?> genus,
+  Value<String?> subGenus,
+  Value<String?> infragenericEpithet,
   Value<String?> specificEpithet,
+  Value<String?> infraspecificEpithet,
+  Value<String?> source,
   Value<String?> authors,
   Value<String?> commonName,
+  Value<String?> verbatimScientificName,
   Value<String?> notes,
   Value<String?> citesStatus,
   Value<String?> redListCategory,
@@ -16339,13 +16828,24 @@ typedef $TaxonomyCreateCompanionBuilder = TaxonomyCompanion Function({
 });
 typedef $TaxonomyUpdateCompanionBuilder = TaxonomyCompanion Function({
   Value<int> id,
+  Value<String?> kingdom,
+  Value<String?> phylum,
   Value<String?> taxonClass,
   Value<String?> taxonOrder,
+  Value<String?> superFamily,
   Value<String?> taxonFamily,
+  Value<String?> subFamily,
+  Value<String?> tribe,
+  Value<String?> subTribe,
   Value<String?> genus,
+  Value<String?> subGenus,
+  Value<String?> infragenericEpithet,
   Value<String?> specificEpithet,
+  Value<String?> infraspecificEpithet,
+  Value<String?> source,
   Value<String?> authors,
   Value<String?> commonName,
+  Value<String?> verbatimScientificName,
   Value<String?> notes,
   Value<String?> citesStatus,
   Value<String?> redListCategory,
@@ -16365,27 +16865,63 @@ class $TaxonomyFilterComposer extends Composer<_$Database, Taxonomy> {
   ColumnFilters<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get kingdom => $composableBuilder(
+      column: $table.kingdom, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get phylum => $composableBuilder(
+      column: $table.phylum, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get taxonClass => $composableBuilder(
       column: $table.taxonClass, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get taxonOrder => $composableBuilder(
       column: $table.taxonOrder, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get superFamily => $composableBuilder(
+      column: $table.superFamily, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get taxonFamily => $composableBuilder(
       column: $table.taxonFamily, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get subFamily => $composableBuilder(
+      column: $table.subFamily, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get tribe => $composableBuilder(
+      column: $table.tribe, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get subTribe => $composableBuilder(
+      column: $table.subTribe, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get genus => $composableBuilder(
       column: $table.genus, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get subGenus => $composableBuilder(
+      column: $table.subGenus, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get infragenericEpithet => $composableBuilder(
+      column: $table.infragenericEpithet,
+      builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get specificEpithet => $composableBuilder(
       column: $table.specificEpithet,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get infraspecificEpithet => $composableBuilder(
+      column: $table.infraspecificEpithet,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get source => $composableBuilder(
+      column: $table.source, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get authors => $composableBuilder(
       column: $table.authors, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get commonName => $composableBuilder(
       column: $table.commonName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get verbatimScientificName => $composableBuilder(
+      column: $table.verbatimScientificName,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnFilters(column));
@@ -16418,27 +16954,63 @@ class $TaxonomyOrderingComposer extends Composer<_$Database, Taxonomy> {
   ColumnOrderings<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get kingdom => $composableBuilder(
+      column: $table.kingdom, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get phylum => $composableBuilder(
+      column: $table.phylum, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get taxonClass => $composableBuilder(
       column: $table.taxonClass, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get taxonOrder => $composableBuilder(
       column: $table.taxonOrder, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get superFamily => $composableBuilder(
+      column: $table.superFamily, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get taxonFamily => $composableBuilder(
       column: $table.taxonFamily, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get subFamily => $composableBuilder(
+      column: $table.subFamily, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tribe => $composableBuilder(
+      column: $table.tribe, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get subTribe => $composableBuilder(
+      column: $table.subTribe, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get genus => $composableBuilder(
       column: $table.genus, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get subGenus => $composableBuilder(
+      column: $table.subGenus, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get infragenericEpithet => $composableBuilder(
+      column: $table.infragenericEpithet,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get specificEpithet => $composableBuilder(
       column: $table.specificEpithet,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get infraspecificEpithet => $composableBuilder(
+      column: $table.infraspecificEpithet,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get source => $composableBuilder(
+      column: $table.source, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get authors => $composableBuilder(
       column: $table.authors, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get commonName => $composableBuilder(
       column: $table.commonName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get verbatimScientificName => $composableBuilder(
+      column: $table.verbatimScientificName,
+      builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnOrderings(column));
@@ -16473,26 +17045,59 @@ class $TaxonomyAnnotationComposer extends Composer<_$Database, Taxonomy> {
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get kingdom =>
+      $composableBuilder(column: $table.kingdom, builder: (column) => column);
+
+  GeneratedColumn<String> get phylum =>
+      $composableBuilder(column: $table.phylum, builder: (column) => column);
+
   GeneratedColumn<String> get taxonClass => $composableBuilder(
       column: $table.taxonClass, builder: (column) => column);
 
   GeneratedColumn<String> get taxonOrder => $composableBuilder(
       column: $table.taxonOrder, builder: (column) => column);
 
+  GeneratedColumn<String> get superFamily => $composableBuilder(
+      column: $table.superFamily, builder: (column) => column);
+
   GeneratedColumn<String> get taxonFamily => $composableBuilder(
       column: $table.taxonFamily, builder: (column) => column);
+
+  GeneratedColumn<String> get subFamily =>
+      $composableBuilder(column: $table.subFamily, builder: (column) => column);
+
+  GeneratedColumn<String> get tribe =>
+      $composableBuilder(column: $table.tribe, builder: (column) => column);
+
+  GeneratedColumn<String> get subTribe =>
+      $composableBuilder(column: $table.subTribe, builder: (column) => column);
 
   GeneratedColumn<String> get genus =>
       $composableBuilder(column: $table.genus, builder: (column) => column);
 
+  GeneratedColumn<String> get subGenus =>
+      $composableBuilder(column: $table.subGenus, builder: (column) => column);
+
+  GeneratedColumn<String> get infragenericEpithet => $composableBuilder(
+      column: $table.infragenericEpithet, builder: (column) => column);
+
   GeneratedColumn<String> get specificEpithet => $composableBuilder(
       column: $table.specificEpithet, builder: (column) => column);
+
+  GeneratedColumn<String> get infraspecificEpithet => $composableBuilder(
+      column: $table.infraspecificEpithet, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
 
   GeneratedColumn<String> get authors =>
       $composableBuilder(column: $table.authors, builder: (column) => column);
 
   GeneratedColumn<String> get commonName => $composableBuilder(
       column: $table.commonName, builder: (column) => column);
+
+  GeneratedColumn<String> get verbatimScientificName => $composableBuilder(
+      column: $table.verbatimScientificName, builder: (column) => column);
 
   GeneratedColumn<String> get notes =>
       $composableBuilder(column: $table.notes, builder: (column) => column);
@@ -16537,13 +17142,24 @@ class $TaxonomyTableManager extends RootTableManager<
               $TaxonomyAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            Value<String?> kingdom = const Value.absent(),
+            Value<String?> phylum = const Value.absent(),
             Value<String?> taxonClass = const Value.absent(),
             Value<String?> taxonOrder = const Value.absent(),
+            Value<String?> superFamily = const Value.absent(),
             Value<String?> taxonFamily = const Value.absent(),
+            Value<String?> subFamily = const Value.absent(),
+            Value<String?> tribe = const Value.absent(),
+            Value<String?> subTribe = const Value.absent(),
             Value<String?> genus = const Value.absent(),
+            Value<String?> subGenus = const Value.absent(),
+            Value<String?> infragenericEpithet = const Value.absent(),
             Value<String?> specificEpithet = const Value.absent(),
+            Value<String?> infraspecificEpithet = const Value.absent(),
+            Value<String?> source = const Value.absent(),
             Value<String?> authors = const Value.absent(),
             Value<String?> commonName = const Value.absent(),
+            Value<String?> verbatimScientificName = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<String?> citesStatus = const Value.absent(),
             Value<String?> redListCategory = const Value.absent(),
@@ -16553,13 +17169,24 @@ class $TaxonomyTableManager extends RootTableManager<
           }) =>
               TaxonomyCompanion(
             id: id,
+            kingdom: kingdom,
+            phylum: phylum,
             taxonClass: taxonClass,
             taxonOrder: taxonOrder,
+            superFamily: superFamily,
             taxonFamily: taxonFamily,
+            subFamily: subFamily,
+            tribe: tribe,
+            subTribe: subTribe,
             genus: genus,
+            subGenus: subGenus,
+            infragenericEpithet: infragenericEpithet,
             specificEpithet: specificEpithet,
+            infraspecificEpithet: infraspecificEpithet,
+            source: source,
             authors: authors,
             commonName: commonName,
+            verbatimScientificName: verbatimScientificName,
             notes: notes,
             citesStatus: citesStatus,
             redListCategory: redListCategory,
@@ -16569,13 +17196,24 @@ class $TaxonomyTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            Value<String?> kingdom = const Value.absent(),
+            Value<String?> phylum = const Value.absent(),
             Value<String?> taxonClass = const Value.absent(),
             Value<String?> taxonOrder = const Value.absent(),
+            Value<String?> superFamily = const Value.absent(),
             Value<String?> taxonFamily = const Value.absent(),
+            Value<String?> subFamily = const Value.absent(),
+            Value<String?> tribe = const Value.absent(),
+            Value<String?> subTribe = const Value.absent(),
             Value<String?> genus = const Value.absent(),
+            Value<String?> subGenus = const Value.absent(),
+            Value<String?> infragenericEpithet = const Value.absent(),
             Value<String?> specificEpithet = const Value.absent(),
+            Value<String?> infraspecificEpithet = const Value.absent(),
+            Value<String?> source = const Value.absent(),
             Value<String?> authors = const Value.absent(),
             Value<String?> commonName = const Value.absent(),
+            Value<String?> verbatimScientificName = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<String?> citesStatus = const Value.absent(),
             Value<String?> redListCategory = const Value.absent(),
@@ -16585,13 +17223,24 @@ class $TaxonomyTableManager extends RootTableManager<
           }) =>
               TaxonomyCompanion.insert(
             id: id,
+            kingdom: kingdom,
+            phylum: phylum,
             taxonClass: taxonClass,
             taxonOrder: taxonOrder,
+            superFamily: superFamily,
             taxonFamily: taxonFamily,
+            subFamily: subFamily,
+            tribe: tribe,
+            subTribe: subTribe,
             genus: genus,
+            subGenus: subGenus,
+            infragenericEpithet: infragenericEpithet,
             specificEpithet: specificEpithet,
+            infraspecificEpithet: infraspecificEpithet,
+            source: source,
             authors: authors,
             commonName: commonName,
+            verbatimScientificName: verbatimScientificName,
             notes: notes,
             citesStatus: citesStatus,
             redListCategory: redListCategory,
