@@ -72,6 +72,23 @@ String convertTimeString(String inputTimeString) {
   return DateFormat.Hms().format(parsedTime);
 }
 
+Future<void> migrateTaxonomyAddRanks(Migrator m) async {
+  final db = m.database as Database;
+  final taxonomy = db.taxonomy;
+
+  await m.addColumn(taxonomy, taxonomy.kingdom);
+  await m.addColumn(taxonomy, taxonomy.phylum);
+  await m.addColumn(taxonomy, taxonomy.superFamily);
+  await m.addColumn(taxonomy, taxonomy.subFamily);
+  await m.addColumn(taxonomy, taxonomy.tribe);
+  await m.addColumn(taxonomy, taxonomy.subTribe);
+  await m.addColumn(taxonomy, taxonomy.subGenus);
+  await m.addColumn(taxonomy, taxonomy.infragenericEpithet);
+  await m.addColumn(taxonomy, taxonomy.infraspecificEpithet);
+  await m.addColumn(taxonomy, taxonomy.source);
+  await m.addColumn(taxonomy, taxonomy.verbatimScientificName);
+}
+
 Future<void> migrateProjectDateTimeFormat(Migrator m) async {
   final db = m.database as Database;
 
