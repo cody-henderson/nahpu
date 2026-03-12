@@ -234,6 +234,21 @@ class PersonnelListViewState extends ConsumerState<PersonnelListView> {
                         },
                       );
                     }))),
+        const SizedBox(height: 8),
+        _isSelecting
+            ? DeletePersonnelButton(
+                // selectedTaxon: _selectedTaxon,
+                onPressed: () async {
+                  // await _deleteTaxon();
+                  // setState(() {
+                  //   _selectedTaxon.clear();
+                  // });
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                },
+              )
+            : const SizedBox.shrink(),
       ],
     );
   }
@@ -378,6 +393,69 @@ class PersonnelListViewState extends ConsumerState<PersonnelListView> {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
+}
+
+class DeletePersonnelButton extends StatelessWidget {
+  const DeletePersonnelButton({
+    super.key,
+    // required this.selectedTaxon,
+    required this.onPressed,
+  });
+
+  // final List<int> selectedTaxon;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IconButton(
+          color: Theme.of(context).colorScheme.error,
+          onPressed: false
+              ? null
+              : () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Delete taxon'),
+                          content: const Text(
+                              'Are you sure you want to delete the selected taxon?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: onPressed,
+                              child: Text('Delete',
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.error,
+                                  )),
+                            ),
+                          ],
+                        );
+                      });
+                },
+          icon: const Icon(Icons.delete_outline),
+        ),
+        Visibility(
+            visible: true,
+            child: Text('Delete', // _taxonCount()}',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                )))
+      ],
+    );
+  }
+
+  // String _taxonCount() {
+  //   return selectedTaxon.length == 1
+  //       ? '1 taxon'
+  //       : '${selectedTaxon.length} taxa';
+  // }
 }
 
 class SelectPersonnelTile extends StatelessWidget {
