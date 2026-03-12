@@ -185,6 +185,10 @@ class CoordinateServices extends AppServices {
   Future<void> deleteCoordinate(int coordinateId) async {
     await CoordinateQuery(dbAccess).deleteCoordinate(coordinateId);
   }
+
+  Future<void> deleteCoordinatesFromList(List<int> coordinatesList) async {
+    await CoordinateQuery(dbAccess).deleteCoordinates(coordinatesList);
+  }
 }
 
 class GeoLocationServices {
