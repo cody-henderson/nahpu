@@ -343,8 +343,13 @@ class SpecimenServices extends AppServices {
     await SpecimenPartQuery(dbAccess).deleteAllSpecimenParts(specimenUuid);
   }
 
-  void deleteSpecimenPart(int partId) {
-    SpecimenPartQuery(dbAccess).deleteSpecimenPart(partId);
+  Future<void> deleteSpecimenPart(int partId) async {
+    await SpecimenPartQuery(dbAccess).deleteSpecimenPart(partId);
+    ref.invalidate(partBySpecimenProvider);
+  }
+
+  Future<void> deleteSpecimenPartsFromList(List<int> partIds) async {
+    await SpecimenPartQuery(dbAccess).deleteSpecimenPartsFromList(partIds);
     ref.invalidate(partBySpecimenProvider);
   }
 

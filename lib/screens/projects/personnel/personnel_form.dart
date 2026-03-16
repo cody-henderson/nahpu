@@ -2,7 +2,6 @@ import 'package:nahpu/services/personnel_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/services/providers/personnel.dart';
-import 'package:nahpu/screens/projects/dashboard.dart';
 import 'package:nahpu/screens/projects/personnel/avatars.dart';
 import 'package:nahpu/screens/shared/buttons.dart';
 import 'package:nahpu/screens/shared/fields.dart';
@@ -219,33 +218,38 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
           const SizedBox(
             height: 16,
           ),
-          Wrap(
-            spacing: 16,
-            children: [
-              SecondaryButton(
-                text: 'Cancel',
-                onPressed: () {
+          FormButtonWithDelete(
+            isEditing: widget.isEditing,
+            onDeleted: () async {
+              try {
+                await _deletePersonnel();
+                ref.invalidate(projectPersonnelProvider);
+                ref.invalidate(personnelFormValidatorProvider);
+                if (context.mounted) {
                   Navigator.of(context).pop();
-                },
-              ),
-              FormElevButton(
-                label: widget.isEditing ? 'Update' : 'Add',
-                icon: widget.isEditing ? Icons.check : Icons.add,
-                enabled: _validateForm(),
-                onPressed: () async {
-                  widget.isEditing ? _updatePersonnel() : _addPersonnel();
-                  ref.invalidate(projectPersonnelProvider);
-                  ref.invalidate(personnelFormValidatorProvider);
-                  if (context.mounted) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const Dashboard(),
-                      ),
-                    );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Cannot delete personnel.'
+                          ' They are assigned to a project.'),
+                    ),
+                  );
+                }
+              }
+            },
+            onSubmitted: _validateForm()
+                ? () async {
+                    widget.isEditing
+                        ? _updatePersonnel()
+                        : await _addPersonnel();
+                    PersonnelServices(ref: ref).invalidatePersonnel();
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
                   }
-                },
-              ),
-            ],
+                : null,
           ),
         ],
       ),
@@ -328,6 +332,10 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
       personnelUuid: db.Value(widget.personnelUuid),
       projectUuid: db.Value(projectUuid),
     ));
+  }
+
+  Future<void> _deletePersonnel() async {
+    await PersonnelServices(ref: ref).deletePersonnel(widget.personnelUuid);
   }
 
   int _getCollectorNumber() {

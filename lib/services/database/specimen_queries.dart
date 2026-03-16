@@ -329,6 +329,10 @@ class SpecimenPartQuery extends DatabaseAccessor<Database>
     return (delete(specimenPart)..where((t) => t.id.equals(partId))).go();
   }
 
+  Future<void> deleteSpecimenPartsFromList(List<int> partIds) {
+    return (delete(specimenPart)..where((t) => t.id.isIn(partIds))).go();
+  }
+
   Future<void> deleteAllSpecimenParts(String specimenUuid) {
     return (delete(specimenPart)
           ..where((t) => t.specimenUuid.equals(specimenUuid)))

@@ -145,6 +145,10 @@ class CollEventServices extends AppServices {
     }
   }
 
+  Future<void> deleteCollEffortFromList(List<int> collEffortList) async {
+    await CollEffortQuery(dbAccess).deleteCollEffortsFromList(collEffortList);
+  }
+
   Future<void> deleteAllCollEvents(String projectUuid) async {
     try {
       List<CollEventData> collEvents = await getAllCollEvents();
@@ -164,6 +168,11 @@ class CollEventServices extends AppServices {
   Future<void> deleteCollPersonnel(int id) async {
     await CollPersonnelQuery(dbAccess).deleteCollPersonnel(id);
     invalidateCollPersonnel();
+  }
+
+  Future<void> deleteCollPersonnelFromList(List<int> collEffortList) async {
+    await CollPersonnelQuery(dbAccess)
+        .deleteCollPersonnelFromList(collEffortList);
   }
 
   void invalidateCollEvent() {
