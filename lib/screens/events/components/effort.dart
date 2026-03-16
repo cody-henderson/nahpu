@@ -138,10 +138,9 @@ class CollEffortListState extends ConsumerState<CollEffortList> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  AddEffortButton(collEventId: widget.collEventId),
-                  const SizedBox(height: 8),
-                  _isSelecting
-                      ? DeleteItemsButton(
+                  !_isSelecting
+                      ? AddEffortButton(collEventId: widget.collEventId)
+                      : DeleteItemsButton(
                           selectedItems: _selectedCollEfforts,
                           itemName: _selectedCollEfforts.length == 1
                               ? 'effort'
@@ -151,8 +150,7 @@ class CollEffortListState extends ConsumerState<CollEffortList> {
                             setState(() {
                               _selectedCollEfforts.clear();
                             });
-                          })
-                      : const SizedBox.shrink(),
+                          }),
                 ],
               );
       },

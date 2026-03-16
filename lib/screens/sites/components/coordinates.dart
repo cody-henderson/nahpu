@@ -224,10 +224,9 @@ class CoordinateListState extends ConsumerState<CoordinateList> {
                         )),
                   ),
                   const SizedBox(height: 8),
-                  AddCoordinateButton(siteId: widget.sideId),
-                  const SizedBox(height: 8),
-                  _isSelecting
-                      ? DeleteItemsButton(
+                  !_isSelecting
+                      ? AddCoordinateButton(siteId: widget.sideId)
+                      : DeleteItemsButton(
                           selectedItems: _selectedCoordinates,
                           itemName: 'coordinates',
                           onPressedFunction: () async {
@@ -235,8 +234,7 @@ class CoordinateListState extends ConsumerState<CoordinateList> {
                             setState(() {
                               _selectedCoordinates.clear();
                             });
-                          })
-                      : const SizedBox.shrink(),
+                          }),
                 ],
               );
       },

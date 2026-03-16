@@ -129,10 +129,9 @@ class PersonnelListState extends ConsumerState<PersonnelList> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const AddPersonnelButton(),
-                  const SizedBox(height: 8),
-                  _isSelecting
-                      ? DeleteItemsButton(
+                  !_isSelecting
+                      ? const AddPersonnelButton()
+                      : DeleteItemsButton(
                           selectedItems: _selectedPersonnel,
                           itemName: "personnel",
                           onPressedFunction: () async {
@@ -148,7 +147,6 @@ class PersonnelListState extends ConsumerState<PersonnelList> {
                               'Are you sure you want to remove the selected personnel from the project?',
                           customDialogButtonText: 'Remove',
                         )
-                      : const SizedBox.shrink(),
                 ],
               );
       },

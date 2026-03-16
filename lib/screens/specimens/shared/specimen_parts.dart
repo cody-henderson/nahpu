@@ -242,10 +242,9 @@ class PartListState extends ConsumerState<PartList> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  AddPartButton(specimenUuid: widget.specimenUuid),
-                  const SizedBox(height: 8),
-                  _isSelecting
-                      ? DeleteItemsButton(
+                  !_isSelecting
+                      ? AddPartButton(specimenUuid: widget.specimenUuid)
+                      : DeleteItemsButton(
                           selectedItems: _selectedparts,
                           itemName:
                               'specimen ${_selectedparts.length == 1 ? 'part' : 'parts'}',
@@ -254,8 +253,7 @@ class PartListState extends ConsumerState<PartList> {
                             setState(() {
                               _selectedparts.clear();
                             });
-                          })
-                      : const SizedBox.shrink(),
+                          }),
                 ],
               );
       },

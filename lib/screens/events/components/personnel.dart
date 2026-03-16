@@ -109,12 +109,11 @@ class CollectingPersonnelFormState extends ConsumerState<EventPersonnel> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                AddPersonnelButton(
-                                  onPressed: _addPersonnel,
-                                ),
-                                const SizedBox(height: 8),
-                                _isSelecting
-                                    ? DeleteItemsButton(
+                                !_isSelecting
+                                    ? AddPersonnelButton(
+                                        onPressed: _addPersonnel,
+                                      )
+                                    : DeleteItemsButton(
                                         selectedItems: _selectedCollPers,
                                         itemName: 'personnel',
                                         onPressedFunction: () async {
@@ -130,8 +129,7 @@ class CollectingPersonnelFormState extends ConsumerState<EventPersonnel> {
                                         customDialogText:
                                             'Are you sure you want to remove the selected personnel from this event?',
                                         customDialogButtonText: 'Remove',
-                                      )
-                                    : const SizedBox.shrink(),
+                                      ),
                               ],
                             );
                     },

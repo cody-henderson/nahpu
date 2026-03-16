@@ -451,6 +451,14 @@ class DeleteItemsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Visibility(
+            visible: selectedItems.isNotEmpty,
+            child: Text(
+                customIconButtonText ??
+                    'Delete ${selectedItems.length} $itemName',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                ))),
         IconButton(
           color: Theme.of(context).colorScheme.error,
           onPressed: selectedItems.isEmpty
@@ -483,14 +491,6 @@ class DeleteItemsButton extends StatelessWidget {
                 },
           icon: const Icon(Icons.delete_outline),
         ),
-        Visibility(
-            visible: selectedItems.isNotEmpty,
-            child: Text(
-                customIconButtonText ??
-                    'Delete ${selectedItems.length} $itemName',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                )))
       ],
     );
   }
