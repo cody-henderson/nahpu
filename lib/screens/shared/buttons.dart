@@ -54,12 +54,19 @@ class ProgressButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDisabled = isRunning || onPressed == null;
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-        backgroundColor: isRunning
-            ? Theme.of(context).disabledColor
+        foregroundColor: isDisabled
+            ? Theme.of(context).colorScheme.onSurface.withAlpha(160)
+            : Theme.of(context).colorScheme.onPrimaryContainer,
+        backgroundColor: isDisabled
+            ? Theme.of(context).colorScheme.surfaceContainerHighest
             : Theme.of(context).colorScheme.primaryContainer,
+        disabledForegroundColor:
+            Theme.of(context).colorScheme.onSurface.withAlpha(160),
+        disabledBackgroundColor:
+            Theme.of(context).colorScheme.surfaceContainerHighest,
         elevation: 0,
       ),
       icon: isRunning
