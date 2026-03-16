@@ -296,20 +296,22 @@ class CollEffortTile extends StatelessWidget {
               value: selectedCollEfforts.contains(collEffort.id),
               onChanged: onChanged)
           : const SizedBox.shrink(),
-      trailing: IconButton(
-        icon: const Icon(Icons.edit_outlined),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditCollEffort(
-                  collEffortId: collEffort.id,
-                  collEventId: collEffort.eventID!,
-                  collToolCtr: CollEffortCtrModel.fromData(collEffort),
-                ),
-              ));
-        },
-      ),
+      trailing: !isSelecting
+          ? IconButton(
+              icon: const Icon(Icons.edit_outlined),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditCollEffort(
+                        collEffortId: collEffort.id,
+                        collEventId: collEffort.eventID!,
+                        collToolCtr: CollEffortCtrModel.fromData(collEffort),
+                      ),
+                    ));
+              },
+            )
+          : SizedBox.shrink(),
     );
   }
 }

@@ -194,8 +194,12 @@ class PartListState extends ConsumerState<PartList> {
                           return ListTile(
                             leading:
                                 Row(mainAxisSize: MainAxisSize.min, children: [
-                              _isSelecting
-                                  ? ListCheckBox(
+                              !_isSelecting
+                                  ? PartIcon(
+                                      partType: part.type ?? 'unknown',
+                                      catalogFmt: widget.catalogFmt,
+                                    )
+                                  : ListCheckBox(
                                       isDisabled: false,
                                       value: _selectedparts.contains(part.id),
                                       onChanged: (bool? value) {
@@ -208,12 +212,7 @@ class PartListState extends ConsumerState<PartList> {
                                             }
                                           });
                                         }
-                                      })
-                                  : const SizedBox.shrink(),
-                              PartIcon(
-                                partType: part.type ?? 'unknown',
-                                catalogFmt: widget.catalogFmt,
-                              )
+                                      }),
                             ]),
                             title: PartTitle(
                               partType: part.type,
@@ -222,20 +221,23 @@ class PartListState extends ConsumerState<PartList> {
                               preparator: part.personnelId,
                             ),
                             subtitle: PartSubTitle(part: part),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.edit_outlined),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => EditPart(
-                                      specimenUuid: widget.specimenUuid,
-                                      specimenPartId: part.id,
-                                      partCtr: PartFormCtrModel.fromData(part),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                            trailing: !_isSelecting
+                                ? IconButton(
+                                    icon: const Icon(Icons.edit_outlined),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => EditPart(
+                                            specimenUuid: widget.specimenUuid,
+                                            specimenPartId: part.id,
+                                            partCtr:
+                                                PartFormCtrModel.fromData(part),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : SizedBox.shrink(),
                           );
                         },
                       ),

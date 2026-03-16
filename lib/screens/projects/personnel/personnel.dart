@@ -295,18 +295,17 @@ class _PersonnelListTileState extends State<PersonnelListTile> {
     final personnelData = widget.personnelData;
     return ListTile(
       leading: Row(mainAxisSize: MainAxisSize.min, children: [
-        widget.isSelecting
-            ? ListCheckBox(
+        !widget.isSelecting
+            ? SizedBox(
+                height: avatarSize.toDouble(),
+                width: avatarSize.toDouble(),
+                child: AvatarViewer(
+                  avatarCtr: _personnelPhotoCtr,
+                ))
+            : ListCheckBox(
                 isDisabled: false,
                 value: widget.selectedPersonnel.contains(personnelData.uuid),
-                onChanged: widget.onChanged)
-            : const SizedBox.shrink(),
-        SizedBox(
-            height: avatarSize.toDouble(),
-            width: avatarSize.toDouble(),
-            child: AvatarViewer(
-              avatarCtr: _personnelPhotoCtr,
-            ))
+                onChanged: widget.onChanged),
       ]),
       title: Text(
         _getTitle(personnelData.name, personnelData.initial),
@@ -317,7 +316,7 @@ class _PersonnelListTileState extends State<PersonnelListTile> {
         affiliation: personnelData.affiliation,
         currentFieldNumber: personnelData.currentFieldNumber,
       ),
-      trailing: widget.trailing,
+      trailing: !widget.isSelecting ? widget.trailing : SizedBox.shrink(),
     );
   }
 

@@ -335,16 +335,18 @@ class SelectPersonnelTile extends StatelessWidget {
                         child: Icon(Icons.book))),
               ])
             : const SizedBox.shrink(),
-        trailing: IconButton(
-          icon: const Icon(Icons.edit_outlined),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EditPersonnelForm(
-                          personnelData: data,
-                        )));
-          },
-        ));
+        trailing: !isSelecting
+            ? IconButton(
+                icon: const Icon(Icons.edit_outlined),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditPersonnelForm(
+                                personnelData: data,
+                              )));
+                },
+              )
+            : SizedBox.shrink());
   }
 }

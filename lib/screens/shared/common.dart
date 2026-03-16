@@ -163,7 +163,7 @@ class SelectItemsInterface extends StatelessWidget {
       const Spacer(),
       TextButton(
         onPressed: onSelectPressed,
-        child: Text(isSelecting ? 'Cancel' : 'Select'),
+        child: Text(isSelecting ? 'Done' : 'Select'),
       )
     ]);
   }

@@ -186,8 +186,11 @@ class CoordinateListState extends ConsumerState<CoordinateList> {
                               leading: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    _isSelecting
-                                        ? ListCheckBox(
+                                    !_isSelecting
+                                        ? CoordinateTileIcon(
+                                            name:
+                                                data[index].nameId ?? 'unknown')
+                                        : ListCheckBox(
                                             isDisabled: false,
                                             value: _selectedCoordinates
                                                 .contains(data[index].id),
@@ -204,21 +207,20 @@ class CoordinateListState extends ConsumerState<CoordinateList> {
                                                 }
                                               });
                                             },
-                                          )
-                                        : SizedBox.shrink(),
-                                    CoordinateTileIcon(
-                                        name: data[index].nameId ?? 'unknown')
+                                          ),
                                   ]),
                               title: CoordinateTitle(
                                   coordinateId: data[index].nameId),
                               subtitle:
                                   CoordinateSubtitle(coordinate: data[index]),
-                              trailing: CoordinateMenu(
-                                coordinateId: data[index].id!,
-                                siteId: data[index].siteID!,
-                                coordCtr:
-                                    CoordinateCtrModel.fromData(data[index]),
-                              ),
+                              trailing: !_isSelecting
+                                  ? CoordinateMenu(
+                                      coordinateId: data[index].id!,
+                                      siteId: data[index].siteID!,
+                                      coordCtr: CoordinateCtrModel.fromData(
+                                          data[index]),
+                                    )
+                                  : SizedBox.shrink(),
                             );
                           },
                         )),

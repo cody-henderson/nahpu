@@ -217,20 +217,22 @@ class TaxonListViewState extends ConsumerState<TaxonListView> {
                           },
                         )
                       : null,
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EditTaxon(
-                            taxonId: widget.taxonList[index].id,
-                            ctr: TaxonRegistryCtrModel.fromData(
-                                widget.taxonList[index]),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                  trailing: !_isSelecting
+                      ? IconButton(
+                          icon: const Icon(Icons.edit_outlined),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EditTaxon(
+                                  taxonId: widget.taxonList[index].id,
+                                  ctr: TaxonRegistryCtrModel.fromData(
+                                      widget.taxonList[index]),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : SizedBox.shrink(),
                 );
               },
             ),
