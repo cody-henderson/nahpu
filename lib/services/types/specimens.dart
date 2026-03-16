@@ -99,6 +99,7 @@ const List<String> taxonGroupList = [
   'Birds',
   'Mammals',
   'Herpetofauna',
+  'Fossils',
 ];
 
 CatalogFmt matchTaxonGroupToCatFmt(String? taxonGroup) {
@@ -110,6 +111,8 @@ CatalogFmt matchTaxonGroupToCatFmt(String? taxonGroup) {
       return CatalogFmt.mammals;
     case 'Herpetofauna':
       return CatalogFmt.herpetofauna;
+    case 'Fossils':
+      return CatalogFmt.fossils;
     default:
       return CatalogFmt.mammals;
   }

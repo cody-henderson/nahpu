@@ -35,6 +35,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
   final _formKey = GlobalKey<FormState>();
   String? initialProjectName;
   bool _showMore = false;
+  CatalogFmt? _catalogFmt;
 
   @override
   void initState() {
@@ -123,7 +124,9 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                   ),
                 ),
                 !widget.isEditing
-                    ? const TaxonGroupFields()
+                    ? TaxonGroupFields(onCatalogFmtChanged: (CatalogFmt value) {
+                        _catalogFmt = value;
+                      })
                     : const SizedBox.shrink(),
                 Visibility(
                   visible: _showMore ||
@@ -419,35 +422,88 @@ class TimeZoneField extends ConsumerWidget {
   }
 }
 
-class TaxonGroupFields extends ConsumerWidget {
-  const TaxonGroupFields({super.key});
+typedef void MyCallback(CatalogFmt cFmt);
+
+class TaxonGroupFields extends ConsumerStatefulWidget {
+  const TaxonGroupFields({super.key, required this.onCatalogFmtChanged});
+
+  final MyCallback onCatalogFmtChanged;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  TaxonGroupFieldsState createState() => TaxonGroupFieldsState();
+}
+
+class TaxonGroupFieldsState extends ConsumerState<TaxonGroupFields> {
+  bool _showMainTaxonGroup = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ref.watch(catalogFmtNotifierProvider).when(
-          data: (fmt) => _buildDropdownMenu(fmt, ref),
+          data: (fmt) => _buildDropdownMenu(fmt),
           loading: () => const CircularProgressIndicator(),
           error: (err, stack) => Text('Error: $err'),
         );
   }
 
-  Widget _buildDropdownMenu(CatalogFmt catalogFmt, WidgetRef ref) {
-    return DropdownButtonFormField(
-      decoration: const InputDecoration(
-        labelText: 'Main Taxon Group',
-        hintText: 'Choose a taxon group',
-      ),
-      items: taxonGroupList
-          .map((taxonGroup) => DropdownMenuItem(
-                value: taxonGroup,
-                child: CommonDropdownText(text: taxonGroup),
-              ))
-          .toList(),
-      initialValue: matchCatFmtToTaxonGroup(catalogFmt),
-      onChanged: (String? newValue) {
-        catalogFmt = matchTaxonGroupToCatFmt(newValue!);
-        ref.read(catalogFmtNotifierProvider.notifier).set(catalogFmt);
-      },
-    );
+  Widget _buildDropdownMenu(CatalogFmt catalogFmt) {
+    return Column(children: [
+      DropdownButtonFormField<int?>(
+          decoration: const InputDecoration(
+            labelText: 'Project type*',
+          ),
+          items: [
+            DropdownMenuItem(
+                value: null,
+                child:
+                    HintDropdownText(text: 'Choose a project type (required)')),
+            DropdownMenuItem(
+                value: 1, child: CommonDropdownText(text: 'Extant taxa')),
+            DropdownMenuItem(
+              value: 2,
+              child: CommonDropdownText(text: 'Fossils'),
+            )
+          ],
+          initialValue: null,
+          onChanged: (int? newValue) {
+            if (newValue == 1) {
+              setState(() {
+                _showMainTaxonGroup = true;
+              });
+            } else {
+              setState(() {
+                _showMainTaxonGroup = false;
+              });
+
+              if (newValue == 2) {
+                widget.onCatalogFmtChanged(CatalogFmt.fossils);
+              }
+            }
+          }),
+      _showMainTaxonGroup
+          ? DropdownButtonFormField(
+              decoration: const InputDecoration(
+                labelText: 'Main Taxon Group',
+                hintText: 'Choose a taxon group',
+              ),
+              items: taxonGroupList
+                  .where((taxonGroup) => taxonGroup != 'Fossils')
+                  .map((taxonGroup) => DropdownMenuItem(
+                        value: taxonGroup,
+                        child: CommonDropdownText(text: taxonGroup),
+                      ))
+                  .toList(),
+              initialValue: matchCatFmtToTaxonGroup(catalogFmt),
+              onChanged: (String? newValue) {
+                catalogFmt = matchTaxonGroupToCatFmt(newValue!);
+                ref.read(catalogFmtNotifierProvider.notifier).set(catalogFmt);
+              },
+            )
+          : const SizedBox.shrink()
+    ]);
   }
 }
