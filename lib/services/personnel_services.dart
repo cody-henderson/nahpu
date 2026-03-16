@@ -83,7 +83,7 @@ class PersonnelServices extends AppServices {
         .getPersonnelByProjectUuid(projectUuid);
   }
 
-  Future<void> deleteProjectPersonnel(String personnelUuid) async {
+  Future<(bool, String)> personnelUsedBy(String personnelUuid) async {
     bool isUsedInPersonnel = await PersonnelQuery(dbAccess)
         .isPersonnelUsedBySpecimenRecords(
             projectUuid: currentProjectUuid, personnelUuid: personnelUuid);
@@ -95,6 +95,16 @@ class PersonnelServices extends AppServices {
       recordType = isUsedInPersonnel && isUsedInCollEvent
           ? 'specimen and collection event'
           : recordType;
+      return (true, recordType);
+    }
+
+    return (false, '');
+  }
+
+  Future<void> deleteProjectPersonnel(String personnelUuid) async {
+    var (inUse, recordType) = await personnelUsedBy(personnelUuid);
+
+    if (inUse) {
       throw Exception(
           'Failed to delete! Personnel is being used in the $recordType records.');
     } else {
