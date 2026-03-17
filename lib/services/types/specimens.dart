@@ -5,6 +5,8 @@ import 'package:nahpu/services/types/export.dart';
 
 enum CatalogFmt { mammals, birds, herpetofauna, fossils }
 
+enum ProjectType { extantTaxa, fossils }
+
 // Database read through index.
 // and stored as integer.
 // DON'T CHANGE ORDER!
@@ -95,7 +97,7 @@ const List<String> idConfidenceList = [
   'High',
 ];
 
-const List<String> taxonGroupList = [
+const List<String> extantTaxaGroupList = [
   'Birds',
   'Mammals',
   'Herpetofauna',
@@ -110,6 +112,8 @@ CatalogFmt matchTaxonGroupToCatFmt(String? taxonGroup) {
       return CatalogFmt.mammals;
     case 'Herpetofauna':
       return CatalogFmt.herpetofauna;
+    case 'Fossils':
+      return CatalogFmt.fossils;
     default:
       return CatalogFmt.mammals;
   }
