@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/screens/shared/buttons.dart';
 import 'package:nahpu/screens/shared/forms.dart';
 import 'package:nahpu/screens/sites/site_view.dart';
+import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/services/site_services.dart';
 
 Future<void> createNewSite(BuildContext context, WidgetRef ref) {
@@ -21,7 +22,8 @@ class NewSiteTextButton extends ConsumerStatefulWidget {
   NewSiteTextButtonState createState() => NewSiteTextButtonState();
 }
 
-class NewSiteTextButtonState extends ConsumerState<NewSiteTextButton> {
+class NewSiteTextButtonState extends ConsumerState<NewSiteTextButton>
+    with FossilAware {
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -38,7 +40,7 @@ class NewSiteTextButtonState extends ConsumerState<NewSiteTextButton> {
           }
         }
       },
-      child: const Text('Create site'),
+      child: Text('Create $siteName'),
     );
   }
 }
@@ -84,14 +86,14 @@ class SiteMenu extends ConsumerStatefulWidget {
   SiteMenuState createState() => SiteMenuState();
 }
 
-class SiteMenuState extends ConsumerState<SiteMenu> {
+class SiteMenuState extends ConsumerState<SiteMenu> with FossilAware {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
         itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
-                child: const CreateMenuButton(
-                  text: 'Create site',
+                child: CreateMenuButton(
+                  text: 'Create $siteName',
                 ),
                 onTap: () => createNewSite(context, ref),
               ),
@@ -99,8 +101,8 @@ class SiteMenuState extends ConsumerState<SiteMenu> {
                 onTap: widget.siteId == null
                     ? null
                     : () async => await _duplicateSite(),
-                child: const DuplicateMenuButton(
-                  text: 'Duplicate site',
+                child: DuplicateMenuButton(
+                  text: 'Duplicate $siteName',
                 ),
               ),
               const PopupMenuDivider(height: 10),

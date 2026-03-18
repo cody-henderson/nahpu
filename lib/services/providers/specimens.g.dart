@@ -295,7 +295,7 @@ class _SpecimenMediaProviderElement
 }
 
 String _$catalogFmtNotifierHash() =>
-    r'9b1919ba48769138f474858cb3c9a9bcd91ad365';
+    r'1d944e330cedc6fd442ffa145bc344db741104ab';
 
 /// See also [CatalogFmtNotifier].
 @ProviderFor(CatalogFmtNotifier)
@@ -343,7 +343,7 @@ final specimenTypesProvider =
 );
 
 typedef _$SpecimenTypes = AutoDisposeAsyncNotifier<List<String>>;
-String _$treatmentOptionsHash() => r'b907834aa65670c7e556ca6ac7d1f225e882bb7e';
+String _$treatmentOptionsHash() => r'09e1d4c991cae53564a35a98924b60106c2d8538';
 
 /// See also [TreatmentOptions].
 @ProviderFor(TreatmentOptions)

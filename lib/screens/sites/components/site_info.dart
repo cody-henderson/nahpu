@@ -7,8 +7,10 @@ import 'package:nahpu/services/providers/personnel.dart';
 import 'package:nahpu/screens/shared/forms.dart';
 import 'package:nahpu/screens/shared/layout.dart';
 import 'package:nahpu/services/database/database.dart';
+import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/services/types/controllers.dart';
 import 'package:nahpu/services/site_services.dart';
+import 'package:nahpu/services/utility_services.dart';
 
 const List<String> siteTypeList = [
   'City',
@@ -23,7 +25,7 @@ const List<String> siteTypeList = [
   'Other',
 ];
 
-class SiteInfo extends ConsumerWidget {
+class SiteInfo extends ConsumerStatefulWidget {
   const SiteInfo({
     super.key,
     required this.id,
@@ -36,7 +38,12 @@ class SiteInfo extends ConsumerWidget {
   final SiteFormCtrModel siteFormCtr;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  SiteInfoState createState() => SiteInfoState();
+}
+
+class SiteInfoState extends ConsumerState<SiteInfo> with FossilAware {
+  @override
+  Widget build(BuildContext context) {
     List<PersonnelData> personnelList = [];
     final personnelEntry = ref.watch(projectPersonnelProvider);
     personnelEntry.whenData(
@@ -45,40 +52,41 @@ class SiteInfo extends ConsumerWidget {
 
     return FormCard(
       isPrimary: true,
-      title: 'Site Info',
-      infoContent: const SiteInfoContent(),
+      title: '${siteName.toTitleCase()} Info',
+      infoContent: SiteInfoContent(ref: ref),
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       child: AdaptiveLayout(
-        useHorizontalLayout: useHorizontalLayout,
+        useHorizontalLayout: widget.useHorizontalLayout,
         children: [
           TextField(
-            controller: siteFormCtr.siteIDCtr,
+            controller: widget.siteFormCtr.siteIDCtr,
             inputFormatters: [
               LengthLimitingTextInputFormatter(40),
               FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9-_]+'))
             ],
-            decoration: const InputDecoration(
-              labelText: 'Site ID',
+            decoration: InputDecoration(
+              labelText: '${siteName.toTitleCase()} ID',
               hintText:
-                  'Enter a site ID (max. 40 chars), e.g. "CAMP-01", "LINE-1"',
+                  'Enter a $siteName ID (max. 40 chars), e.g. "CAMP-01", "LINE-1"',
             ),
             onChanged: (value) {
-              siteFormCtr.siteIDCtr.value = TextEditingValue(
+              widget.siteFormCtr.siteIDCtr.value = TextEditingValue(
                 text: value.toUpperCase(),
-                selection: siteFormCtr.siteIDCtr.selection,
+                selection: widget.siteFormCtr.siteIDCtr.selection,
               );
               SiteServices(ref: ref).updateSite(
-                id,
-                SiteCompanion(siteID: db.Value(siteFormCtr.siteIDCtr.text)),
+                widget.id,
+                SiteCompanion(
+                    siteID: db.Value(widget.siteFormCtr.siteIDCtr.text)),
               );
             },
           ),
           DropdownButtonFormField(
-            initialValue: siteFormCtr.leadStaffCtr,
+            initialValue: widget.siteFormCtr.leadStaffCtr,
             isExpanded: true,
-            decoration: const InputDecoration(
-              labelText: 'Site Leader',
+            decoration: InputDecoration(
+              labelText: '${siteName.toTitleCase()} Leader',
               hintText: 'Choose a person name',
             ),
             items: personnelList
@@ -91,17 +99,17 @@ class SiteInfo extends ConsumerWidget {
                 .toList(),
             onChanged: (String? uuid) {
               SiteServices(ref: ref).updateSite(
-                id,
+                widget.id,
                 SiteCompanion(leadStaffId: db.Value(uuid)),
               );
             },
           ),
           DropdownButtonFormField<String?>(
-            initialValue: siteFormCtr.siteTypeCtr,
+            initialValue: widget.siteFormCtr.siteTypeCtr,
             isExpanded: true,
-            decoration: const InputDecoration(
-              labelText: 'Site Type',
-              hintText: 'Choose a site type',
+            decoration: InputDecoration(
+              labelText: '${siteName.toTitleCase()} Type',
+              hintText: 'Choose a $siteName type',
             ),
             items: siteTypeList
                 .map(
@@ -114,7 +122,7 @@ class SiteInfo extends ConsumerWidget {
             onChanged: (String? value) {
               if (value != null) {
                 SiteServices(ref: ref).updateSite(
-                  id,
+                  widget.id,
                   SiteCompanion(siteType: db.Value(value)),
                 );
               }
@@ -126,27 +134,30 @@ class SiteInfo extends ConsumerWidget {
   }
 }
 
-class SiteInfoContent extends StatelessWidget {
-  const SiteInfoContent({super.key});
+class SiteInfoContent extends StatelessWidget with FossilAware {
+  const SiteInfoContent({super.key, required this.ref});
+
+  @override
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
-    return const InfoContainer(
+    return InfoContainer(
       content: [
         InfoContent(
           header: 'Overview',
-          content: 'Basic information about the site.'
-              ' We recommend developing a naming convention for your sites.'
+          content: 'Basic information about the $siteName.'
+              ' We recommend developing a naming convention for your $siteNamePlural.'
               ' For example, "CAMP-01" for the first campsite, '
-              '"L1" for the first line. You could prefix the site ID with the'
+              '"L1" for the first line. You could prefix the $siteName ID with the'
               ' project ID or location ID to make it unique.',
         ),
         InfoContent(
             content:
-                'To avoid inputting the same information when creating a new site,'
-                ' you can duplicate a site using the menu button in the top right corner.'
-                ' It will create a new site with the same information as the current site,'
-                ' except that the site ID and coordinates will be empty.'),
+                'To avoid inputting the same information when creating a new $siteName,'
+                ' you can duplicate a $siteName using the menu button in the top right corner.'
+                ' It will create a new $siteName with the same information as the current $siteName,'
+                ' except that the $siteName ID and coordinates will be empty.'),
       ],
     );
   }

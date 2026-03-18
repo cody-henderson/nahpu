@@ -13,6 +13,7 @@ import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/screens/sites/site_view.dart';
 import 'package:nahpu/screens/specimens/specimen_view.dart';
 import 'package:nahpu/screens/projects/dashboard.dart';
+import 'package:nahpu/services/utility_services.dart';
 
 class ProjectBottomNavbar extends ConsumerStatefulWidget {
   const ProjectBottomNavbar({super.key});
@@ -21,7 +22,8 @@ class ProjectBottomNavbar extends ConsumerStatefulWidget {
   ProjectBottomNavbarState createState() => ProjectBottomNavbarState();
 }
 
-class ProjectBottomNavbarState extends ConsumerState<ProjectBottomNavbar> {
+class ProjectBottomNavbarState extends ConsumerState<ProjectBottomNavbar>
+    with FossilAware {
   @override
   Widget build(BuildContext context) {
     final isPhone = getScreenType(context) == ScreenType.phone;
@@ -36,7 +38,7 @@ class ProjectBottomNavbarState extends ConsumerState<ProjectBottomNavbar> {
       elevation: 10,
       animationDuration: const Duration(seconds: 3),
       selectedIndex: selectedIndex,
-      destinations: const [
+      destinations: [
         NavigationDestination(
           selectedIcon: Icon(Icons.dashboard_rounded),
           icon: Icon(
@@ -45,12 +47,11 @@ class ProjectBottomNavbarState extends ConsumerState<ProjectBottomNavbar> {
           label: 'Dashboard',
         ),
         NavigationDestination(
-          selectedIcon: Icon(Icons.place_rounded),
-          icon: Icon(
-            Icons.place_outlined,
-          ),
-          label: 'Sites',
-        ),
+            selectedIcon: const Icon(Icons.place_rounded),
+            icon: Icon(
+              Icons.place_outlined,
+            ),
+            label: siteNamePlural.toTitleCase()),
         NavigationDestination(
           selectedIcon: Icon(Icons.calendar_month_rounded),
           icon: Icon(

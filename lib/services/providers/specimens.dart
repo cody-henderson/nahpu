@@ -46,9 +46,51 @@ class CatalogFmtNotifier extends _$CatalogFmtNotifier {
       final setFmt = matchTaxonGroupToCatFmt(value);
       if (setFmt == fmt) return fmt;
       await prefs.setString(catalogFmtPrefKey, matchCatFmtToTaxonGroup(fmt));
+      ref.invalidate(catalogFmtProvider);
       return fmt;
     });
   }
+}
+
+final catalogFmtProvider = Provider<CatalogFmt>((ref) {
+  final prefs = ref.watch(settingProvider);
+  return matchTaxonGroupToCatFmt(prefs.getString(catalogFmtPrefKey));
+});
+
+class FossilAwareStruct {
+  const FossilAwareStruct({required this.isFossils});
+
+  final bool isFossils;
+
+  static const _fossilAwareValues = <bool, Map<String, Map<String, String>>>{
+    false: {
+      'siteName': {'singular': 'site', 'plural': 'sites'}
+    },
+    true: {
+      'siteName': {'singular': 'locality', 'plural': 'localities'}
+    }
+  };
+
+  String get siteName {
+    return _fossilAwareValues[isFossils]!['siteName']!['singular']!;
+  }
+
+  String get siteNamePlural {
+    return _fossilAwareValues[isFossils]!['siteName']!['plural']!;
+  }
+}
+
+final fossilAwareProvider = Provider<FossilAwareStruct>((ref) {
+  final fmt = ref.watch(catalogFmtProvider);
+  return FossilAwareStruct(isFossils: fmt == CatalogFmt.fossils);
+});
+
+mixin FossilAware {
+  WidgetRef get ref;
+  FossilAwareStruct get struct => ref.watch(fossilAwareProvider);
+
+  String get siteName => struct.siteName;
+  String get siteNamePlural => struct.siteNamePlural;
 }
 
 @riverpod

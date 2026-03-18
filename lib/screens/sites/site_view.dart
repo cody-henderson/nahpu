@@ -6,11 +6,13 @@ import 'package:nahpu/screens/shared/layout.dart';
 import 'package:nahpu/services/navigation_services.dart';
 import 'package:nahpu/services/types/controllers.dart';
 import 'package:nahpu/services/providers/sites.dart';
+import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/screens/shared/common.dart';
 import 'package:nahpu/screens/shared/navigation.dart';
 import 'package:nahpu/screens/sites/components/menu_bar.dart';
 import 'package:nahpu/screens/sites/site_form.dart';
 import 'package:nahpu/services/database/database.dart';
+import 'package:nahpu/services/utility_services.dart';
 
 enum MenuSelection { newSite, pdfExport, deleteRecords, deleteAllRecords }
 
@@ -21,7 +23,7 @@ class SiteViewer extends ConsumerStatefulWidget {
   SiteViewerState createState() => SiteViewerState();
 }
 
-class SiteViewerState extends ConsumerState<SiteViewer> {
+class SiteViewerState extends ConsumerState<SiteViewer> with FossilAware {
   bool _isVisible = false;
   final PageNavigation _pageNav = PageNavigation.init();
   final TextEditingController _searchController = TextEditingController();
@@ -45,17 +47,18 @@ class SiteViewerState extends ConsumerState<SiteViewer> {
   @override
   Widget build(BuildContext context) {
     final siteEntries = ref.watch(siteEntryProvider);
+
     return FalseWillPop(
         child: Scaffold(
       appBar: AppBar(
-        title: const Text("Sites"),
+        title: Text(siteNamePlural.toTitleCase()),
         automaticallyImplyLeading: false,
         actions: [
           _isSearching
               ? ExpandedSearchBar(
                   controller: _searchController,
                   focusNode: _focus,
-                  hintText: 'Search sites',
+                  hintText: 'Search $siteNamePlural',
                   trailing: [
                     _searchController.text.isNotEmpty
                         ? IconButton(
@@ -112,7 +115,7 @@ class SiteViewerState extends ConsumerState<SiteViewer> {
                 _isVisible = false;
                 _siteId = null;
               });
-              return EmptySite(isButtonVisible: !_isSearching);
+              return EmptySite(isButtonVisible: !_isSearching, ref: ref);
             } else {
               int siteSize = siteEntries.length;
               setState(() {
@@ -200,16 +203,19 @@ class SitePages extends StatelessWidget {
   }
 }
 
-class EmptySite extends StatelessWidget {
-  const EmptySite({super.key, required this.isButtonVisible});
+class EmptySite extends StatelessWidget with FossilAware {
+  const EmptySite(
+      {super.key, required this.ref, required this.isButtonVisible});
 
+  @override
+  final WidgetRef ref;
   final bool isButtonVisible;
 
   @override
   Widget build(BuildContext context) {
     return CommonEmptyForm(
       iconPath: 'assets/icons/forest.svg',
-      text: 'No site found',
+      text: 'No $siteNamePlural found',
       child: Visibility(
         visible: isButtonVisible,
         child: const NewSiteTextButton(),
