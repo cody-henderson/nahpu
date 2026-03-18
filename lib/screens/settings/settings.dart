@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:nahpu/screens/settings/taxonomy_settings.dart';
 import 'package:nahpu/services/providers/specimens.dart';
 import 'package:nahpu/screens/projects/personnel/manage_personnel.dart';
 import 'package:nahpu/screens/projects/taxonomy/taxon_list.dart';
@@ -62,6 +63,7 @@ class CatalogSettings extends StatelessWidget {
       isDivided: true,
       children: [
         CatalogFmtSection(selectedFmt: catalogFmt),
+        TaxonomySection(),
         const CollEventSection(),
         CommonSettingTile(
           title: 'Sites',
@@ -149,6 +151,29 @@ class CatalogFmtSection extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => CatalogFmtSelection(),
+            ),
+          );
+        });
+  }
+}
+
+class TaxonomySection extends StatelessWidget {
+  const TaxonomySection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedFmt = CatalogFmt.fossils;
+
+    return CommonSettingTile(
+        isNavigation: true,
+        icon: MdiIcons.fileCabinet,
+        title: 'Taxonomy',
+        value: matchCatFmtToTaxonGroup(selectedFmt),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TaxonomySelection(),
             ),
           );
         });

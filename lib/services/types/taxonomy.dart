@@ -1,0 +1,33 @@
+enum TaxonomicRanks {
+  kingdom,
+  phylum,
+  taxonClass,
+  order,
+  superfamily,
+  family,
+  subfamily,
+  tribe,
+  subtribe,
+  genus,
+  subgenus,
+  infragenericEpithet,
+  specificEpithet,
+  infraspecificEpithet,
+}
+
+Map<TaxonomicRanks, String> taxonRankMap = {
+  TaxonomicRanks.kingdom: "Kingdom",
+  TaxonomicRanks.phylum: "Phylum",
+  TaxonomicRanks.taxonClass: "Class",
+  TaxonomicRanks.order: "Order",
+  TaxonomicRanks.superfamily: "Superfamily",
+  TaxonomicRanks.family: "Family",
+  TaxonomicRanks.subfamily: "Subfamily",
+  TaxonomicRanks.tribe: "Tribe",
+  TaxonomicRanks.subtribe: "Subtribe",
+  TaxonomicRanks.genus: "Genus",
+  TaxonomicRanks.subgenus: "Subgenus",
+  TaxonomicRanks.infragenericEpithet: "Infrageneric Epithet",
+  TaxonomicRanks.specificEpithet: "Specific Epithet",
+  TaxonomicRanks.infraspecificEpithet: "Infraspecific Epithet",
+};
