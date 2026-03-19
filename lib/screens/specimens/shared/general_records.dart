@@ -443,11 +443,11 @@ class PersonnelRecordsState extends ConsumerState<PersonnelRecords> {
                 ),
             onChanged: (String? uuid) async {
               if (uuid != null) {
-                int fieldNumber = await _getCurrentCollectorNumber(uuid);
+                int personalFieldNumber = await _getCurrentCollectorNumber(uuid);
                 setState(() {
                   bool hasSelected = _selectedPersonnel.contains(uuid);
                   int currentFieldNumber =
-                      hasSelected ? fieldNumber - 1 : fieldNumber;
+                      hasSelected ? personalFieldNumber - 1 : personalFieldNumber;
                   widget.specimenCtr.catalogerCtr = uuid;
                   widget.specimenCtr.preparatorCtr = uuid;
                   widget.specimenCtr.fieldNumberCtr.text =
@@ -457,7 +457,7 @@ class PersonnelRecordsState extends ConsumerState<PersonnelRecords> {
                     PersonnelServices(ref: ref).updatePersonnelEntry(
                         uuid,
                         PersonnelCompanion(
-                            currentFieldNumber: db.Value(fieldNumber + 1)));
+                            currentFieldNumber: db.Value(personalFieldNumber + 1)));
                     _selectedPersonnel.add(uuid);
                   }
                   SpecimenServices(ref: ref).updateSpecimen(
