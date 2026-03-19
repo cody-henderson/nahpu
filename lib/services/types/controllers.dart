@@ -904,6 +904,7 @@ class PersonnelFormCtrModel {
     required this.collectorNumCtr,
     required this.photoPathCtr,
     required this.noteCtr,
+    required this.isRegisterField,
   });
 
   TextEditingController nameCtr;
@@ -915,6 +916,7 @@ class PersonnelFormCtrModel {
   TextEditingController phoneCtr;
   TextEditingController photoPathCtr;
   TextEditingController noteCtr;
+  bool isRegisterField;
 
   factory PersonnelFormCtrModel.empty() => PersonnelFormCtrModel(
       nameCtr: TextEditingController(),
@@ -925,7 +927,9 @@ class PersonnelFormCtrModel {
       roleCtr: null,
       collectorNumCtr: TextEditingController(),
       photoPathCtr: TextEditingController(),
-      noteCtr: TextEditingController());
+      noteCtr: TextEditingController(),
+      isRegisterField: true,
+      );
 
   factory PersonnelFormCtrModel.fromData(PersonnelData personnel) =>
       PersonnelFormCtrModel(
@@ -939,6 +943,7 @@ class PersonnelFormCtrModel {
             text: personnel.currentFieldNumber?.toString() ?? ''),
         photoPathCtr: TextEditingController(text: personnel.photoPath),
         noteCtr: TextEditingController(text: personnel.notes),
+        isRegisterField: personnel.isRegisterField,
       );
 
   void dispose() {
