@@ -422,7 +422,7 @@ class CatalogerNumberField extends ConsumerWidget {
       enabled: ctr.roleCtr == 'Cataloger',
       controller: ctr.collectorNumCtr,
       decoration: InputDecoration(
-          labelText: 'Cataloger Number*',
+          labelText: 'Cataloger number*',
           hintText: '1234',
           errorText: ref.watch(personnelFormValidatorProvider).when(
                 data: (data) => data.collNum.errMsg,
