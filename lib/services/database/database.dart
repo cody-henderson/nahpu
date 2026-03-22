@@ -23,7 +23,7 @@ part 'database.g.dart';
 /// It is a good practice to test the migration steps on a test database before
 /// updating the production database.
 /// Learn more at https://drift.simonbinder.eu/docs/migrations/tests/
-const int kSchemaVersion = 8;
+const int kSchemaVersion = 7;
 
 @DriftDatabase(
   include: {'tables.drift'},
@@ -72,20 +72,9 @@ class Database extends _$Database {
         await _migrateFromVersion6(m);
       }
 
-      if (from < 8) {
-        await _migrateFromVersion7(m);
-      }
     }, beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
     });
-  }
-
-  Future<void> _migrateFromVersion7(Migrator m) async {
-    // add toggle to Personnel
-    await m.addColumn(personnel, personnel.isRegisterField);
-
-    // add project-level ID to Project
-    await m.addColumn(project, project.projectID);
   }
 
   Future<void> _migrateFromVersion6(Migrator m) async {
