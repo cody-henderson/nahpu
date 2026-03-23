@@ -71,6 +71,7 @@ class Database extends _$Database {
       if (from < 7) {
         await _migrateFromVersion6(m);
       }
+
     }, beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
     });

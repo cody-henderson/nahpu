@@ -76,6 +76,13 @@ class Project extends Table with TableInfo<Project, ProjectData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _projectIDMeta =
+      const VerificationMeta('projectID');
+  late final GeneratedColumn<String> projectID = GeneratedColumn<String>(
+      'projectID', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   @override
   List<GeneratedColumn> get $columns => [
         uuid,
@@ -87,7 +94,8 @@ class Project extends Table with TableInfo<Project, ProjectData> {
         startDate,
         endDate,
         created,
-        lastAccessed
+        lastAccessed,
+        projectID
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -149,6 +157,10 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           lastAccessed.isAcceptableOrUnknown(
               data['lastAccessed']!, _lastAccessedMeta));
     }
+    if (data.containsKey('projectID')) {
+      context.handle(_projectIDMeta,
+          projectID.isAcceptableOrUnknown(data['projectID']!, _projectIDMeta));
+    }
     return context;
   }
 
@@ -178,6 +190,8 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           .read(DriftSqlType.string, data['${effectivePrefix}created']),
       lastAccessed: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}lastAccessed']),
+      projectID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}projectID']),
     );
   }
 
@@ -201,6 +215,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
   final String? endDate;
   final String? created;
   final String? lastAccessed;
+  final String? projectID;
   const ProjectData(
       {required this.uuid,
       required this.name,
@@ -211,7 +226,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       this.startDate,
       this.endDate,
       this.created,
-      this.lastAccessed});
+      this.lastAccessed,
+      this.projectID});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -240,6 +256,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
     }
     if (!nullToAbsent || lastAccessed != null) {
       map['lastAccessed'] = Variable<String>(lastAccessed);
+    }
+    if (!nullToAbsent || projectID != null) {
+      map['projectID'] = Variable<String>(projectID);
     }
     return map;
   }
@@ -272,6 +291,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       lastAccessed: lastAccessed == null && nullToAbsent
           ? const Value.absent()
           : Value(lastAccessed),
+      projectID: projectID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(projectID),
     );
   }
 
@@ -290,6 +312,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       endDate: serializer.fromJson<String?>(json['endDate']),
       created: serializer.fromJson<String?>(json['created']),
       lastAccessed: serializer.fromJson<String?>(json['lastAccessed']),
+      projectID: serializer.fromJson<String?>(json['projectID']),
     );
   }
   @override
@@ -307,6 +330,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       'endDate': serializer.toJson<String?>(endDate),
       'created': serializer.toJson<String?>(created),
       'lastAccessed': serializer.toJson<String?>(lastAccessed),
+      'projectID': serializer.toJson<String?>(projectID),
     };
   }
 
@@ -320,7 +344,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           Value<String?> startDate = const Value.absent(),
           Value<String?> endDate = const Value.absent(),
           Value<String?> created = const Value.absent(),
-          Value<String?> lastAccessed = const Value.absent()}) =>
+          Value<String?> lastAccessed = const Value.absent(),
+          Value<String?> projectID = const Value.absent()}) =>
       ProjectData(
         uuid: uuid ?? this.uuid,
         name: name ?? this.name,
@@ -335,6 +360,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
         created: created.present ? created.value : this.created,
         lastAccessed:
             lastAccessed.present ? lastAccessed.value : this.lastAccessed,
+        projectID: projectID.present ? projectID.value : this.projectID,
       );
   ProjectData copyWithCompanion(ProjectCompanion data) {
     return ProjectData(
@@ -353,6 +379,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       lastAccessed: data.lastAccessed.present
           ? data.lastAccessed.value
           : this.lastAccessed,
+      projectID: data.projectID.present ? data.projectID.value : this.projectID,
     );
   }
 
@@ -368,7 +395,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('created: $created, ')
-          ..write('lastAccessed: $lastAccessed')
+          ..write('lastAccessed: $lastAccessed, ')
+          ..write('projectID: $projectID')
           ..write(')'))
         .toString();
   }
@@ -384,7 +412,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       startDate,
       endDate,
       created,
-      lastAccessed);
+      lastAccessed,
+      projectID);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -398,7 +427,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
           other.created == this.created &&
-          other.lastAccessed == this.lastAccessed);
+          other.lastAccessed == this.lastAccessed &&
+          other.projectID == this.projectID);
 }
 
 class ProjectCompanion extends UpdateCompanion<ProjectData> {
@@ -412,6 +442,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
   final Value<String?> endDate;
   final Value<String?> created;
   final Value<String?> lastAccessed;
+  final Value<String?> projectID;
   final Value<int> rowid;
   const ProjectCompanion({
     this.uuid = const Value.absent(),
@@ -424,6 +455,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.endDate = const Value.absent(),
     this.created = const Value.absent(),
     this.lastAccessed = const Value.absent(),
+    this.projectID = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ProjectCompanion.insert({
@@ -437,6 +469,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.endDate = const Value.absent(),
     this.created = const Value.absent(),
     this.lastAccessed = const Value.absent(),
+    this.projectID = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : uuid = Value(uuid),
         name = Value(name);
@@ -451,6 +484,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     Expression<String>? endDate,
     Expression<String>? created,
     Expression<String>? lastAccessed,
+    Expression<String>? projectID,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -465,6 +499,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       if (endDate != null) 'endDate': endDate,
       if (created != null) 'created': created,
       if (lastAccessed != null) 'lastAccessed': lastAccessed,
+      if (projectID != null) 'projectID': projectID,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -480,6 +515,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       Value<String?>? endDate,
       Value<String?>? created,
       Value<String?>? lastAccessed,
+      Value<String?>? projectID,
       Value<int>? rowid}) {
     return ProjectCompanion(
       uuid: uuid ?? this.uuid,
@@ -493,6 +529,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       endDate: endDate ?? this.endDate,
       created: created ?? this.created,
       lastAccessed: lastAccessed ?? this.lastAccessed,
+      projectID: projectID ?? this.projectID,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -531,6 +568,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     if (lastAccessed.present) {
       map['lastAccessed'] = Variable<String>(lastAccessed.value);
     }
+    if (projectID.present) {
+      map['projectID'] = Variable<String>(projectID.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -550,6 +590,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
           ..write('endDate: $endDate, ')
           ..write('created: $created, ')
           ..write('lastAccessed: $lastAccessed, ')
+          ..write('projectID: $projectID, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -625,6 +666,14 @@ class Personnel extends Table with TableInfo<Personnel, PersonnelData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _isRegisterFieldMeta =
+      const VerificationMeta('isRegisterField');
+  late final GeneratedColumn<bool> isRegisterField = GeneratedColumn<bool>(
+      'isRegisterField', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 1',
+      defaultValue: const CustomExpression('1'));
   @override
   List<GeneratedColumn> get $columns => [
         uuid,
@@ -636,7 +685,8 @@ class Personnel extends Table with TableInfo<Personnel, PersonnelData> {
         role,
         currentFieldNumber,
         notes,
-        photoPath
+        photoPath,
+        isRegisterField
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -694,6 +744,12 @@ class Personnel extends Table with TableInfo<Personnel, PersonnelData> {
       context.handle(_photoPathMeta,
           photoPath.isAcceptableOrUnknown(data['photoPath']!, _photoPathMeta));
     }
+    if (data.containsKey('isRegisterField')) {
+      context.handle(
+          _isRegisterFieldMeta,
+          isRegisterField.isAcceptableOrUnknown(
+              data['isRegisterField']!, _isRegisterFieldMeta));
+    }
     return context;
   }
 
@@ -723,6 +779,8 @@ class Personnel extends Table with TableInfo<Personnel, PersonnelData> {
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       photoPath: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}photoPath']),
+      isRegisterField: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}isRegisterField'])!,
     );
   }
 
@@ -748,6 +806,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
   /// the next input for field number
   final String? notes;
   final String? photoPath;
+  final bool isRegisterField;
   const PersonnelData(
       {required this.uuid,
       this.name,
@@ -758,7 +817,8 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       this.role,
       this.currentFieldNumber,
       this.notes,
-      this.photoPath});
+      this.photoPath,
+      required this.isRegisterField});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -790,6 +850,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
     if (!nullToAbsent || photoPath != null) {
       map['photoPath'] = Variable<String>(photoPath);
     }
+    map['isRegisterField'] = Variable<bool>(isRegisterField);
     return map;
   }
 
@@ -816,6 +877,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       photoPath: photoPath == null && nullToAbsent
           ? const Value.absent()
           : Value(photoPath),
+      isRegisterField: Value(isRegisterField),
     );
   }
 
@@ -833,6 +895,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       currentFieldNumber: serializer.fromJson<int?>(json['currentFieldNumber']),
       notes: serializer.fromJson<String?>(json['notes']),
       photoPath: serializer.fromJson<String?>(json['photoPath']),
+      isRegisterField: serializer.fromJson<bool>(json['isRegisterField']),
     );
   }
   @override
@@ -849,6 +912,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       'currentFieldNumber': serializer.toJson<int?>(currentFieldNumber),
       'notes': serializer.toJson<String?>(notes),
       'photoPath': serializer.toJson<String?>(photoPath),
+      'isRegisterField': serializer.toJson<bool>(isRegisterField),
     };
   }
 
@@ -862,7 +926,8 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           Value<String?> role = const Value.absent(),
           Value<int?> currentFieldNumber = const Value.absent(),
           Value<String?> notes = const Value.absent(),
-          Value<String?> photoPath = const Value.absent()}) =>
+          Value<String?> photoPath = const Value.absent(),
+          bool? isRegisterField}) =>
       PersonnelData(
         uuid: uuid ?? this.uuid,
         name: name.present ? name.value : this.name,
@@ -876,6 +941,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
             : this.currentFieldNumber,
         notes: notes.present ? notes.value : this.notes,
         photoPath: photoPath.present ? photoPath.value : this.photoPath,
+        isRegisterField: isRegisterField ?? this.isRegisterField,
       );
   PersonnelData copyWithCompanion(PersonnelCompanion data) {
     return PersonnelData(
@@ -892,6 +958,9 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           : this.currentFieldNumber,
       notes: data.notes.present ? data.notes.value : this.notes,
       photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+      isRegisterField: data.isRegisterField.present
+          ? data.isRegisterField.value
+          : this.isRegisterField,
     );
   }
 
@@ -907,14 +976,15 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           ..write('role: $role, ')
           ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('notes: $notes, ')
-          ..write('photoPath: $photoPath')
+          ..write('photoPath: $photoPath, ')
+          ..write('isRegisterField: $isRegisterField')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(uuid, name, initial, email, phone,
-      affiliation, role, currentFieldNumber, notes, photoPath);
+      affiliation, role, currentFieldNumber, notes, photoPath, isRegisterField);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -928,7 +998,8 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           other.role == this.role &&
           other.currentFieldNumber == this.currentFieldNumber &&
           other.notes == this.notes &&
-          other.photoPath == this.photoPath);
+          other.photoPath == this.photoPath &&
+          other.isRegisterField == this.isRegisterField);
 }
 
 class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
@@ -942,6 +1013,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
   final Value<int?> currentFieldNumber;
   final Value<String?> notes;
   final Value<String?> photoPath;
+  final Value<bool> isRegisterField;
   final Value<int> rowid;
   const PersonnelCompanion({
     this.uuid = const Value.absent(),
@@ -954,6 +1026,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     this.currentFieldNumber = const Value.absent(),
     this.notes = const Value.absent(),
     this.photoPath = const Value.absent(),
+    this.isRegisterField = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PersonnelCompanion.insert({
@@ -967,6 +1040,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     this.currentFieldNumber = const Value.absent(),
     this.notes = const Value.absent(),
     this.photoPath = const Value.absent(),
+    this.isRegisterField = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : uuid = Value(uuid);
   static Insertable<PersonnelData> custom({
@@ -980,6 +1054,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     Expression<int>? currentFieldNumber,
     Expression<String>? notes,
     Expression<String>? photoPath,
+    Expression<bool>? isRegisterField,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -993,6 +1068,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
       if (currentFieldNumber != null) 'currentFieldNumber': currentFieldNumber,
       if (notes != null) 'notes': notes,
       if (photoPath != null) 'photoPath': photoPath,
+      if (isRegisterField != null) 'isRegisterField': isRegisterField,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1008,6 +1084,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
       Value<int?>? currentFieldNumber,
       Value<String?>? notes,
       Value<String?>? photoPath,
+      Value<bool>? isRegisterField,
       Value<int>? rowid}) {
     return PersonnelCompanion(
       uuid: uuid ?? this.uuid,
@@ -1020,6 +1097,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
       currentFieldNumber: currentFieldNumber ?? this.currentFieldNumber,
       notes: notes ?? this.notes,
       photoPath: photoPath ?? this.photoPath,
+      isRegisterField: isRegisterField ?? this.isRegisterField,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1057,6 +1135,9 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     if (photoPath.present) {
       map['photoPath'] = Variable<String>(photoPath.value);
     }
+    if (isRegisterField.present) {
+      map['isRegisterField'] = Variable<bool>(isRegisterField.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1076,6 +1157,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
           ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('notes: $notes, ')
           ..write('photoPath: $photoPath, ')
+          ..write('isRegisterField: $isRegisterField, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -13289,6 +13371,7 @@ typedef $ProjectCreateCompanionBuilder = ProjectCompanion Function({
   Value<String?> endDate,
   Value<String?> created,
   Value<String?> lastAccessed,
+  Value<String?> projectID,
   Value<int> rowid,
 });
 typedef $ProjectUpdateCompanionBuilder = ProjectCompanion Function({
@@ -13302,6 +13385,7 @@ typedef $ProjectUpdateCompanionBuilder = ProjectCompanion Function({
   Value<String?> endDate,
   Value<String?> created,
   Value<String?> lastAccessed,
+  Value<String?> projectID,
   Value<int> rowid,
 });
 
@@ -13343,6 +13427,9 @@ class $ProjectFilterComposer extends Composer<_$Database, Project> {
 
   ColumnFilters<String> get lastAccessed => $composableBuilder(
       column: $table.lastAccessed, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get projectID => $composableBuilder(
+      column: $table.projectID, builder: (column) => ColumnFilters(column));
 }
 
 class $ProjectOrderingComposer extends Composer<_$Database, Project> {
@@ -13384,6 +13471,9 @@ class $ProjectOrderingComposer extends Composer<_$Database, Project> {
   ColumnOrderings<String> get lastAccessed => $composableBuilder(
       column: $table.lastAccessed,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get projectID => $composableBuilder(
+      column: $table.projectID, builder: (column) => ColumnOrderings(column));
 }
 
 class $ProjectAnnotationComposer extends Composer<_$Database, Project> {
@@ -13423,6 +13513,9 @@ class $ProjectAnnotationComposer extends Composer<_$Database, Project> {
 
   GeneratedColumn<String> get lastAccessed => $composableBuilder(
       column: $table.lastAccessed, builder: (column) => column);
+
+  GeneratedColumn<String> get projectID =>
+      $composableBuilder(column: $table.projectID, builder: (column) => column);
 }
 
 class $ProjectTableManager extends RootTableManager<
@@ -13458,6 +13551,7 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> endDate = const Value.absent(),
             Value<String?> created = const Value.absent(),
             Value<String?> lastAccessed = const Value.absent(),
+            Value<String?> projectID = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ProjectCompanion(
@@ -13471,6 +13565,7 @@ class $ProjectTableManager extends RootTableManager<
             endDate: endDate,
             created: created,
             lastAccessed: lastAccessed,
+            projectID: projectID,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -13484,6 +13579,7 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> endDate = const Value.absent(),
             Value<String?> created = const Value.absent(),
             Value<String?> lastAccessed = const Value.absent(),
+            Value<String?> projectID = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ProjectCompanion.insert(
@@ -13497,6 +13593,7 @@ class $ProjectTableManager extends RootTableManager<
             endDate: endDate,
             created: created,
             lastAccessed: lastAccessed,
+            projectID: projectID,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
@@ -13529,6 +13626,7 @@ typedef $PersonnelCreateCompanionBuilder = PersonnelCompanion Function({
   Value<int?> currentFieldNumber,
   Value<String?> notes,
   Value<String?> photoPath,
+  Value<bool> isRegisterField,
   Value<int> rowid,
 });
 typedef $PersonnelUpdateCompanionBuilder = PersonnelCompanion Function({
@@ -13542,6 +13640,7 @@ typedef $PersonnelUpdateCompanionBuilder = PersonnelCompanion Function({
   Value<int?> currentFieldNumber,
   Value<String?> notes,
   Value<String?> photoPath,
+  Value<bool> isRegisterField,
   Value<int> rowid,
 });
 
@@ -13604,6 +13703,10 @@ class $PersonnelFilterComposer extends Composer<_$Database, Personnel> {
   ColumnFilters<String> get photoPath => $composableBuilder(
       column: $table.photoPath, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<bool> get isRegisterField => $composableBuilder(
+      column: $table.isRegisterField,
+      builder: (column) => ColumnFilters(column));
+
   Expression<bool> specimenRefs(
       Expression<bool> Function($SpecimenFilterComposer f) f) {
     final $SpecimenFilterComposer composer = $composerBuilder(
@@ -13664,6 +13767,10 @@ class $PersonnelOrderingComposer extends Composer<_$Database, Personnel> {
 
   ColumnOrderings<String> get photoPath => $composableBuilder(
       column: $table.photoPath, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isRegisterField => $composableBuilder(
+      column: $table.isRegisterField,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $PersonnelAnnotationComposer extends Composer<_$Database, Personnel> {
@@ -13703,6 +13810,9 @@ class $PersonnelAnnotationComposer extends Composer<_$Database, Personnel> {
 
   GeneratedColumn<String> get photoPath =>
       $composableBuilder(column: $table.photoPath, builder: (column) => column);
+
+  GeneratedColumn<bool> get isRegisterField => $composableBuilder(
+      column: $table.isRegisterField, builder: (column) => column);
 
   Expression<T> specimenRefs<T extends Object>(
       Expression<T> Function($SpecimenAnnotationComposer a) f) {
@@ -13759,6 +13869,7 @@ class $PersonnelTableManager extends RootTableManager<
             Value<int?> currentFieldNumber = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<String?> photoPath = const Value.absent(),
+            Value<bool> isRegisterField = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               PersonnelCompanion(
@@ -13772,6 +13883,7 @@ class $PersonnelTableManager extends RootTableManager<
             currentFieldNumber: currentFieldNumber,
             notes: notes,
             photoPath: photoPath,
+            isRegisterField: isRegisterField,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -13785,6 +13897,7 @@ class $PersonnelTableManager extends RootTableManager<
             Value<int?> currentFieldNumber = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<String?> photoPath = const Value.absent(),
+            Value<bool> isRegisterField = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               PersonnelCompanion.insert(
@@ -13798,6 +13911,7 @@ class $PersonnelTableManager extends RootTableManager<
             currentFieldNumber: currentFieldNumber,
             notes: notes,
             photoPath: photoPath,
+            isRegisterField: isRegisterField,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

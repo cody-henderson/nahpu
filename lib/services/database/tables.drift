@@ -25,7 +25,8 @@ CREATE TABLE project (
     startDate TEXT,
     endDate TEXT,
     created TEXT,
-    lastAccessed Text
+    lastAccessed Text,
+    projectID TEXT
 );
 
 CREATE TABLE site (
@@ -191,7 +192,8 @@ CREATE TABLE personnel (
     role TEXT,
     currentFieldNumber INT, -- the next input for field number
     notes TEXT,
-    photoPath TEXT
+    photoPath TEXT,
+    isRegisterField BOOLEAN NOT NULL DEFAULT 1 
 );
 
 CREATE TABLE taxonomy (

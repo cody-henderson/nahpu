@@ -186,6 +186,20 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
                     }
                   },
                 ),
+                SwitchListTile(
+                  title: const Text('Register personal field number'),
+                  subtitle:
+                      const Text('Use personal catalog sequence for specimens'),
+                  value: widget.ctr.isRegisterField,
+                  onChanged: (bool value) {
+                    setState(() {
+                      widget.ctr.isRegisterField = value;
+                    });
+                    if (widget.isEditing) {
+                      _validateEditing();
+                    }
+                  },
+                ),
                 Text(
                     'Initial and cataloger number will be used to generate Field ID.',
                     style: Theme.of(context).textTheme.labelSmall),
@@ -300,6 +314,7 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
         email: db.Value(widget.ctr.emailCtr.text),
         phone: db.Value(widget.ctr.phoneCtr.text),
         role: db.Value(widget.ctr.roleCtr),
+        isRegisterField: db.Value(widget.ctr.isRegisterField),
         currentFieldNumber: db.Value(
           _getCollectorNumber(),
         ),
@@ -321,6 +336,7 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
         email: db.Value(widget.ctr.emailCtr.text),
         phone: db.Value(widget.ctr.phoneCtr.text),
         role: db.Value(widget.ctr.roleCtr),
+        isRegisterField: db.Value(widget.ctr.isRegisterField),
         currentFieldNumber: db.Value(
           _getCollectorNumber(),
         ),
@@ -422,7 +438,7 @@ class CatalogerNumberField extends ConsumerWidget {
       enabled: ctr.roleCtr == 'Cataloger',
       controller: ctr.collectorNumCtr,
       decoration: InputDecoration(
-          labelText: 'Cataloger Number*',
+          labelText: 'Cataloger number*',
           hintText: '1234',
           errorText: ref.watch(personnelFormValidatorProvider).when(
                 data: (data) => data.collNum.errMsg,
