@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nahpu/services/database/project_queries.dart';
 import 'package:nahpu/services/providers/personnel.dart';
 import 'package:nahpu/services/providers/taxa.dart';
 import 'package:nahpu/services/collevent_services.dart';
@@ -31,10 +32,18 @@ class SpecimenServices extends AppServices {
   Future<String> createSpecimen() async {
     CatalogFmt catalogFmt = await ref.watch(catalogFmtNotifierProvider.future);
     final String specimenUuid = uuid;
+    final bool useProjectNumber = await ProjectQuery(dbAccess)
+            .projectUsesProjFieldNums(currentProjectUuid) ??
+        false;
+    final int? currentProjectNumber = useProjectNumber
+        ? await getSpecimenProjectNumber(currentProjectUuid)
+        : null;
+
     await SpecimenQuery(dbAccess).createSpecimen(SpecimenCompanion(
       uuid: db.Value(specimenUuid),
       projectUuid: db.Value(currentProjectUuid),
       taxonGroup: db.Value(matchCatFmtToTaxonGroup(catalogFmt)),
+      projectFieldNumber: db.Value(currentProjectNumber),
     ));
 
     switch (catalogFmt) {
@@ -49,6 +58,15 @@ class SpecimenServices extends AppServices {
         break;
     }
     invalidateSpecimenList();
+
+    if (useProjectNumber) {
+      // Increment current project field number
+      ProjectServices(ref: ref).updateProject(
+          currentProjectUuid,
+          ProjectCompanion(
+              currentFieldNumber: db.Value(currentProjectNumber! + 1)));
+    }
+
     return specimenUuid;
   }
 
@@ -214,6 +232,22 @@ class SpecimenServices extends AppServices {
       return 0;
     } else {
       return currentFieldNum;
+    }
+  }
+
+  Future<int> getSpecimenProjectNumber(
+    String projectUuid,
+  ) async {
+    int? projectNumber =
+        await ProjectQuery(dbAccess).getCurrentProjectNumberByUuid(projectUuid);
+    return _getCurrentProjectNumber(projectNumber);
+  }
+
+  int _getCurrentProjectNumber(int? currentProjectNum) {
+    if (currentProjectNum == null) {
+      return 0;
+    } else {
+      return currentProjectNum;
     }
   }
 

@@ -113,8 +113,8 @@ class ProjectFormCtrModel {
   void updateData(ProjectData data) {
     projectNameCtr.text = data.name;
     descriptionCtr.text = data.description ?? '';
-    usePersonalNumberCtr = data.useProjectNumber;
-    useProjectNumberCtr = data.useProjectNumber;
+    usePersonalNumberCtr = data.useProjectNumber ?? true;
+    useProjectNumberCtr = data.useProjectNumber ?? false;
     currentFieldNumberCtr.text = data.currentFieldNumber?.toString() ?? '';
     pICtr.text = data.principalInvestigator ?? '';
     locationCtr.text = data.location ?? '';
@@ -298,7 +298,8 @@ class SpecimenFormCtrModel {
     required this.idMethodCtr,
     required this.catalogerCtr,
     required this.museumIDCtr,
-    required this.fieldNumberCtr,
+    required this.persFieldNumberCtr,
+    required this.projFieldNumberCtr,
     required this.collEventIDCtr,
     required this.multipleCollectorCtr,
     required this.collPersonnelCtr,
@@ -331,7 +332,8 @@ class SpecimenFormCtrModel {
   int? coordinateCtr;
   TextEditingController idMethodCtr;
   TextEditingController museumIDCtr;
-  TextEditingController fieldNumberCtr;
+  TextEditingController persFieldNumberCtr;
+  TextEditingController projFieldNumberCtr;
   DateEditingController prepDateCtr;
   TimeEditingController prepTimeCtr;
   DateEditingController collDateCtr;
@@ -352,7 +354,8 @@ class SpecimenFormCtrModel {
         relativeTimeCtr: null,
         collMethodCtr: null,
         coordinateCtr: null,
-        fieldNumberCtr: TextEditingController(),
+        persFieldNumberCtr: TextEditingController(),
+        projFieldNumberCtr: TextEditingController(),
         speciesCtr: null,
         idConfidenceCtr: null,
         idMethodCtr: TextEditingController(),
@@ -382,9 +385,11 @@ class SpecimenFormCtrModel {
         idConfidenceCtr: specimen.iDConfidence,
         idMethodCtr: TextEditingController(text: specimen.iDMethod ?? ''),
         museumIDCtr: TextEditingController(text: specimen.museumID ?? ''),
-        fieldNumberCtr:
+        persFieldNumberCtr:
             TextEditingController(text: specimen.fieldNumber?.toString() ?? ''),
         speciesCtr: specimen.speciesID,
+        projFieldNumberCtr: TextEditingController(
+            text: specimen.projectFieldNumber?.toString() ?? ''),
         prepDateCtr: DateEditingController(date: specimen.prepDate),
         prepTimeCtr: TimeEditingController(time: specimen.prepTime),
         collDateCtr: DateEditingController(date: specimen.collectionDate),
@@ -402,7 +407,8 @@ class SpecimenFormCtrModel {
   void dispose() {
     museumIDCtr.dispose();
     idMethodCtr.dispose();
-    fieldNumberCtr.dispose();
+    persFieldNumberCtr.dispose();
+    projFieldNumberCtr.dispose();
     prepDateCtr.dispose();
     prepTimeCtr.dispose();
     collDateCtr.dispose();

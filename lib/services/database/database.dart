@@ -120,6 +120,7 @@ class Database extends _$Database {
     await m.addColumn(project, project.usePersonalNumber);
     await m.addColumn(project, project.useProjectNumber);
     await m.addColumn(project, project.currentFieldNumber);
+    await m.addColumn(specimen, specimen.projectFieldNumber);
   }
 
   Future<void> _migrateFromVersion5(Migrator m) async {

@@ -30,18 +30,18 @@ class Project extends Table with TableInfo<Project, ProjectData> {
   static const VerificationMeta _usePersonalNumberMeta =
       const VerificationMeta('usePersonalNumber');
   late final GeneratedColumn<bool> usePersonalNumber = GeneratedColumn<bool>(
-      'usePersonalNumber', aliasedName, false,
+      'usePersonalNumber', aliasedName, true,
       type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 1',
+      $customConstraints: 'DEFAULT 1',
       defaultValue: const CustomExpression('1'));
   static const VerificationMeta _useProjectNumberMeta =
       const VerificationMeta('useProjectNumber');
   late final GeneratedColumn<bool> useProjectNumber = GeneratedColumn<bool>(
-      'useProjectNumber', aliasedName, false,
+      'useProjectNumber', aliasedName, true,
       type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0',
+      $customConstraints: 'DEFAULT 0',
       defaultValue: const CustomExpression('0'));
   static const VerificationMeta _currentFieldNumberMeta =
       const VerificationMeta('currentFieldNumber');
@@ -208,10 +208,10 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
-      usePersonalNumber: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}usePersonalNumber'])!,
+      usePersonalNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}usePersonalNumber']),
       useProjectNumber: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}useProjectNumber'])!,
+          .read(DriftSqlType.bool, data['${effectivePrefix}useProjectNumber']),
       currentFieldNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}currentFieldNumber']),
       principalInvestigator: attachedDatabase.typeMapping.read(
@@ -244,8 +244,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
   final String uuid;
   final String name;
   final String? description;
-  final bool usePersonalNumber;
-  final bool useProjectNumber;
+  final bool? usePersonalNumber;
+  final bool? useProjectNumber;
   final int? currentFieldNumber;
   final String? principalInvestigator;
   final String? location;
@@ -258,8 +258,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       {required this.uuid,
       required this.name,
       this.description,
-      required this.usePersonalNumber,
-      required this.useProjectNumber,
+      this.usePersonalNumber,
+      this.useProjectNumber,
       this.currentFieldNumber,
       this.principalInvestigator,
       this.location,
@@ -276,8 +276,12 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
-    map['usePersonalNumber'] = Variable<bool>(usePersonalNumber);
-    map['useProjectNumber'] = Variable<bool>(useProjectNumber);
+    if (!nullToAbsent || usePersonalNumber != null) {
+      map['usePersonalNumber'] = Variable<bool>(usePersonalNumber);
+    }
+    if (!nullToAbsent || useProjectNumber != null) {
+      map['useProjectNumber'] = Variable<bool>(useProjectNumber);
+    }
     if (!nullToAbsent || currentFieldNumber != null) {
       map['currentFieldNumber'] = Variable<int>(currentFieldNumber);
     }
@@ -312,8 +316,12 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
-      usePersonalNumber: Value(usePersonalNumber),
-      useProjectNumber: Value(useProjectNumber),
+      usePersonalNumber: usePersonalNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(usePersonalNumber),
+      useProjectNumber: useProjectNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(useProjectNumber),
       currentFieldNumber: currentFieldNumber == null && nullToAbsent
           ? const Value.absent()
           : Value(currentFieldNumber),
@@ -348,8 +356,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       uuid: serializer.fromJson<String>(json['uuid']),
       name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
-      usePersonalNumber: serializer.fromJson<bool>(json['usePersonalNumber']),
-      useProjectNumber: serializer.fromJson<bool>(json['useProjectNumber']),
+      usePersonalNumber: serializer.fromJson<bool?>(json['usePersonalNumber']),
+      useProjectNumber: serializer.fromJson<bool?>(json['useProjectNumber']),
       currentFieldNumber: serializer.fromJson<int?>(json['currentFieldNumber']),
       principalInvestigator:
           serializer.fromJson<String?>(json['principalInvestigator']),
@@ -368,8 +376,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       'uuid': serializer.toJson<String>(uuid),
       'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String?>(description),
-      'usePersonalNumber': serializer.toJson<bool>(usePersonalNumber),
-      'useProjectNumber': serializer.toJson<bool>(useProjectNumber),
+      'usePersonalNumber': serializer.toJson<bool?>(usePersonalNumber),
+      'useProjectNumber': serializer.toJson<bool?>(useProjectNumber),
       'currentFieldNumber': serializer.toJson<int?>(currentFieldNumber),
       'principalInvestigator':
           serializer.toJson<String?>(principalInvestigator),
@@ -386,8 +394,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           {String? uuid,
           String? name,
           Value<String?> description = const Value.absent(),
-          bool? usePersonalNumber,
-          bool? useProjectNumber,
+          Value<bool?> usePersonalNumber = const Value.absent(),
+          Value<bool?> useProjectNumber = const Value.absent(),
           Value<int?> currentFieldNumber = const Value.absent(),
           Value<String?> principalInvestigator = const Value.absent(),
           Value<String?> location = const Value.absent(),
@@ -400,8 +408,12 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
         uuid: uuid ?? this.uuid,
         name: name ?? this.name,
         description: description.present ? description.value : this.description,
-        usePersonalNumber: usePersonalNumber ?? this.usePersonalNumber,
-        useProjectNumber: useProjectNumber ?? this.useProjectNumber,
+        usePersonalNumber: usePersonalNumber.present
+            ? usePersonalNumber.value
+            : this.usePersonalNumber,
+        useProjectNumber: useProjectNumber.present
+            ? useProjectNumber.value
+            : this.useProjectNumber,
         currentFieldNumber: currentFieldNumber.present
             ? currentFieldNumber.value
             : this.currentFieldNumber,
@@ -503,8 +515,8 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
   final Value<String> uuid;
   final Value<String> name;
   final Value<String?> description;
-  final Value<bool> usePersonalNumber;
-  final Value<bool> useProjectNumber;
+  final Value<bool?> usePersonalNumber;
+  final Value<bool?> useProjectNumber;
   final Value<int?> currentFieldNumber;
   final Value<String?> principalInvestigator;
   final Value<String?> location;
@@ -586,8 +598,8 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       {Value<String>? uuid,
       Value<String>? name,
       Value<String?>? description,
-      Value<bool>? usePersonalNumber,
-      Value<bool>? useProjectNumber,
+      Value<bool?>? usePersonalNumber,
+      Value<bool?>? useProjectNumber,
       Value<int?>? currentFieldNumber,
       Value<String?>? principalInvestigator,
       Value<String?>? location,
@@ -6725,6 +6737,13 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _projectFieldNumberMeta =
+      const VerificationMeta('projectFieldNumber');
+  late final GeneratedColumn<int> projectFieldNumber = GeneratedColumn<int>(
+      'projectFieldNumber', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _collEventIDMeta =
       const VerificationMeta('collEventID');
   late final GeneratedColumn<int> collEventID = GeneratedColumn<int>(
@@ -6789,6 +6808,7 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
         coordinateID,
         catalogerID,
         fieldNumber,
+        projectFieldNumber,
         collEventID,
         isMultipleCollector,
         collPersonnelID,
@@ -6912,6 +6932,12 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
           fieldNumber.isAcceptableOrUnknown(
               data['fieldNumber']!, _fieldNumberMeta));
     }
+    if (data.containsKey('projectFieldNumber')) {
+      context.handle(
+          _projectFieldNumberMeta,
+          projectFieldNumber.isAcceptableOrUnknown(
+              data['projectFieldNumber']!, _projectFieldNumberMeta));
+    }
     if (data.containsKey('collEventID')) {
       context.handle(
           _collEventIDMeta,
@@ -6995,6 +7021,8 @@ class Specimen extends Table with TableInfo<Specimen, SpecimenData> {
           .read(DriftSqlType.string, data['${effectivePrefix}catalogerID']),
       fieldNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}fieldNumber']),
+      projectFieldNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}projectFieldNumber']),
       collEventID: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}collEventID']),
       isMultipleCollector: attachedDatabase.typeMapping.read(
@@ -7055,6 +7083,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
   final int? coordinateID;
   final String? catalogerID;
   final int? fieldNumber;
+  final int? projectFieldNumber;
   final int? collEventID;
   final int? isMultipleCollector;
   final int? collPersonnelID;
@@ -7082,6 +7111,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       this.coordinateID,
       this.catalogerID,
       this.fieldNumber,
+      this.projectFieldNumber,
       this.collEventID,
       this.isMultipleCollector,
       this.collPersonnelID,
@@ -7148,6 +7178,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
     }
     if (!nullToAbsent || fieldNumber != null) {
       map['fieldNumber'] = Variable<int>(fieldNumber);
+    }
+    if (!nullToAbsent || projectFieldNumber != null) {
+      map['projectFieldNumber'] = Variable<int>(projectFieldNumber);
     }
     if (!nullToAbsent || collEventID != null) {
       map['collEventID'] = Variable<int>(collEventID);
@@ -7230,6 +7263,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       fieldNumber: fieldNumber == null && nullToAbsent
           ? const Value.absent()
           : Value(fieldNumber),
+      projectFieldNumber: projectFieldNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(projectFieldNumber),
       collEventID: collEventID == null && nullToAbsent
           ? const Value.absent()
           : Value(collEventID),
@@ -7276,6 +7312,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       coordinateID: serializer.fromJson<int?>(json['coordinateID']),
       catalogerID: serializer.fromJson<String?>(json['catalogerID']),
       fieldNumber: serializer.fromJson<int?>(json['fieldNumber']),
+      projectFieldNumber: serializer.fromJson<int?>(json['projectFieldNumber']),
       collEventID: serializer.fromJson<int?>(json['collEventID']),
       isMultipleCollector:
           serializer.fromJson<int?>(json['isMultipleCollector']),
@@ -7309,6 +7346,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
       'coordinateID': serializer.toJson<int?>(coordinateID),
       'catalogerID': serializer.toJson<String?>(catalogerID),
       'fieldNumber': serializer.toJson<int?>(fieldNumber),
+      'projectFieldNumber': serializer.toJson<int?>(projectFieldNumber),
       'collEventID': serializer.toJson<int?>(collEventID),
       'isMultipleCollector': serializer.toJson<int?>(isMultipleCollector),
       'collPersonnelID': serializer.toJson<int?>(collPersonnelID),
@@ -7339,6 +7377,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           Value<int?> coordinateID = const Value.absent(),
           Value<String?> catalogerID = const Value.absent(),
           Value<int?> fieldNumber = const Value.absent(),
+          Value<int?> projectFieldNumber = const Value.absent(),
           Value<int?> collEventID = const Value.absent(),
           Value<int?> isMultipleCollector = const Value.absent(),
           Value<int?> collPersonnelID = const Value.absent(),
@@ -7373,6 +7412,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
             coordinateID.present ? coordinateID.value : this.coordinateID,
         catalogerID: catalogerID.present ? catalogerID.value : this.catalogerID,
         fieldNumber: fieldNumber.present ? fieldNumber.value : this.fieldNumber,
+        projectFieldNumber: projectFieldNumber.present
+            ? projectFieldNumber.value
+            : this.projectFieldNumber,
         collEventID: collEventID.present ? collEventID.value : this.collEventID,
         isMultipleCollector: isMultipleCollector.present
             ? isMultipleCollector.value
@@ -7426,6 +7468,9 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           data.catalogerID.present ? data.catalogerID.value : this.catalogerID,
       fieldNumber:
           data.fieldNumber.present ? data.fieldNumber.value : this.fieldNumber,
+      projectFieldNumber: data.projectFieldNumber.present
+          ? data.projectFieldNumber.value
+          : this.projectFieldNumber,
       collEventID:
           data.collEventID.present ? data.collEventID.value : this.collEventID,
       isMultipleCollector: data.isMultipleCollector.present
@@ -7467,6 +7512,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           ..write('coordinateID: $coordinateID, ')
           ..write('catalogerID: $catalogerID, ')
           ..write('fieldNumber: $fieldNumber, ')
+          ..write('projectFieldNumber: $projectFieldNumber, ')
           ..write('collEventID: $collEventID, ')
           ..write('isMultipleCollector: $isMultipleCollector, ')
           ..write('collPersonnelID: $collPersonnelID, ')
@@ -7499,6 +7545,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
         coordinateID,
         catalogerID,
         fieldNumber,
+        projectFieldNumber,
         collEventID,
         isMultipleCollector,
         collPersonnelID,
@@ -7530,6 +7577,7 @@ class SpecimenData extends DataClass implements Insertable<SpecimenData> {
           other.coordinateID == this.coordinateID &&
           other.catalogerID == this.catalogerID &&
           other.fieldNumber == this.fieldNumber &&
+          other.projectFieldNumber == this.projectFieldNumber &&
           other.collEventID == this.collEventID &&
           other.isMultipleCollector == this.isMultipleCollector &&
           other.collPersonnelID == this.collPersonnelID &&
@@ -7559,6 +7607,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
   final Value<int?> coordinateID;
   final Value<String?> catalogerID;
   final Value<int?> fieldNumber;
+  final Value<int?> projectFieldNumber;
   final Value<int?> collEventID;
   final Value<int?> isMultipleCollector;
   final Value<int?> collPersonnelID;
@@ -7587,6 +7636,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     this.coordinateID = const Value.absent(),
     this.catalogerID = const Value.absent(),
     this.fieldNumber = const Value.absent(),
+    this.projectFieldNumber = const Value.absent(),
     this.collEventID = const Value.absent(),
     this.isMultipleCollector = const Value.absent(),
     this.collPersonnelID = const Value.absent(),
@@ -7616,6 +7666,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     this.coordinateID = const Value.absent(),
     this.catalogerID = const Value.absent(),
     this.fieldNumber = const Value.absent(),
+    this.projectFieldNumber = const Value.absent(),
     this.collEventID = const Value.absent(),
     this.isMultipleCollector = const Value.absent(),
     this.collPersonnelID = const Value.absent(),
@@ -7645,6 +7696,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     Expression<int>? coordinateID,
     Expression<String>? catalogerID,
     Expression<int>? fieldNumber,
+    Expression<int>? projectFieldNumber,
     Expression<int>? collEventID,
     Expression<int>? isMultipleCollector,
     Expression<int>? collPersonnelID,
@@ -7675,6 +7727,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
       if (coordinateID != null) 'coordinateID': coordinateID,
       if (catalogerID != null) 'catalogerID': catalogerID,
       if (fieldNumber != null) 'fieldNumber': fieldNumber,
+      if (projectFieldNumber != null) 'projectFieldNumber': projectFieldNumber,
       if (collEventID != null) 'collEventID': collEventID,
       if (isMultipleCollector != null)
         'isMultipleCollector': isMultipleCollector,
@@ -7707,6 +7760,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
       Value<int?>? coordinateID,
       Value<String?>? catalogerID,
       Value<int?>? fieldNumber,
+      Value<int?>? projectFieldNumber,
       Value<int?>? collEventID,
       Value<int?>? isMultipleCollector,
       Value<int?>? collPersonnelID,
@@ -7735,6 +7789,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
       coordinateID: coordinateID ?? this.coordinateID,
       catalogerID: catalogerID ?? this.catalogerID,
       fieldNumber: fieldNumber ?? this.fieldNumber,
+      projectFieldNumber: projectFieldNumber ?? this.projectFieldNumber,
       collEventID: collEventID ?? this.collEventID,
       isMultipleCollector: isMultipleCollector ?? this.isMultipleCollector,
       collPersonnelID: collPersonnelID ?? this.collPersonnelID,
@@ -7808,6 +7863,9 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
     if (fieldNumber.present) {
       map['fieldNumber'] = Variable<int>(fieldNumber.value);
     }
+    if (projectFieldNumber.present) {
+      map['projectFieldNumber'] = Variable<int>(projectFieldNumber.value);
+    }
     if (collEventID.present) {
       map['collEventID'] = Variable<int>(collEventID.value);
     }
@@ -7855,6 +7913,7 @@ class SpecimenCompanion extends UpdateCompanion<SpecimenData> {
           ..write('coordinateID: $coordinateID, ')
           ..write('catalogerID: $catalogerID, ')
           ..write('fieldNumber: $fieldNumber, ')
+          ..write('projectFieldNumber: $projectFieldNumber, ')
           ..write('collEventID: $collEventID, ')
           ..write('isMultipleCollector: $isMultipleCollector, ')
           ..write('collPersonnelID: $collPersonnelID, ')
@@ -13454,8 +13513,8 @@ typedef $ProjectCreateCompanionBuilder = ProjectCompanion Function({
   required String uuid,
   required String name,
   Value<String?> description,
-  Value<bool> usePersonalNumber,
-  Value<bool> useProjectNumber,
+  Value<bool?> usePersonalNumber,
+  Value<bool?> useProjectNumber,
   Value<int?> currentFieldNumber,
   Value<String?> principalInvestigator,
   Value<String?> location,
@@ -13470,8 +13529,8 @@ typedef $ProjectUpdateCompanionBuilder = ProjectCompanion Function({
   Value<String> uuid,
   Value<String> name,
   Value<String?> description,
-  Value<bool> usePersonalNumber,
-  Value<bool> useProjectNumber,
+  Value<bool?> usePersonalNumber,
+  Value<bool?> useProjectNumber,
   Value<int?> currentFieldNumber,
   Value<String?> principalInvestigator,
   Value<String?> location,
@@ -13662,8 +13721,8 @@ class $ProjectTableManager extends RootTableManager<
             Value<String> uuid = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String?> description = const Value.absent(),
-            Value<bool> usePersonalNumber = const Value.absent(),
-            Value<bool> useProjectNumber = const Value.absent(),
+            Value<bool?> usePersonalNumber = const Value.absent(),
+            Value<bool?> useProjectNumber = const Value.absent(),
             Value<int?> currentFieldNumber = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
@@ -13694,8 +13753,8 @@ class $ProjectTableManager extends RootTableManager<
             required String uuid,
             required String name,
             Value<String?> description = const Value.absent(),
-            Value<bool> usePersonalNumber = const Value.absent(),
-            Value<bool> useProjectNumber = const Value.absent(),
+            Value<bool?> usePersonalNumber = const Value.absent(),
+            Value<bool?> useProjectNumber = const Value.absent(),
             Value<int?> currentFieldNumber = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
@@ -16879,6 +16938,7 @@ typedef $SpecimenCreateCompanionBuilder = SpecimenCompanion Function({
   Value<int?> coordinateID,
   Value<String?> catalogerID,
   Value<int?> fieldNumber,
+  Value<int?> projectFieldNumber,
   Value<int?> collEventID,
   Value<int?> isMultipleCollector,
   Value<int?> collPersonnelID,
@@ -16908,6 +16968,7 @@ typedef $SpecimenUpdateCompanionBuilder = SpecimenCompanion Function({
   Value<int?> coordinateID,
   Value<String?> catalogerID,
   Value<int?> fieldNumber,
+  Value<int?> projectFieldNumber,
   Value<int?> collEventID,
   Value<int?> isMultipleCollector,
   Value<int?> collPersonnelID,
@@ -17008,6 +17069,10 @@ class $SpecimenFilterComposer extends Composer<_$Database, Specimen> {
 
   ColumnFilters<int> get fieldNumber => $composableBuilder(
       column: $table.fieldNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get projectFieldNumber => $composableBuilder(
+      column: $table.projectFieldNumber,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get collEventID => $composableBuilder(
       column: $table.collEventID, builder: (column) => ColumnFilters(column));
@@ -17121,6 +17186,10 @@ class $SpecimenOrderingComposer extends Composer<_$Database, Specimen> {
   ColumnOrderings<int> get fieldNumber => $composableBuilder(
       column: $table.fieldNumber, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get projectFieldNumber => $composableBuilder(
+      column: $table.projectFieldNumber,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get collEventID => $composableBuilder(
       column: $table.collEventID, builder: (column) => ColumnOrderings(column));
 
@@ -17228,6 +17297,9 @@ class $SpecimenAnnotationComposer extends Composer<_$Database, Specimen> {
   GeneratedColumn<int> get fieldNumber => $composableBuilder(
       column: $table.fieldNumber, builder: (column) => column);
 
+  GeneratedColumn<int> get projectFieldNumber => $composableBuilder(
+      column: $table.projectFieldNumber, builder: (column) => column);
+
   GeneratedColumn<int> get collEventID => $composableBuilder(
       column: $table.collEventID, builder: (column) => column);
 
@@ -17307,6 +17379,7 @@ class $SpecimenTableManager extends RootTableManager<
             Value<int?> coordinateID = const Value.absent(),
             Value<String?> catalogerID = const Value.absent(),
             Value<int?> fieldNumber = const Value.absent(),
+            Value<int?> projectFieldNumber = const Value.absent(),
             Value<int?> collEventID = const Value.absent(),
             Value<int?> isMultipleCollector = const Value.absent(),
             Value<int?> collPersonnelID = const Value.absent(),
@@ -17336,6 +17409,7 @@ class $SpecimenTableManager extends RootTableManager<
             coordinateID: coordinateID,
             catalogerID: catalogerID,
             fieldNumber: fieldNumber,
+            projectFieldNumber: projectFieldNumber,
             collEventID: collEventID,
             isMultipleCollector: isMultipleCollector,
             collPersonnelID: collPersonnelID,
@@ -17365,6 +17439,7 @@ class $SpecimenTableManager extends RootTableManager<
             Value<int?> coordinateID = const Value.absent(),
             Value<String?> catalogerID = const Value.absent(),
             Value<int?> fieldNumber = const Value.absent(),
+            Value<int?> projectFieldNumber = const Value.absent(),
             Value<int?> collEventID = const Value.absent(),
             Value<int?> isMultipleCollector = const Value.absent(),
             Value<int?> collPersonnelID = const Value.absent(),
@@ -17394,6 +17469,7 @@ class $SpecimenTableManager extends RootTableManager<
             coordinateID: coordinateID,
             catalogerID: catalogerID,
             fieldNumber: fieldNumber,
+            projectFieldNumber: projectFieldNumber,
             collEventID: collEventID,
             isMultipleCollector: isMultipleCollector,
             collPersonnelID: collPersonnelID,

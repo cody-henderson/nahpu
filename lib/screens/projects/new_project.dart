@@ -90,7 +90,7 @@ class CreateProjectFormState extends ConsumerState<CreateProjectForm> {
         null,
         projectData.name,
         projectData.currentFieldNumber.toString(),
-        projectData.useProjectNumber);
+        projectData.useProjectNumber ?? true);
     ref
         .read(projectFormValidatorProvider.notifier)
         .checkProjectNameExists(projectData.name);

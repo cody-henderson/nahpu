@@ -31,6 +31,24 @@ class ProjectQuery extends DatabaseAccessor<Database> with _$ProjectQueryMixin {
     }
   }
 
+  Future<bool?> projectUsesPersFieldNums(String uuid) async {
+    return await (select(project)..where((t) => t.uuid.equals(uuid)))
+        .map((e) => e.usePersonalNumber)
+        .getSingle();
+  }
+
+  Future<bool?> projectUsesProjFieldNums(String uuid) async {
+    return await (select(project)..where((t) => t.uuid.equals(uuid)))
+        .map((e) => e.useProjectNumber)
+        .getSingle();
+  }
+
+  Future<int?> getCurrentProjectNumberByUuid(String projectUuid) async {
+    return await (select(project)..where((t) => t.uuid.equals(projectUuid)))
+        .map((e) => e.currentFieldNumber)
+        .getSingle();
+  }
+
   Future<void> updateProjectEntry(String uuid, ProjectCompanion entry) {
     return (update(project)..where((t) => t.uuid.equals(uuid))).write(entry);
   }

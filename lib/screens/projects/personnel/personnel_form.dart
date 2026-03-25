@@ -244,6 +244,7 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
                 await _deletePersonnel();
                 ref.invalidate(projectPersonnelProvider);
                 ref.invalidate(personnelFormValidatorProvider);
+                ref.invalidate(personnelNameProvider);
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
