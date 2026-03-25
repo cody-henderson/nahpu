@@ -7,7 +7,7 @@ part of 'validation.dart';
 // **************************************************************************
 
 String _$projectFormValidatorHash() =>
-    r'c5868fad77bf661e6a072af4b88d775e4c9a40e1';
+    r'2387da32b15a3bb361c7fb3cbd7aea65d223f575';
 
 /// See also [ProjectFormValidator].
 @ProviderFor(ProjectFormValidator)

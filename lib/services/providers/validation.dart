@@ -15,15 +15,21 @@ abstract class ProjectForm with _$ProjectForm {
 
   const factory ProjectForm({
     required ProjectFormField projectName,
+    required ProjectFormField currentFieldNumber,
     required ProjectFormField existingProject,
   }) = _ProjectForm;
 
   factory ProjectForm.empty() => ProjectForm(
         projectName: ProjectFormField(errMsg: null, isValid: false),
+        currentFieldNumber: ProjectFormField(errMsg: null, isValid: false),
         existingProject: ProjectFormField(errMsg: null, isValid: false),
       );
 
-  bool get isValid => projectName.isValid && existingProject.isValid;
+  bool get isValid {
+    return projectName.isValid &&
+        currentFieldNumber.isValid &&
+        existingProject.isValid;
+  }
 }
 
 @freezed
@@ -45,11 +51,18 @@ class ProjectFormValidator extends _$ProjectFormValidator {
     return _fetch();
   }
 
-  Future<void> validateOnEditing(
-      String? initialProjectName, String? value) async {
-    await validateProjectName(value);
-    if (initialProjectName != value) {
-      await checkProjectNameExists(value);
+  Future<void> validateOnCreate(
+      String? projectName, String? currentFieldNum, bool useProjectNum) async {
+    await validateProjectName(projectName);
+    await checkProjectNameExists(projectName);
+    await validateCurrentFieldNum(currentFieldNum, useProjectNum);
+  }
+
+  Future<void> validateOnEditing(String? initialProjectName,
+      String? projectName, String? currentFieldNum, bool useProjectNum) async {
+    await validateProjectName(projectName);
+    if (initialProjectName != projectName) {
+      await checkProjectNameExists(projectName);
     } else {
       state = const AsyncValue.loading();
       state = await AsyncValue.guard(() async {
@@ -58,6 +71,7 @@ class ProjectFormValidator extends _$ProjectFormValidator {
             existingProject: ProjectFormField(errMsg: null, isValid: true));
       });
     }
+    await validateCurrentFieldNum(currentFieldNum, useProjectNum);
   }
 
   Future<void> validateProjectName(String? value) async {
@@ -118,6 +132,31 @@ class ProjectFormValidator extends _$ProjectFormValidator {
 
   bool _findMatchingName(List<String> projectNames, String value) {
     return isListContains(projectNames, value);
+  }
+
+  Future<void> validateCurrentFieldNum(
+      String? value, bool useProjectNumber) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      if (!useProjectNumber) {
+        return state.value!.copyWith(
+            currentFieldNumber: ProjectFormField(errMsg: null, isValid: true));
+      }
+
+      if (value == null || value.isEmpty || state.value == null) {
+        return state.value!.copyWith(
+            currentFieldNumber: ProjectFormField(errMsg: null, isValid: false));
+      }
+
+      if (!value.isValidCollNum) {
+        return state.value!.copyWith(
+            currentFieldNumber: ProjectFormField(
+                errMsg: "Invalid general field number", isValid: false));
+      }
+
+      return state.value!.copyWith(
+          currentFieldNumber: ProjectFormField(errMsg: null, isValid: true));
+    });
   }
 }
 

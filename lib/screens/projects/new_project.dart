@@ -86,9 +86,11 @@ class CreateProjectFormState extends ConsumerState<CreateProjectForm> {
       projectData.name,
     );
     Navigator.pop(context);
-    ref
-        .read(projectFormValidatorProvider.notifier)
-        .validateOnEditing(null, projectData.name);
+    ref.read(projectFormValidatorProvider.notifier).validateOnEditing(
+        null,
+        projectData.name,
+        projectData.currentFieldNumber.toString(),
+        projectData.useProjectNumber);
     ref
         .read(projectFormValidatorProvider.notifier)
         .checkProjectNameExists(projectData.name);

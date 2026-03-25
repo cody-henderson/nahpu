@@ -66,20 +66,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(25),
                     ],
-                    onChanged: (value) async {
-                      if (widget.isEditing) {
-                        ref
-                            .watch(projectFormValidatorProvider.notifier)
-                            .validateOnEditing(initialProjectName,
-                                widget.projectCtr.projectNameCtr.text);
-                      } else {
-                        await ref
-                            .watch(projectFormValidatorProvider.notifier)
-                            .validateProjectName(value);
-                        await ref
-                            .watch(projectFormValidatorProvider.notifier)
-                            .checkProjectNameExists(value);
-                      }
+                    onChanged: (_) async {
+                      _validateAll();
                     },
                     errorText: validator.when(
                       data: (data) {
@@ -108,7 +96,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                   maxLines: 2,
                   maxLength: 120,
                   onChanged: (_) {
-                    _validateEditing();
+                    _validateAll();
                   },
                 ),
                 Visibility(
@@ -118,7 +106,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     labelText: 'Principal Investigator',
                     hintText: 'Enter PI name of the project (optional)',
                     onChanged: (_) {
-                      _validateEditing();
+                      _validateAll();
                     },
                   ),
                 ),
@@ -138,7 +126,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                       setState(() {
                         widget.projectCtr.usePersonalNumberCtr = value;
                       });
-                      _validateEditing();
+                      _validateAll();
                     }),
                 SwitchListTile(
                   title: Text('Project field number',
@@ -148,8 +136,34 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     setState(() {
                       widget.projectCtr.useProjectNumberCtr = value;
                     });
-                    _validateEditing();
+                    _validateAll();
                   },
+                ),
+                Visibility(
+                  visible: widget.projectCtr.useProjectNumberCtr,
+                  child: Column(children: [
+                    ProjectFormField(
+                        controller: widget.projectCtr.currentFieldNumberCtr,
+                        labelText: 'General field number*',
+                        hintText: '1234',
+                        keyboardType: TextInputType.number,
+                        errorText: ref.watch(projectFormValidatorProvider).when(
+                              data: (data) => data.currentFieldNumber.errMsg,
+                              loading: () => null,
+                              error: (e, s) => null,
+                            ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'[0-9]+'),
+                          )
+                        ],
+                        onChanged: (_) async {
+                          _validateAll();
+                        }),
+                    Text(
+                        'General field number will be used to generate specimen project IDs.',
+                        style: Theme.of(context).textTheme.labelSmall),
+                  ]),
                 ),
                 Visibility(
                   visible: _showMore ||
@@ -159,7 +173,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     labelText: 'Location',
                     hintText: 'Enter location of the project (optional)',
                     onChanged: (_) {
-                      _validateEditing();
+                      _validateAll();
                     },
                   ),
                 ),
@@ -169,7 +183,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                     child: TimeZoneField(
                       projectCtr: widget.projectCtr,
                       onChanged: (_) {
-                        _validateEditing();
+                        _validateAll();
                       },
                     )),
                 Visibility(
@@ -187,7 +201,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                       if (selectedDate != null) {
                         widget.projectCtr.startDateCtr.dateTime = selectedDate;
                       }
-                      _validateEditing();
+                      _validateAll();
                     },
                   ),
                 ),
@@ -206,7 +220,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                       if (selectedDate != null) {
                         widget.projectCtr.endDateCtr.dateTime = selectedDate;
                       }
-                      _validateEditing();
+                      _validateAll();
                     },
                   ),
                 ),
@@ -255,10 +269,18 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
     );
   }
 
-  Future<void> _validateEditing() async {
+  Future<void> _validateAll() async {
     if (widget.isEditing) {
       ref.watch(projectFormValidatorProvider.notifier).validateOnEditing(
-          initialProjectName, widget.projectCtr.projectNameCtr.text);
+          initialProjectName,
+          widget.projectCtr.projectNameCtr.text,
+          widget.projectCtr.currentFieldNumberCtr.text,
+          widget.projectCtr.useProjectNumberCtr);
+    } else {
+      ref.watch(projectFormValidatorProvider.notifier).validateOnCreate(
+          widget.projectCtr.projectNameCtr.text,
+          widget.projectCtr.currentFieldNumberCtr.text,
+          widget.projectCtr.useProjectNumberCtr);
     }
   }
 
@@ -295,6 +317,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       usePersonalNumber: db.Value(widget.projectCtr.usePersonalNumberCtr),
       useProjectNumber: db.Value(widget.projectCtr.useProjectNumberCtr),
       description: db.Value(widget.projectCtr.descriptionCtr.text),
+      currentFieldNumber:
+          db.Value(int.tryParse(widget.projectCtr.currentFieldNumberCtr.text)),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
       timeZone: db.Value(widget.projectCtr.timeZoneCtr.text),
@@ -313,6 +337,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       usePersonalNumber: db.Value(widget.projectCtr.usePersonalNumberCtr),
       useProjectNumber: db.Value(widget.projectCtr.useProjectNumberCtr),
+      currentFieldNumber:
+          db.Value(int.tryParse(widget.projectCtr.currentFieldNumberCtr.text)),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
       timeZone: db.Value(widget.projectCtr.timeZoneCtr.text),

@@ -23,6 +23,23 @@ class Project extends Table with TableInfo<Project, ProjectData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  late final GeneratedColumn<bool> usePersonalNumber = GeneratedColumn<bool>(
+      'usePersonalNumber', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 1',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<bool> useProjectNumber = GeneratedColumn<bool>(
+      'useProjectNumber', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const CustomExpression('0'));
+  late final GeneratedColumn<int> currentFieldNumber = GeneratedColumn<int>(
+      'currentFieldNumber', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   late final GeneratedColumn<String> principalInvestigator =
       GeneratedColumn<String>('principalInvestigator', aliasedName, true,
           type: DriftSqlType.string,
@@ -63,6 +80,9 @@ class Project extends Table with TableInfo<Project, ProjectData> {
         uuid,
         name,
         description,
+        usePersonalNumber,
+        useProjectNumber,
+        currentFieldNumber,
         principalInvestigator,
         location,
         timeZone,
@@ -88,6 +108,12 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      usePersonalNumber: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}usePersonalNumber'])!,
+      useProjectNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}useProjectNumber'])!,
+      currentFieldNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}currentFieldNumber']),
       principalInvestigator: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}principalInvestigator']),
       location: attachedDatabase.typeMapping
@@ -118,6 +144,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
   final String uuid;
   final String name;
   final String? description;
+  final bool usePersonalNumber;
+  final bool useProjectNumber;
+  final int? currentFieldNumber;
   final String? principalInvestigator;
   final String? location;
   final String? timeZone;
@@ -129,6 +158,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       {required this.uuid,
       required this.name,
       this.description,
+      required this.usePersonalNumber,
+      required this.useProjectNumber,
+      this.currentFieldNumber,
       this.principalInvestigator,
       this.location,
       this.timeZone,
@@ -143,6 +175,11 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
     map['name'] = Variable<String>(name);
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
+    }
+    map['usePersonalNumber'] = Variable<bool>(usePersonalNumber);
+    map['useProjectNumber'] = Variable<bool>(useProjectNumber);
+    if (!nullToAbsent || currentFieldNumber != null) {
+      map['currentFieldNumber'] = Variable<int>(currentFieldNumber);
     }
     if (!nullToAbsent || principalInvestigator != null) {
       map['principalInvestigator'] = Variable<String>(principalInvestigator);
@@ -175,6 +212,11 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
+      usePersonalNumber: Value(usePersonalNumber),
+      useProjectNumber: Value(useProjectNumber),
+      currentFieldNumber: currentFieldNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currentFieldNumber),
       principalInvestigator: principalInvestigator == null && nullToAbsent
           ? const Value.absent()
           : Value(principalInvestigator),
@@ -206,6 +248,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       uuid: serializer.fromJson<String>(json['uuid']),
       name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
+      usePersonalNumber: serializer.fromJson<bool>(json['usePersonalNumber']),
+      useProjectNumber: serializer.fromJson<bool>(json['useProjectNumber']),
+      currentFieldNumber: serializer.fromJson<int?>(json['currentFieldNumber']),
       principalInvestigator:
           serializer.fromJson<String?>(json['principalInvestigator']),
       location: serializer.fromJson<String?>(json['location']),
@@ -223,6 +268,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       'uuid': serializer.toJson<String>(uuid),
       'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String?>(description),
+      'usePersonalNumber': serializer.toJson<bool>(usePersonalNumber),
+      'useProjectNumber': serializer.toJson<bool>(useProjectNumber),
+      'currentFieldNumber': serializer.toJson<int?>(currentFieldNumber),
       'principalInvestigator':
           serializer.toJson<String?>(principalInvestigator),
       'location': serializer.toJson<String?>(location),
@@ -238,6 +286,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           {String? uuid,
           String? name,
           Value<String?> description = const Value.absent(),
+          bool? usePersonalNumber,
+          bool? useProjectNumber,
+          Value<int?> currentFieldNumber = const Value.absent(),
           Value<String?> principalInvestigator = const Value.absent(),
           Value<String?> location = const Value.absent(),
           Value<String?> timeZone = const Value.absent(),
@@ -249,6 +300,11 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
         uuid: uuid ?? this.uuid,
         name: name ?? this.name,
         description: description.present ? description.value : this.description,
+        usePersonalNumber: usePersonalNumber ?? this.usePersonalNumber,
+        useProjectNumber: useProjectNumber ?? this.useProjectNumber,
+        currentFieldNumber: currentFieldNumber.present
+            ? currentFieldNumber.value
+            : this.currentFieldNumber,
         principalInvestigator: principalInvestigator.present
             ? principalInvestigator.value
             : this.principalInvestigator,
@@ -266,6 +322,15 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       name: data.name.present ? data.name.value : this.name,
       description:
           data.description.present ? data.description.value : this.description,
+      usePersonalNumber: data.usePersonalNumber.present
+          ? data.usePersonalNumber.value
+          : this.usePersonalNumber,
+      useProjectNumber: data.useProjectNumber.present
+          ? data.useProjectNumber.value
+          : this.useProjectNumber,
+      currentFieldNumber: data.currentFieldNumber.present
+          ? data.currentFieldNumber.value
+          : this.currentFieldNumber,
       principalInvestigator: data.principalInvestigator.present
           ? data.principalInvestigator.value
           : this.principalInvestigator,
@@ -286,6 +351,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           ..write('uuid: $uuid, ')
           ..write('name: $name, ')
           ..write('description: $description, ')
+          ..write('usePersonalNumber: $usePersonalNumber, ')
+          ..write('useProjectNumber: $useProjectNumber, ')
+          ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
           ..write('timeZone: $timeZone, ')
@@ -302,6 +370,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       uuid,
       name,
       description,
+      usePersonalNumber,
+      useProjectNumber,
+      currentFieldNumber,
       principalInvestigator,
       location,
       timeZone,
@@ -316,6 +387,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           other.uuid == this.uuid &&
           other.name == this.name &&
           other.description == this.description &&
+          other.usePersonalNumber == this.usePersonalNumber &&
+          other.useProjectNumber == this.useProjectNumber &&
+          other.currentFieldNumber == this.currentFieldNumber &&
           other.principalInvestigator == this.principalInvestigator &&
           other.location == this.location &&
           other.timeZone == this.timeZone &&
@@ -329,6 +403,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
   final Value<String> uuid;
   final Value<String> name;
   final Value<String?> description;
+  final Value<bool> usePersonalNumber;
+  final Value<bool> useProjectNumber;
+  final Value<int?> currentFieldNumber;
   final Value<String?> principalInvestigator;
   final Value<String?> location;
   final Value<String?> timeZone;
@@ -341,6 +418,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.uuid = const Value.absent(),
     this.name = const Value.absent(),
     this.description = const Value.absent(),
+    this.usePersonalNumber = const Value.absent(),
+    this.useProjectNumber = const Value.absent(),
+    this.currentFieldNumber = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
     this.timeZone = const Value.absent(),
@@ -354,6 +434,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     required String uuid,
     required String name,
     this.description = const Value.absent(),
+    this.usePersonalNumber = const Value.absent(),
+    this.useProjectNumber = const Value.absent(),
+    this.currentFieldNumber = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
     this.timeZone = const Value.absent(),
@@ -368,6 +451,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     Expression<String>? uuid,
     Expression<String>? name,
     Expression<String>? description,
+    Expression<bool>? usePersonalNumber,
+    Expression<bool>? useProjectNumber,
+    Expression<int>? currentFieldNumber,
     Expression<String>? principalInvestigator,
     Expression<String>? location,
     Expression<String>? timeZone,
@@ -381,6 +467,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       if (uuid != null) 'uuid': uuid,
       if (name != null) 'name': name,
       if (description != null) 'description': description,
+      if (usePersonalNumber != null) 'usePersonalNumber': usePersonalNumber,
+      if (useProjectNumber != null) 'useProjectNumber': useProjectNumber,
+      if (currentFieldNumber != null) 'currentFieldNumber': currentFieldNumber,
       if (principalInvestigator != null)
         'principalInvestigator': principalInvestigator,
       if (location != null) 'location': location,
@@ -397,6 +486,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       {Value<String>? uuid,
       Value<String>? name,
       Value<String?>? description,
+      Value<bool>? usePersonalNumber,
+      Value<bool>? useProjectNumber,
+      Value<int?>? currentFieldNumber,
       Value<String?>? principalInvestigator,
       Value<String?>? location,
       Value<String?>? timeZone,
@@ -409,6 +501,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       uuid: uuid ?? this.uuid,
       name: name ?? this.name,
       description: description ?? this.description,
+      usePersonalNumber: usePersonalNumber ?? this.usePersonalNumber,
+      useProjectNumber: useProjectNumber ?? this.useProjectNumber,
+      currentFieldNumber: currentFieldNumber ?? this.currentFieldNumber,
       principalInvestigator:
           principalInvestigator ?? this.principalInvestigator,
       location: location ?? this.location,
@@ -432,6 +527,15 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
+    }
+    if (usePersonalNumber.present) {
+      map['usePersonalNumber'] = Variable<bool>(usePersonalNumber.value);
+    }
+    if (useProjectNumber.present) {
+      map['useProjectNumber'] = Variable<bool>(useProjectNumber.value);
+    }
+    if (currentFieldNumber.present) {
+      map['currentFieldNumber'] = Variable<int>(currentFieldNumber.value);
     }
     if (principalInvestigator.present) {
       map['principalInvestigator'] =
@@ -467,6 +571,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
           ..write('uuid: $uuid, ')
           ..write('name: $name, ')
           ..write('description: $description, ')
+          ..write('usePersonalNumber: $usePersonalNumber, ')
+          ..write('useProjectNumber: $useProjectNumber, ')
+          ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
           ..write('timeZone: $timeZone, ')
@@ -535,6 +642,12 @@ class Personnel extends Table with TableInfo<Personnel, PersonnelData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  late final GeneratedColumn<bool> isRegisterField = GeneratedColumn<bool>(
+      'isRegisterField', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 1',
+      defaultValue: const CustomExpression('1'));
   @override
   List<GeneratedColumn> get $columns => [
         uuid,
@@ -546,7 +659,8 @@ class Personnel extends Table with TableInfo<Personnel, PersonnelData> {
         role,
         currentFieldNumber,
         notes,
-        photoPath
+        photoPath,
+        isRegisterField
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -579,6 +693,8 @@ class Personnel extends Table with TableInfo<Personnel, PersonnelData> {
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       photoPath: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}photoPath']),
+      isRegisterField: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}isRegisterField'])!,
     );
   }
 
@@ -602,6 +718,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
   final int? currentFieldNumber;
   final String? notes;
   final String? photoPath;
+  final bool isRegisterField;
   const PersonnelData(
       {required this.uuid,
       this.name,
@@ -612,7 +729,8 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       this.role,
       this.currentFieldNumber,
       this.notes,
-      this.photoPath});
+      this.photoPath,
+      required this.isRegisterField});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -644,6 +762,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
     if (!nullToAbsent || photoPath != null) {
       map['photoPath'] = Variable<String>(photoPath);
     }
+    map['isRegisterField'] = Variable<bool>(isRegisterField);
     return map;
   }
 
@@ -670,6 +789,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       photoPath: photoPath == null && nullToAbsent
           ? const Value.absent()
           : Value(photoPath),
+      isRegisterField: Value(isRegisterField),
     );
   }
 
@@ -687,6 +807,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       currentFieldNumber: serializer.fromJson<int?>(json['currentFieldNumber']),
       notes: serializer.fromJson<String?>(json['notes']),
       photoPath: serializer.fromJson<String?>(json['photoPath']),
+      isRegisterField: serializer.fromJson<bool>(json['isRegisterField']),
     );
   }
   @override
@@ -703,6 +824,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
       'currentFieldNumber': serializer.toJson<int?>(currentFieldNumber),
       'notes': serializer.toJson<String?>(notes),
       'photoPath': serializer.toJson<String?>(photoPath),
+      'isRegisterField': serializer.toJson<bool>(isRegisterField),
     };
   }
 
@@ -716,7 +838,8 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           Value<String?> role = const Value.absent(),
           Value<int?> currentFieldNumber = const Value.absent(),
           Value<String?> notes = const Value.absent(),
-          Value<String?> photoPath = const Value.absent()}) =>
+          Value<String?> photoPath = const Value.absent(),
+          bool? isRegisterField}) =>
       PersonnelData(
         uuid: uuid ?? this.uuid,
         name: name.present ? name.value : this.name,
@@ -730,6 +853,7 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
             : this.currentFieldNumber,
         notes: notes.present ? notes.value : this.notes,
         photoPath: photoPath.present ? photoPath.value : this.photoPath,
+        isRegisterField: isRegisterField ?? this.isRegisterField,
       );
   PersonnelData copyWithCompanion(PersonnelCompanion data) {
     return PersonnelData(
@@ -746,6 +870,9 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           : this.currentFieldNumber,
       notes: data.notes.present ? data.notes.value : this.notes,
       photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+      isRegisterField: data.isRegisterField.present
+          ? data.isRegisterField.value
+          : this.isRegisterField,
     );
   }
 
@@ -761,14 +888,15 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           ..write('role: $role, ')
           ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('notes: $notes, ')
-          ..write('photoPath: $photoPath')
+          ..write('photoPath: $photoPath, ')
+          ..write('isRegisterField: $isRegisterField')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(uuid, name, initial, email, phone,
-      affiliation, role, currentFieldNumber, notes, photoPath);
+      affiliation, role, currentFieldNumber, notes, photoPath, isRegisterField);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -782,7 +910,8 @@ class PersonnelData extends DataClass implements Insertable<PersonnelData> {
           other.role == this.role &&
           other.currentFieldNumber == this.currentFieldNumber &&
           other.notes == this.notes &&
-          other.photoPath == this.photoPath);
+          other.photoPath == this.photoPath &&
+          other.isRegisterField == this.isRegisterField);
 }
 
 class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
@@ -796,6 +925,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
   final Value<int?> currentFieldNumber;
   final Value<String?> notes;
   final Value<String?> photoPath;
+  final Value<bool> isRegisterField;
   final Value<int> rowid;
   const PersonnelCompanion({
     this.uuid = const Value.absent(),
@@ -808,6 +938,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     this.currentFieldNumber = const Value.absent(),
     this.notes = const Value.absent(),
     this.photoPath = const Value.absent(),
+    this.isRegisterField = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PersonnelCompanion.insert({
@@ -821,6 +952,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     this.currentFieldNumber = const Value.absent(),
     this.notes = const Value.absent(),
     this.photoPath = const Value.absent(),
+    this.isRegisterField = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : uuid = Value(uuid);
   static Insertable<PersonnelData> custom({
@@ -834,6 +966,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     Expression<int>? currentFieldNumber,
     Expression<String>? notes,
     Expression<String>? photoPath,
+    Expression<bool>? isRegisterField,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -847,6 +980,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
       if (currentFieldNumber != null) 'currentFieldNumber': currentFieldNumber,
       if (notes != null) 'notes': notes,
       if (photoPath != null) 'photoPath': photoPath,
+      if (isRegisterField != null) 'isRegisterField': isRegisterField,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -862,6 +996,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
       Value<int?>? currentFieldNumber,
       Value<String?>? notes,
       Value<String?>? photoPath,
+      Value<bool>? isRegisterField,
       Value<int>? rowid}) {
     return PersonnelCompanion(
       uuid: uuid ?? this.uuid,
@@ -874,6 +1009,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
       currentFieldNumber: currentFieldNumber ?? this.currentFieldNumber,
       notes: notes ?? this.notes,
       photoPath: photoPath ?? this.photoPath,
+      isRegisterField: isRegisterField ?? this.isRegisterField,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -911,6 +1047,9 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
     if (photoPath.present) {
       map['photoPath'] = Variable<String>(photoPath.value);
     }
+    if (isRegisterField.present) {
+      map['isRegisterField'] = Variable<bool>(isRegisterField.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -930,6 +1069,7 @@ class PersonnelCompanion extends UpdateCompanion<PersonnelData> {
           ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('notes: $notes, ')
           ..write('photoPath: $photoPath, ')
+          ..write('isRegisterField: $isRegisterField, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProjectForm {
   ProjectFormField get projectName;
+  ProjectFormField get currentFieldNumber;
   ProjectFormField get existingProject;
 
   /// Create a copy of ProjectForm
@@ -31,16 +32,19 @@ mixin _$ProjectForm {
             other is ProjectForm &&
             (identical(other.projectName, projectName) ||
                 other.projectName == projectName) &&
+            (identical(other.currentFieldNumber, currentFieldNumber) ||
+                other.currentFieldNumber == currentFieldNumber) &&
             (identical(other.existingProject, existingProject) ||
                 other.existingProject == existingProject));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, projectName, existingProject);
+  int get hashCode => Object.hash(
+      runtimeType, projectName, currentFieldNumber, existingProject);
 
   @override
   String toString() {
-    return 'ProjectForm(projectName: $projectName, existingProject: $existingProject)';
+    return 'ProjectForm(projectName: $projectName, currentFieldNumber: $currentFieldNumber, existingProject: $existingProject)';
   }
 }
 
@@ -50,9 +54,13 @@ abstract mixin class $ProjectFormCopyWith<$Res> {
           ProjectForm value, $Res Function(ProjectForm) _then) =
       _$ProjectFormCopyWithImpl;
   @useResult
-  $Res call({ProjectFormField projectName, ProjectFormField existingProject});
+  $Res call(
+      {ProjectFormField projectName,
+      ProjectFormField currentFieldNumber,
+      ProjectFormField existingProject});
 
   $ProjectFormFieldCopyWith<$Res> get projectName;
+  $ProjectFormFieldCopyWith<$Res> get currentFieldNumber;
   $ProjectFormFieldCopyWith<$Res> get existingProject;
 }
 
@@ -69,12 +77,17 @@ class _$ProjectFormCopyWithImpl<$Res> implements $ProjectFormCopyWith<$Res> {
   @override
   $Res call({
     Object? projectName = null,
+    Object? currentFieldNumber = null,
     Object? existingProject = null,
   }) {
     return _then(_self.copyWith(
       projectName: null == projectName
           ? _self.projectName
           : projectName // ignore: cast_nullable_to_non_nullable
+              as ProjectFormField,
+      currentFieldNumber: null == currentFieldNumber
+          ? _self.currentFieldNumber
+          : currentFieldNumber // ignore: cast_nullable_to_non_nullable
               as ProjectFormField,
       existingProject: null == existingProject
           ? _self.existingProject
@@ -90,6 +103,16 @@ class _$ProjectFormCopyWithImpl<$Res> implements $ProjectFormCopyWith<$Res> {
   $ProjectFormFieldCopyWith<$Res> get projectName {
     return $ProjectFormFieldCopyWith<$Res>(_self.projectName, (value) {
       return _then(_self.copyWith(projectName: value));
+    });
+  }
+
+  /// Create a copy of ProjectForm
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ProjectFormFieldCopyWith<$Res> get currentFieldNumber {
+    return $ProjectFormFieldCopyWith<$Res>(_self.currentFieldNumber, (value) {
+      return _then(_self.copyWith(currentFieldNumber: value));
     });
   }
 
@@ -198,14 +221,17 @@ extension ProjectFormPatterns on ProjectForm {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            ProjectFormField projectName, ProjectFormField existingProject)?
+            ProjectFormField projectName,
+            ProjectFormField currentFieldNumber,
+            ProjectFormField existingProject)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ProjectForm() when $default != null:
-        return $default(_that.projectName, _that.existingProject);
+        return $default(
+            _that.projectName, _that.currentFieldNumber, _that.existingProject);
       case _:
         return orElse();
     }
@@ -227,13 +253,16 @@ extension ProjectFormPatterns on ProjectForm {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            ProjectFormField projectName, ProjectFormField existingProject)
+            ProjectFormField projectName,
+            ProjectFormField currentFieldNumber,
+            ProjectFormField existingProject)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ProjectForm():
-        return $default(_that.projectName, _that.existingProject);
+        return $default(
+            _that.projectName, _that.currentFieldNumber, _that.existingProject);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -254,13 +283,16 @@ extension ProjectFormPatterns on ProjectForm {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            ProjectFormField projectName, ProjectFormField existingProject)?
+            ProjectFormField projectName,
+            ProjectFormField currentFieldNumber,
+            ProjectFormField existingProject)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ProjectForm() when $default != null:
-        return $default(_that.projectName, _that.existingProject);
+        return $default(
+            _that.projectName, _that.currentFieldNumber, _that.existingProject);
       case _:
         return null;
     }
@@ -270,11 +302,16 @@ extension ProjectFormPatterns on ProjectForm {
 /// @nodoc
 
 class _ProjectForm extends ProjectForm {
-  const _ProjectForm({required this.projectName, required this.existingProject})
+  const _ProjectForm(
+      {required this.projectName,
+      required this.currentFieldNumber,
+      required this.existingProject})
       : super._();
 
   @override
   final ProjectFormField projectName;
+  @override
+  final ProjectFormField currentFieldNumber;
   @override
   final ProjectFormField existingProject;
 
@@ -293,16 +330,19 @@ class _ProjectForm extends ProjectForm {
             other is _ProjectForm &&
             (identical(other.projectName, projectName) ||
                 other.projectName == projectName) &&
+            (identical(other.currentFieldNumber, currentFieldNumber) ||
+                other.currentFieldNumber == currentFieldNumber) &&
             (identical(other.existingProject, existingProject) ||
                 other.existingProject == existingProject));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, projectName, existingProject);
+  int get hashCode => Object.hash(
+      runtimeType, projectName, currentFieldNumber, existingProject);
 
   @override
   String toString() {
-    return 'ProjectForm(projectName: $projectName, existingProject: $existingProject)';
+    return 'ProjectForm(projectName: $projectName, currentFieldNumber: $currentFieldNumber, existingProject: $existingProject)';
   }
 }
 
@@ -314,10 +354,15 @@ abstract mixin class _$ProjectFormCopyWith<$Res>
       __$ProjectFormCopyWithImpl;
   @override
   @useResult
-  $Res call({ProjectFormField projectName, ProjectFormField existingProject});
+  $Res call(
+      {ProjectFormField projectName,
+      ProjectFormField currentFieldNumber,
+      ProjectFormField existingProject});
 
   @override
   $ProjectFormFieldCopyWith<$Res> get projectName;
+  @override
+  $ProjectFormFieldCopyWith<$Res> get currentFieldNumber;
   @override
   $ProjectFormFieldCopyWith<$Res> get existingProject;
 }
@@ -335,12 +380,17 @@ class __$ProjectFormCopyWithImpl<$Res> implements _$ProjectFormCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? projectName = null,
+    Object? currentFieldNumber = null,
     Object? existingProject = null,
   }) {
     return _then(_ProjectForm(
       projectName: null == projectName
           ? _self.projectName
           : projectName // ignore: cast_nullable_to_non_nullable
+              as ProjectFormField,
+      currentFieldNumber: null == currentFieldNumber
+          ? _self.currentFieldNumber
+          : currentFieldNumber // ignore: cast_nullable_to_non_nullable
               as ProjectFormField,
       existingProject: null == existingProject
           ? _self.existingProject
@@ -356,6 +406,16 @@ class __$ProjectFormCopyWithImpl<$Res> implements _$ProjectFormCopyWith<$Res> {
   $ProjectFormFieldCopyWith<$Res> get projectName {
     return $ProjectFormFieldCopyWith<$Res>(_self.projectName, (value) {
       return _then(_self.copyWith(projectName: value));
+    });
+  }
+
+  /// Create a copy of ProjectForm
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ProjectFormFieldCopyWith<$Res> get currentFieldNumber {
+    return $ProjectFormFieldCopyWith<$Res>(_self.currentFieldNumber, (value) {
+      return _then(_self.copyWith(currentFieldNumber: value));
     });
   }
 

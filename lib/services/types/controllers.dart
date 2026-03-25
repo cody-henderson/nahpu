@@ -59,6 +59,7 @@ class ProjectFormCtrModel {
     required this.descriptionCtr,
     required this.usePersonalNumberCtr,
     required this.useProjectNumberCtr,
+    required this.currentFieldNumberCtr,
     required this.pICtr,
     required this.locationCtr,
     required this.timeZoneCtr,
@@ -71,6 +72,7 @@ class ProjectFormCtrModel {
   TextEditingController descriptionCtr;
   bool usePersonalNumberCtr;
   bool useProjectNumberCtr;
+  TextEditingController currentFieldNumberCtr;
   TextEditingController pICtr;
   TextEditingController locationCtr;
   TextEditingController timeZoneCtr;
@@ -83,6 +85,7 @@ class ProjectFormCtrModel {
         descriptionCtr: TextEditingController(),
         usePersonalNumberCtr: true,
         useProjectNumberCtr: false,
+        currentFieldNumberCtr: TextEditingController(),
         pICtr: TextEditingController(),
         locationCtr: TextEditingController(),
         timeZoneCtr: TextEditingController(),
@@ -97,6 +100,8 @@ class ProjectFormCtrModel {
         descriptionCtr: TextEditingController(text: data?.description ?? ''),
         usePersonalNumberCtr: data?.usePersonalNumber ?? true,
         useProjectNumberCtr: data?.useProjectNumber ?? false,
+        currentFieldNumberCtr: TextEditingController(
+            text: data?.currentFieldNumber?.toString() ?? ''),
         pICtr: TextEditingController(text: data?.principalInvestigator ?? ''),
         locationCtr: TextEditingController(text: data?.location ?? ''),
         timeZoneCtr: TextEditingController(text: data?.timeZone),
@@ -110,6 +115,7 @@ class ProjectFormCtrModel {
     descriptionCtr.text = data.description ?? '';
     usePersonalNumberCtr = data.useProjectNumber;
     useProjectNumberCtr = data.useProjectNumber;
+    currentFieldNumberCtr.text = data.currentFieldNumber?.toString() ?? '';
     pICtr.text = data.principalInvestigator ?? '';
     locationCtr.text = data.location ?? '';
     timeZoneCtr.text = data.timeZone ?? '';
@@ -121,6 +127,7 @@ class ProjectFormCtrModel {
   void dispose() {
     projectNameCtr.dispose();
     descriptionCtr.dispose();
+    currentFieldNumberCtr.dispose();
     pICtr.dispose();
     locationCtr.dispose();
     timeZoneCtr.dispose();

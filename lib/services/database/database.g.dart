@@ -43,6 +43,13 @@ class Project extends Table with TableInfo<Project, ProjectData> {
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT 0',
       defaultValue: const CustomExpression('0'));
+  static const VerificationMeta _currentFieldNumberMeta =
+      const VerificationMeta('currentFieldNumber');
+  late final GeneratedColumn<int> currentFieldNumber = GeneratedColumn<int>(
+      'currentFieldNumber', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _principalInvestigatorMeta =
       const VerificationMeta('principalInvestigator');
   late final GeneratedColumn<String> principalInvestigator =
@@ -99,6 +106,7 @@ class Project extends Table with TableInfo<Project, ProjectData> {
         description,
         usePersonalNumber,
         useProjectNumber,
+        currentFieldNumber,
         principalInvestigator,
         location,
         timeZone,
@@ -146,6 +154,12 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           _useProjectNumberMeta,
           useProjectNumber.isAcceptableOrUnknown(
               data['useProjectNumber']!, _useProjectNumberMeta));
+    }
+    if (data.containsKey('currentFieldNumber')) {
+      context.handle(
+          _currentFieldNumberMeta,
+          currentFieldNumber.isAcceptableOrUnknown(
+              data['currentFieldNumber']!, _currentFieldNumberMeta));
     }
     if (data.containsKey('principalInvestigator')) {
       context.handle(
@@ -198,6 +212,8 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           DriftSqlType.bool, data['${effectivePrefix}usePersonalNumber'])!,
       useProjectNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}useProjectNumber'])!,
+      currentFieldNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}currentFieldNumber']),
       principalInvestigator: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}principalInvestigator']),
       location: attachedDatabase.typeMapping
@@ -230,6 +246,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
   final String? description;
   final bool usePersonalNumber;
   final bool useProjectNumber;
+  final int? currentFieldNumber;
   final String? principalInvestigator;
   final String? location;
   final String? timeZone;
@@ -243,6 +260,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       this.description,
       required this.usePersonalNumber,
       required this.useProjectNumber,
+      this.currentFieldNumber,
       this.principalInvestigator,
       this.location,
       this.timeZone,
@@ -260,6 +278,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
     }
     map['usePersonalNumber'] = Variable<bool>(usePersonalNumber);
     map['useProjectNumber'] = Variable<bool>(useProjectNumber);
+    if (!nullToAbsent || currentFieldNumber != null) {
+      map['currentFieldNumber'] = Variable<int>(currentFieldNumber);
+    }
     if (!nullToAbsent || principalInvestigator != null) {
       map['principalInvestigator'] = Variable<String>(principalInvestigator);
     }
@@ -293,6 +314,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           : Value(description),
       usePersonalNumber: Value(usePersonalNumber),
       useProjectNumber: Value(useProjectNumber),
+      currentFieldNumber: currentFieldNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currentFieldNumber),
       principalInvestigator: principalInvestigator == null && nullToAbsent
           ? const Value.absent()
           : Value(principalInvestigator),
@@ -326,6 +350,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       description: serializer.fromJson<String?>(json['description']),
       usePersonalNumber: serializer.fromJson<bool>(json['usePersonalNumber']),
       useProjectNumber: serializer.fromJson<bool>(json['useProjectNumber']),
+      currentFieldNumber: serializer.fromJson<int?>(json['currentFieldNumber']),
       principalInvestigator:
           serializer.fromJson<String?>(json['principalInvestigator']),
       location: serializer.fromJson<String?>(json['location']),
@@ -345,6 +370,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       'description': serializer.toJson<String?>(description),
       'usePersonalNumber': serializer.toJson<bool>(usePersonalNumber),
       'useProjectNumber': serializer.toJson<bool>(useProjectNumber),
+      'currentFieldNumber': serializer.toJson<int?>(currentFieldNumber),
       'principalInvestigator':
           serializer.toJson<String?>(principalInvestigator),
       'location': serializer.toJson<String?>(location),
@@ -362,6 +388,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           Value<String?> description = const Value.absent(),
           bool? usePersonalNumber,
           bool? useProjectNumber,
+          Value<int?> currentFieldNumber = const Value.absent(),
           Value<String?> principalInvestigator = const Value.absent(),
           Value<String?> location = const Value.absent(),
           Value<String?> timeZone = const Value.absent(),
@@ -375,6 +402,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
         description: description.present ? description.value : this.description,
         usePersonalNumber: usePersonalNumber ?? this.usePersonalNumber,
         useProjectNumber: useProjectNumber ?? this.useProjectNumber,
+        currentFieldNumber: currentFieldNumber.present
+            ? currentFieldNumber.value
+            : this.currentFieldNumber,
         principalInvestigator: principalInvestigator.present
             ? principalInvestigator.value
             : this.principalInvestigator,
@@ -398,6 +428,9 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       useProjectNumber: data.useProjectNumber.present
           ? data.useProjectNumber.value
           : this.useProjectNumber,
+      currentFieldNumber: data.currentFieldNumber.present
+          ? data.currentFieldNumber.value
+          : this.currentFieldNumber,
       principalInvestigator: data.principalInvestigator.present
           ? data.principalInvestigator.value
           : this.principalInvestigator,
@@ -420,6 +453,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           ..write('description: $description, ')
           ..write('usePersonalNumber: $usePersonalNumber, ')
           ..write('useProjectNumber: $useProjectNumber, ')
+          ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
           ..write('timeZone: $timeZone, ')
@@ -438,6 +472,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       description,
       usePersonalNumber,
       useProjectNumber,
+      currentFieldNumber,
       principalInvestigator,
       location,
       timeZone,
@@ -454,6 +489,7 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           other.description == this.description &&
           other.usePersonalNumber == this.usePersonalNumber &&
           other.useProjectNumber == this.useProjectNumber &&
+          other.currentFieldNumber == this.currentFieldNumber &&
           other.principalInvestigator == this.principalInvestigator &&
           other.location == this.location &&
           other.timeZone == this.timeZone &&
@@ -469,6 +505,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
   final Value<String?> description;
   final Value<bool> usePersonalNumber;
   final Value<bool> useProjectNumber;
+  final Value<int?> currentFieldNumber;
   final Value<String?> principalInvestigator;
   final Value<String?> location;
   final Value<String?> timeZone;
@@ -483,6 +520,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.description = const Value.absent(),
     this.usePersonalNumber = const Value.absent(),
     this.useProjectNumber = const Value.absent(),
+    this.currentFieldNumber = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
     this.timeZone = const Value.absent(),
@@ -498,6 +536,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.description = const Value.absent(),
     this.usePersonalNumber = const Value.absent(),
     this.useProjectNumber = const Value.absent(),
+    this.currentFieldNumber = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
     this.timeZone = const Value.absent(),
@@ -514,6 +553,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     Expression<String>? description,
     Expression<bool>? usePersonalNumber,
     Expression<bool>? useProjectNumber,
+    Expression<int>? currentFieldNumber,
     Expression<String>? principalInvestigator,
     Expression<String>? location,
     Expression<String>? timeZone,
@@ -529,6 +569,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       if (description != null) 'description': description,
       if (usePersonalNumber != null) 'usePersonalNumber': usePersonalNumber,
       if (useProjectNumber != null) 'useProjectNumber': useProjectNumber,
+      if (currentFieldNumber != null) 'currentFieldNumber': currentFieldNumber,
       if (principalInvestigator != null)
         'principalInvestigator': principalInvestigator,
       if (location != null) 'location': location,
@@ -547,6 +588,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       Value<String?>? description,
       Value<bool>? usePersonalNumber,
       Value<bool>? useProjectNumber,
+      Value<int?>? currentFieldNumber,
       Value<String?>? principalInvestigator,
       Value<String?>? location,
       Value<String?>? timeZone,
@@ -561,6 +603,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       description: description ?? this.description,
       usePersonalNumber: usePersonalNumber ?? this.usePersonalNumber,
       useProjectNumber: useProjectNumber ?? this.useProjectNumber,
+      currentFieldNumber: currentFieldNumber ?? this.currentFieldNumber,
       principalInvestigator:
           principalInvestigator ?? this.principalInvestigator,
       location: location ?? this.location,
@@ -590,6 +633,9 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     }
     if (useProjectNumber.present) {
       map['useProjectNumber'] = Variable<bool>(useProjectNumber.value);
+    }
+    if (currentFieldNumber.present) {
+      map['currentFieldNumber'] = Variable<int>(currentFieldNumber.value);
     }
     if (principalInvestigator.present) {
       map['principalInvestigator'] =
@@ -627,6 +673,7 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
           ..write('description: $description, ')
           ..write('usePersonalNumber: $usePersonalNumber, ')
           ..write('useProjectNumber: $useProjectNumber, ')
+          ..write('currentFieldNumber: $currentFieldNumber, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
           ..write('timeZone: $timeZone, ')
@@ -13409,6 +13456,7 @@ typedef $ProjectCreateCompanionBuilder = ProjectCompanion Function({
   Value<String?> description,
   Value<bool> usePersonalNumber,
   Value<bool> useProjectNumber,
+  Value<int?> currentFieldNumber,
   Value<String?> principalInvestigator,
   Value<String?> location,
   Value<String?> timeZone,
@@ -13424,6 +13472,7 @@ typedef $ProjectUpdateCompanionBuilder = ProjectCompanion Function({
   Value<String?> description,
   Value<bool> usePersonalNumber,
   Value<bool> useProjectNumber,
+  Value<int?> currentFieldNumber,
   Value<String?> principalInvestigator,
   Value<String?> location,
   Value<String?> timeZone,
@@ -13457,6 +13506,10 @@ class $ProjectFilterComposer extends Composer<_$Database, Project> {
 
   ColumnFilters<bool> get useProjectNumber => $composableBuilder(
       column: $table.useProjectNumber,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get currentFieldNumber => $composableBuilder(
+      column: $table.currentFieldNumber,
       builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get principalInvestigator => $composableBuilder(
@@ -13507,6 +13560,10 @@ class $ProjectOrderingComposer extends Composer<_$Database, Project> {
       column: $table.useProjectNumber,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get currentFieldNumber => $composableBuilder(
+      column: $table.currentFieldNumber,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get principalInvestigator => $composableBuilder(
       column: $table.principalInvestigator,
       builder: (column) => ColumnOrderings(column));
@@ -13553,6 +13610,9 @@ class $ProjectAnnotationComposer extends Composer<_$Database, Project> {
 
   GeneratedColumn<bool> get useProjectNumber => $composableBuilder(
       column: $table.useProjectNumber, builder: (column) => column);
+
+  GeneratedColumn<int> get currentFieldNumber => $composableBuilder(
+      column: $table.currentFieldNumber, builder: (column) => column);
 
   GeneratedColumn<String> get principalInvestigator => $composableBuilder(
       column: $table.principalInvestigator, builder: (column) => column);
@@ -13604,6 +13664,7 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> description = const Value.absent(),
             Value<bool> usePersonalNumber = const Value.absent(),
             Value<bool> useProjectNumber = const Value.absent(),
+            Value<int?> currentFieldNumber = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
             Value<String?> timeZone = const Value.absent(),
@@ -13619,6 +13680,7 @@ class $ProjectTableManager extends RootTableManager<
             description: description,
             usePersonalNumber: usePersonalNumber,
             useProjectNumber: useProjectNumber,
+            currentFieldNumber: currentFieldNumber,
             principalInvestigator: principalInvestigator,
             location: location,
             timeZone: timeZone,
@@ -13634,6 +13696,7 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> description = const Value.absent(),
             Value<bool> usePersonalNumber = const Value.absent(),
             Value<bool> useProjectNumber = const Value.absent(),
+            Value<int?> currentFieldNumber = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
             Value<String?> timeZone = const Value.absent(),
@@ -13649,6 +13712,7 @@ class $ProjectTableManager extends RootTableManager<
             description: description,
             usePersonalNumber: usePersonalNumber,
             useProjectNumber: useProjectNumber,
+            currentFieldNumber: currentFieldNumber,
             principalInvestigator: principalInvestigator,
             location: location,
             timeZone: timeZone,
