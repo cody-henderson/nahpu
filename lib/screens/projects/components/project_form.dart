@@ -125,6 +125,32 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                 !widget.isEditing
                     ? const TaxonGroupFields()
                     : const SizedBox.shrink(),
+                const SizedBox(height: 8),
+                Align(
+                    alignment: AlignmentGeometry.topStart,
+                    child: Text('Specimen registration numbers',
+                        style: Theme.of(context).textTheme.bodyLarge)),
+                SwitchListTile(
+                    title: Text('Personal field number',
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    value: widget.projectCtr.usePersonalNumberCtr,
+                    onChanged: (bool value) {
+                      setState(() {
+                        widget.projectCtr.usePersonalNumberCtr = value;
+                      });
+                      _validateEditing();
+                    }),
+                SwitchListTile(
+                  title: Text('Project field number',
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  value: widget.projectCtr.useProjectNumberCtr,
+                  onChanged: (bool value) {
+                    setState(() {
+                      widget.projectCtr.useProjectNumberCtr = value;
+                    });
+                    _validateEditing();
+                  },
+                ),
                 Visibility(
                   visible: _showMore ||
                       widget.projectCtr.locationCtr.text.isNotEmpty,
@@ -266,6 +292,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
     final projectData = ProjectCompanion(
       uuid: db.Value(widget.projectUuid),
       name: db.Value(widget.projectCtr.projectNameCtr.text),
+      usePersonalNumber: db.Value(widget.projectCtr.usePersonalNumberCtr),
+      useProjectNumber: db.Value(widget.projectCtr.useProjectNumberCtr),
       description: db.Value(widget.projectCtr.descriptionCtr.text),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
@@ -283,6 +311,8 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
     final projectData = ProjectCompanion(
       name: db.Value(widget.projectCtr.projectNameCtr.text),
       description: db.Value(widget.projectCtr.descriptionCtr.text),
+      usePersonalNumber: db.Value(widget.projectCtr.usePersonalNumberCtr),
+      useProjectNumber: db.Value(widget.projectCtr.useProjectNumberCtr),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
       timeZone: db.Value(widget.projectCtr.timeZoneCtr.text),

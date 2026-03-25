@@ -27,6 +27,22 @@ class Project extends Table with TableInfo<Project, ProjectData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _usePersonalNumberMeta =
+      const VerificationMeta('usePersonalNumber');
+  late final GeneratedColumn<bool> usePersonalNumber = GeneratedColumn<bool>(
+      'usePersonalNumber', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 1',
+      defaultValue: const CustomExpression('1'));
+  static const VerificationMeta _useProjectNumberMeta =
+      const VerificationMeta('useProjectNumber');
+  late final GeneratedColumn<bool> useProjectNumber = GeneratedColumn<bool>(
+      'useProjectNumber', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const CustomExpression('0'));
   static const VerificationMeta _principalInvestigatorMeta =
       const VerificationMeta('principalInvestigator');
   late final GeneratedColumn<String> principalInvestigator =
@@ -76,26 +92,20 @@ class Project extends Table with TableInfo<Project, ProjectData> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
-  static const VerificationMeta _projectIDMeta =
-      const VerificationMeta('projectID');
-  late final GeneratedColumn<String> projectID = GeneratedColumn<String>(
-      'projectID', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: '');
   @override
   List<GeneratedColumn> get $columns => [
         uuid,
         name,
         description,
+        usePersonalNumber,
+        useProjectNumber,
         principalInvestigator,
         location,
         timeZone,
         startDate,
         endDate,
         created,
-        lastAccessed,
-        projectID
+        lastAccessed
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -124,6 +134,18 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           _descriptionMeta,
           description.isAcceptableOrUnknown(
               data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('usePersonalNumber')) {
+      context.handle(
+          _usePersonalNumberMeta,
+          usePersonalNumber.isAcceptableOrUnknown(
+              data['usePersonalNumber']!, _usePersonalNumberMeta));
+    }
+    if (data.containsKey('useProjectNumber')) {
+      context.handle(
+          _useProjectNumberMeta,
+          useProjectNumber.isAcceptableOrUnknown(
+              data['useProjectNumber']!, _useProjectNumberMeta));
     }
     if (data.containsKey('principalInvestigator')) {
       context.handle(
@@ -157,10 +179,6 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           lastAccessed.isAcceptableOrUnknown(
               data['lastAccessed']!, _lastAccessedMeta));
     }
-    if (data.containsKey('projectID')) {
-      context.handle(_projectIDMeta,
-          projectID.isAcceptableOrUnknown(data['projectID']!, _projectIDMeta));
-    }
     return context;
   }
 
@@ -176,6 +194,10 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      usePersonalNumber: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}usePersonalNumber'])!,
+      useProjectNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}useProjectNumber'])!,
       principalInvestigator: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}principalInvestigator']),
       location: attachedDatabase.typeMapping
@@ -190,8 +212,6 @@ class Project extends Table with TableInfo<Project, ProjectData> {
           .read(DriftSqlType.string, data['${effectivePrefix}created']),
       lastAccessed: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}lastAccessed']),
-      projectID: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}projectID']),
     );
   }
 
@@ -208,6 +228,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
   final String uuid;
   final String name;
   final String? description;
+  final bool usePersonalNumber;
+  final bool useProjectNumber;
   final String? principalInvestigator;
   final String? location;
   final String? timeZone;
@@ -215,19 +237,19 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
   final String? endDate;
   final String? created;
   final String? lastAccessed;
-  final String? projectID;
   const ProjectData(
       {required this.uuid,
       required this.name,
       this.description,
+      required this.usePersonalNumber,
+      required this.useProjectNumber,
       this.principalInvestigator,
       this.location,
       this.timeZone,
       this.startDate,
       this.endDate,
       this.created,
-      this.lastAccessed,
-      this.projectID});
+      this.lastAccessed});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -236,6 +258,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
+    map['usePersonalNumber'] = Variable<bool>(usePersonalNumber);
+    map['useProjectNumber'] = Variable<bool>(useProjectNumber);
     if (!nullToAbsent || principalInvestigator != null) {
       map['principalInvestigator'] = Variable<String>(principalInvestigator);
     }
@@ -257,9 +281,6 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
     if (!nullToAbsent || lastAccessed != null) {
       map['lastAccessed'] = Variable<String>(lastAccessed);
     }
-    if (!nullToAbsent || projectID != null) {
-      map['projectID'] = Variable<String>(projectID);
-    }
     return map;
   }
 
@@ -270,6 +291,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
+      usePersonalNumber: Value(usePersonalNumber),
+      useProjectNumber: Value(useProjectNumber),
       principalInvestigator: principalInvestigator == null && nullToAbsent
           ? const Value.absent()
           : Value(principalInvestigator),
@@ -291,9 +314,6 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       lastAccessed: lastAccessed == null && nullToAbsent
           ? const Value.absent()
           : Value(lastAccessed),
-      projectID: projectID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(projectID),
     );
   }
 
@@ -304,6 +324,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       uuid: serializer.fromJson<String>(json['uuid']),
       name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
+      usePersonalNumber: serializer.fromJson<bool>(json['usePersonalNumber']),
+      useProjectNumber: serializer.fromJson<bool>(json['useProjectNumber']),
       principalInvestigator:
           serializer.fromJson<String?>(json['principalInvestigator']),
       location: serializer.fromJson<String?>(json['location']),
@@ -312,7 +334,6 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       endDate: serializer.fromJson<String?>(json['endDate']),
       created: serializer.fromJson<String?>(json['created']),
       lastAccessed: serializer.fromJson<String?>(json['lastAccessed']),
-      projectID: serializer.fromJson<String?>(json['projectID']),
     );
   }
   @override
@@ -322,6 +343,8 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       'uuid': serializer.toJson<String>(uuid),
       'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String?>(description),
+      'usePersonalNumber': serializer.toJson<bool>(usePersonalNumber),
+      'useProjectNumber': serializer.toJson<bool>(useProjectNumber),
       'principalInvestigator':
           serializer.toJson<String?>(principalInvestigator),
       'location': serializer.toJson<String?>(location),
@@ -330,7 +353,6 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       'endDate': serializer.toJson<String?>(endDate),
       'created': serializer.toJson<String?>(created),
       'lastAccessed': serializer.toJson<String?>(lastAccessed),
-      'projectID': serializer.toJson<String?>(projectID),
     };
   }
 
@@ -338,18 +360,21 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           {String? uuid,
           String? name,
           Value<String?> description = const Value.absent(),
+          bool? usePersonalNumber,
+          bool? useProjectNumber,
           Value<String?> principalInvestigator = const Value.absent(),
           Value<String?> location = const Value.absent(),
           Value<String?> timeZone = const Value.absent(),
           Value<String?> startDate = const Value.absent(),
           Value<String?> endDate = const Value.absent(),
           Value<String?> created = const Value.absent(),
-          Value<String?> lastAccessed = const Value.absent(),
-          Value<String?> projectID = const Value.absent()}) =>
+          Value<String?> lastAccessed = const Value.absent()}) =>
       ProjectData(
         uuid: uuid ?? this.uuid,
         name: name ?? this.name,
         description: description.present ? description.value : this.description,
+        usePersonalNumber: usePersonalNumber ?? this.usePersonalNumber,
+        useProjectNumber: useProjectNumber ?? this.useProjectNumber,
         principalInvestigator: principalInvestigator.present
             ? principalInvestigator.value
             : this.principalInvestigator,
@@ -360,7 +385,6 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
         created: created.present ? created.value : this.created,
         lastAccessed:
             lastAccessed.present ? lastAccessed.value : this.lastAccessed,
-        projectID: projectID.present ? projectID.value : this.projectID,
       );
   ProjectData copyWithCompanion(ProjectCompanion data) {
     return ProjectData(
@@ -368,6 +392,12 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       name: data.name.present ? data.name.value : this.name,
       description:
           data.description.present ? data.description.value : this.description,
+      usePersonalNumber: data.usePersonalNumber.present
+          ? data.usePersonalNumber.value
+          : this.usePersonalNumber,
+      useProjectNumber: data.useProjectNumber.present
+          ? data.useProjectNumber.value
+          : this.useProjectNumber,
       principalInvestigator: data.principalInvestigator.present
           ? data.principalInvestigator.value
           : this.principalInvestigator,
@@ -379,7 +409,6 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       lastAccessed: data.lastAccessed.present
           ? data.lastAccessed.value
           : this.lastAccessed,
-      projectID: data.projectID.present ? data.projectID.value : this.projectID,
     );
   }
 
@@ -389,14 +418,15 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           ..write('uuid: $uuid, ')
           ..write('name: $name, ')
           ..write('description: $description, ')
+          ..write('usePersonalNumber: $usePersonalNumber, ')
+          ..write('useProjectNumber: $useProjectNumber, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
           ..write('timeZone: $timeZone, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('created: $created, ')
-          ..write('lastAccessed: $lastAccessed, ')
-          ..write('projectID: $projectID')
+          ..write('lastAccessed: $lastAccessed')
           ..write(')'))
         .toString();
   }
@@ -406,14 +436,15 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
       uuid,
       name,
       description,
+      usePersonalNumber,
+      useProjectNumber,
       principalInvestigator,
       location,
       timeZone,
       startDate,
       endDate,
       created,
-      lastAccessed,
-      projectID);
+      lastAccessed);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -421,20 +452,23 @@ class ProjectData extends DataClass implements Insertable<ProjectData> {
           other.uuid == this.uuid &&
           other.name == this.name &&
           other.description == this.description &&
+          other.usePersonalNumber == this.usePersonalNumber &&
+          other.useProjectNumber == this.useProjectNumber &&
           other.principalInvestigator == this.principalInvestigator &&
           other.location == this.location &&
           other.timeZone == this.timeZone &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
           other.created == this.created &&
-          other.lastAccessed == this.lastAccessed &&
-          other.projectID == this.projectID);
+          other.lastAccessed == this.lastAccessed);
 }
 
 class ProjectCompanion extends UpdateCompanion<ProjectData> {
   final Value<String> uuid;
   final Value<String> name;
   final Value<String?> description;
+  final Value<bool> usePersonalNumber;
+  final Value<bool> useProjectNumber;
   final Value<String?> principalInvestigator;
   final Value<String?> location;
   final Value<String?> timeZone;
@@ -442,12 +476,13 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
   final Value<String?> endDate;
   final Value<String?> created;
   final Value<String?> lastAccessed;
-  final Value<String?> projectID;
   final Value<int> rowid;
   const ProjectCompanion({
     this.uuid = const Value.absent(),
     this.name = const Value.absent(),
     this.description = const Value.absent(),
+    this.usePersonalNumber = const Value.absent(),
+    this.useProjectNumber = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
     this.timeZone = const Value.absent(),
@@ -455,13 +490,14 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.endDate = const Value.absent(),
     this.created = const Value.absent(),
     this.lastAccessed = const Value.absent(),
-    this.projectID = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ProjectCompanion.insert({
     required String uuid,
     required String name,
     this.description = const Value.absent(),
+    this.usePersonalNumber = const Value.absent(),
+    this.useProjectNumber = const Value.absent(),
     this.principalInvestigator = const Value.absent(),
     this.location = const Value.absent(),
     this.timeZone = const Value.absent(),
@@ -469,7 +505,6 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     this.endDate = const Value.absent(),
     this.created = const Value.absent(),
     this.lastAccessed = const Value.absent(),
-    this.projectID = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : uuid = Value(uuid),
         name = Value(name);
@@ -477,6 +512,8 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     Expression<String>? uuid,
     Expression<String>? name,
     Expression<String>? description,
+    Expression<bool>? usePersonalNumber,
+    Expression<bool>? useProjectNumber,
     Expression<String>? principalInvestigator,
     Expression<String>? location,
     Expression<String>? timeZone,
@@ -484,13 +521,14 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     Expression<String>? endDate,
     Expression<String>? created,
     Expression<String>? lastAccessed,
-    Expression<String>? projectID,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (uuid != null) 'uuid': uuid,
       if (name != null) 'name': name,
       if (description != null) 'description': description,
+      if (usePersonalNumber != null) 'usePersonalNumber': usePersonalNumber,
+      if (useProjectNumber != null) 'useProjectNumber': useProjectNumber,
       if (principalInvestigator != null)
         'principalInvestigator': principalInvestigator,
       if (location != null) 'location': location,
@@ -499,7 +537,6 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       if (endDate != null) 'endDate': endDate,
       if (created != null) 'created': created,
       if (lastAccessed != null) 'lastAccessed': lastAccessed,
-      if (projectID != null) 'projectID': projectID,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -508,6 +545,8 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       {Value<String>? uuid,
       Value<String>? name,
       Value<String?>? description,
+      Value<bool>? usePersonalNumber,
+      Value<bool>? useProjectNumber,
       Value<String?>? principalInvestigator,
       Value<String?>? location,
       Value<String?>? timeZone,
@@ -515,12 +554,13 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       Value<String?>? endDate,
       Value<String?>? created,
       Value<String?>? lastAccessed,
-      Value<String?>? projectID,
       Value<int>? rowid}) {
     return ProjectCompanion(
       uuid: uuid ?? this.uuid,
       name: name ?? this.name,
       description: description ?? this.description,
+      usePersonalNumber: usePersonalNumber ?? this.usePersonalNumber,
+      useProjectNumber: useProjectNumber ?? this.useProjectNumber,
       principalInvestigator:
           principalInvestigator ?? this.principalInvestigator,
       location: location ?? this.location,
@@ -529,7 +569,6 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
       endDate: endDate ?? this.endDate,
       created: created ?? this.created,
       lastAccessed: lastAccessed ?? this.lastAccessed,
-      projectID: projectID ?? this.projectID,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -545,6 +584,12 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
+    }
+    if (usePersonalNumber.present) {
+      map['usePersonalNumber'] = Variable<bool>(usePersonalNumber.value);
+    }
+    if (useProjectNumber.present) {
+      map['useProjectNumber'] = Variable<bool>(useProjectNumber.value);
     }
     if (principalInvestigator.present) {
       map['principalInvestigator'] =
@@ -568,9 +613,6 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
     if (lastAccessed.present) {
       map['lastAccessed'] = Variable<String>(lastAccessed.value);
     }
-    if (projectID.present) {
-      map['projectID'] = Variable<String>(projectID.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -583,6 +625,8 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
           ..write('uuid: $uuid, ')
           ..write('name: $name, ')
           ..write('description: $description, ')
+          ..write('usePersonalNumber: $usePersonalNumber, ')
+          ..write('useProjectNumber: $useProjectNumber, ')
           ..write('principalInvestigator: $principalInvestigator, ')
           ..write('location: $location, ')
           ..write('timeZone: $timeZone, ')
@@ -590,7 +634,6 @@ class ProjectCompanion extends UpdateCompanion<ProjectData> {
           ..write('endDate: $endDate, ')
           ..write('created: $created, ')
           ..write('lastAccessed: $lastAccessed, ')
-          ..write('projectID: $projectID, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -13364,6 +13407,8 @@ typedef $ProjectCreateCompanionBuilder = ProjectCompanion Function({
   required String uuid,
   required String name,
   Value<String?> description,
+  Value<bool> usePersonalNumber,
+  Value<bool> useProjectNumber,
   Value<String?> principalInvestigator,
   Value<String?> location,
   Value<String?> timeZone,
@@ -13371,13 +13416,14 @@ typedef $ProjectCreateCompanionBuilder = ProjectCompanion Function({
   Value<String?> endDate,
   Value<String?> created,
   Value<String?> lastAccessed,
-  Value<String?> projectID,
   Value<int> rowid,
 });
 typedef $ProjectUpdateCompanionBuilder = ProjectCompanion Function({
   Value<String> uuid,
   Value<String> name,
   Value<String?> description,
+  Value<bool> usePersonalNumber,
+  Value<bool> useProjectNumber,
   Value<String?> principalInvestigator,
   Value<String?> location,
   Value<String?> timeZone,
@@ -13385,7 +13431,6 @@ typedef $ProjectUpdateCompanionBuilder = ProjectCompanion Function({
   Value<String?> endDate,
   Value<String?> created,
   Value<String?> lastAccessed,
-  Value<String?> projectID,
   Value<int> rowid,
 });
 
@@ -13405,6 +13450,14 @@ class $ProjectFilterComposer extends Composer<_$Database, Project> {
 
   ColumnFilters<String> get description => $composableBuilder(
       column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get usePersonalNumber => $composableBuilder(
+      column: $table.usePersonalNumber,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get useProjectNumber => $composableBuilder(
+      column: $table.useProjectNumber,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get principalInvestigator => $composableBuilder(
       column: $table.principalInvestigator,
@@ -13427,9 +13480,6 @@ class $ProjectFilterComposer extends Composer<_$Database, Project> {
 
   ColumnFilters<String> get lastAccessed => $composableBuilder(
       column: $table.lastAccessed, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get projectID => $composableBuilder(
-      column: $table.projectID, builder: (column) => ColumnFilters(column));
 }
 
 class $ProjectOrderingComposer extends Composer<_$Database, Project> {
@@ -13448,6 +13498,14 @@ class $ProjectOrderingComposer extends Composer<_$Database, Project> {
 
   ColumnOrderings<String> get description => $composableBuilder(
       column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get usePersonalNumber => $composableBuilder(
+      column: $table.usePersonalNumber,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get useProjectNumber => $composableBuilder(
+      column: $table.useProjectNumber,
+      builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get principalInvestigator => $composableBuilder(
       column: $table.principalInvestigator,
@@ -13471,9 +13529,6 @@ class $ProjectOrderingComposer extends Composer<_$Database, Project> {
   ColumnOrderings<String> get lastAccessed => $composableBuilder(
       column: $table.lastAccessed,
       builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get projectID => $composableBuilder(
-      column: $table.projectID, builder: (column) => ColumnOrderings(column));
 }
 
 class $ProjectAnnotationComposer extends Composer<_$Database, Project> {
@@ -13492,6 +13547,12 @@ class $ProjectAnnotationComposer extends Composer<_$Database, Project> {
 
   GeneratedColumn<String> get description => $composableBuilder(
       column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<bool> get usePersonalNumber => $composableBuilder(
+      column: $table.usePersonalNumber, builder: (column) => column);
+
+  GeneratedColumn<bool> get useProjectNumber => $composableBuilder(
+      column: $table.useProjectNumber, builder: (column) => column);
 
   GeneratedColumn<String> get principalInvestigator => $composableBuilder(
       column: $table.principalInvestigator, builder: (column) => column);
@@ -13513,9 +13574,6 @@ class $ProjectAnnotationComposer extends Composer<_$Database, Project> {
 
   GeneratedColumn<String> get lastAccessed => $composableBuilder(
       column: $table.lastAccessed, builder: (column) => column);
-
-  GeneratedColumn<String> get projectID =>
-      $composableBuilder(column: $table.projectID, builder: (column) => column);
 }
 
 class $ProjectTableManager extends RootTableManager<
@@ -13544,6 +13602,8 @@ class $ProjectTableManager extends RootTableManager<
             Value<String> uuid = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String?> description = const Value.absent(),
+            Value<bool> usePersonalNumber = const Value.absent(),
+            Value<bool> useProjectNumber = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
             Value<String?> timeZone = const Value.absent(),
@@ -13551,13 +13611,14 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> endDate = const Value.absent(),
             Value<String?> created = const Value.absent(),
             Value<String?> lastAccessed = const Value.absent(),
-            Value<String?> projectID = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ProjectCompanion(
             uuid: uuid,
             name: name,
             description: description,
+            usePersonalNumber: usePersonalNumber,
+            useProjectNumber: useProjectNumber,
             principalInvestigator: principalInvestigator,
             location: location,
             timeZone: timeZone,
@@ -13565,13 +13626,14 @@ class $ProjectTableManager extends RootTableManager<
             endDate: endDate,
             created: created,
             lastAccessed: lastAccessed,
-            projectID: projectID,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required String uuid,
             required String name,
             Value<String?> description = const Value.absent(),
+            Value<bool> usePersonalNumber = const Value.absent(),
+            Value<bool> useProjectNumber = const Value.absent(),
             Value<String?> principalInvestigator = const Value.absent(),
             Value<String?> location = const Value.absent(),
             Value<String?> timeZone = const Value.absent(),
@@ -13579,13 +13641,14 @@ class $ProjectTableManager extends RootTableManager<
             Value<String?> endDate = const Value.absent(),
             Value<String?> created = const Value.absent(),
             Value<String?> lastAccessed = const Value.absent(),
-            Value<String?> projectID = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ProjectCompanion.insert(
             uuid: uuid,
             name: name,
             description: description,
+            usePersonalNumber: usePersonalNumber,
+            useProjectNumber: useProjectNumber,
             principalInvestigator: principalInvestigator,
             location: location,
             timeZone: timeZone,
@@ -13593,7 +13656,6 @@ class $ProjectTableManager extends RootTableManager<
             endDate: endDate,
             created: created,
             lastAccessed: lastAccessed,
-            projectID: projectID,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

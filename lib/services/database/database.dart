@@ -71,7 +71,6 @@ class Database extends _$Database {
       if (from < 7) {
         await _migrateFromVersion6(m);
       }
-
     }, beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
     });
@@ -115,6 +114,11 @@ class Database extends _$Database {
     await m.addColumn(
         mammalMeasurement, mammalMeasurement.frequencyAtMaxEnergy);
     await m.addColumn(mammalMeasurement, mammalMeasurement.duration);
+
+    // Enhanced specimen ID options
+    await m.addColumn(personnel, personnel.isRegisterField);
+    await m.addColumn(project, project.usePersonalNumber);
+    await m.addColumn(project, project.useProjectNumber);
   }
 
   Future<void> _migrateFromVersion5(Migrator m) async {

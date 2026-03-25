@@ -57,6 +57,8 @@ class ProjectFormCtrModel {
   ProjectFormCtrModel({
     required this.projectNameCtr,
     required this.descriptionCtr,
+    required this.usePersonalNumberCtr,
+    required this.useProjectNumberCtr,
     required this.pICtr,
     required this.locationCtr,
     required this.timeZoneCtr,
@@ -67,6 +69,8 @@ class ProjectFormCtrModel {
 
   TextEditingController projectNameCtr;
   TextEditingController descriptionCtr;
+  bool usePersonalNumberCtr;
+  bool useProjectNumberCtr;
   TextEditingController pICtr;
   TextEditingController locationCtr;
   TextEditingController timeZoneCtr;
@@ -77,6 +81,8 @@ class ProjectFormCtrModel {
   factory ProjectFormCtrModel.empty() => ProjectFormCtrModel(
         projectNameCtr: TextEditingController(),
         descriptionCtr: TextEditingController(),
+        usePersonalNumberCtr: true,
+        useProjectNumberCtr: false,
         pICtr: TextEditingController(),
         locationCtr: TextEditingController(),
         timeZoneCtr: TextEditingController(),
@@ -89,6 +95,8 @@ class ProjectFormCtrModel {
       ProjectFormCtrModel(
         projectNameCtr: TextEditingController(text: data?.name ?? ''),
         descriptionCtr: TextEditingController(text: data?.description ?? ''),
+        usePersonalNumberCtr: data?.usePersonalNumber ?? true,
+        useProjectNumberCtr: data?.useProjectNumber ?? false,
         pICtr: TextEditingController(text: data?.principalInvestigator ?? ''),
         locationCtr: TextEditingController(text: data?.location ?? ''),
         timeZoneCtr: TextEditingController(text: data?.timeZone),
@@ -100,6 +108,8 @@ class ProjectFormCtrModel {
   void updateData(ProjectData data) {
     projectNameCtr.text = data.name;
     descriptionCtr.text = data.description ?? '';
+    usePersonalNumberCtr = data.useProjectNumber;
+    useProjectNumberCtr = data.useProjectNumber;
     pICtr.text = data.principalInvestigator ?? '';
     locationCtr.text = data.location ?? '';
     timeZoneCtr.text = data.timeZone ?? '';
@@ -919,16 +929,16 @@ class PersonnelFormCtrModel {
   bool isRegisterField;
 
   factory PersonnelFormCtrModel.empty() => PersonnelFormCtrModel(
-      nameCtr: TextEditingController(),
-      initialCtr: TextEditingController(),
-      emailCtr: TextEditingController(),
-      phoneCtr: TextEditingController(),
-      affiliationCtr: TextEditingController(),
-      roleCtr: null,
-      collectorNumCtr: TextEditingController(),
-      photoPathCtr: TextEditingController(),
-      noteCtr: TextEditingController(),
-      isRegisterField: true,
+        nameCtr: TextEditingController(),
+        initialCtr: TextEditingController(),
+        emailCtr: TextEditingController(),
+        phoneCtr: TextEditingController(),
+        affiliationCtr: TextEditingController(),
+        roleCtr: null,
+        collectorNumCtr: TextEditingController(),
+        photoPathCtr: TextEditingController(),
+        noteCtr: TextEditingController(),
+        isRegisterField: true,
       );
 
   factory PersonnelFormCtrModel.fromData(PersonnelData personnel) =>
