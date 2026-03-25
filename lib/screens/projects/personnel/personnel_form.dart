@@ -155,41 +155,13 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
                   },
           ),
           Visibility(
-            visible: widget.ctr.roleCtr == 'Cataloger',
-            child: Column(
-              children: [
-                PersonnelInitialField(
-                  ctr: widget.ctr,
-                  onChanged: (value) {
-                    widget.ctr.initialCtr.value = TextEditingValue(
-                      text: value.toUpperCase(),
-                      selection: widget.ctr.initialCtr.selection,
-                    );
-                    if (widget.isEditing) {
-                      _validateEditing();
-                    } else {
-                      ref
-                          .watch(personnelFormValidatorProvider.notifier)
-                          .validateInitial(value);
-                    }
-                  },
-                ),
-                CatalogerNumberField(
-                  ctr: widget.ctr,
-                  onChanged: (value) {
-                    if (widget.isEditing) {
-                      _validateEditing();
-                    } else {
-                      ref
-                          .watch(personnelFormValidatorProvider.notifier)
-                          .validateCollNum(value);
-                    }
-                  },
-                ),
+              visible: widget.ctr.roleCtr == 'Cataloger',
+              child: Column(children: [
                 SwitchListTile(
                   title: const Text('Register personal field number'),
-                  subtitle:
-                      const Text('Use personal catalog sequence for specimens'),
+                  subtitle: Text(
+                      'Initials and cataloger number will be used to generate specimen field ID.',
+                      style: Theme.of(context).textTheme.labelSmall),
                   value: widget.ctr.isRegisterField,
                   onChanged: (bool value) {
                     setState(() {
@@ -197,15 +169,48 @@ class PersonnelFormPageState extends ConsumerState<PersonnelFormPage> {
                     });
                     if (widget.isEditing) {
                       _validateEditing();
+                    } else {
+                      ref
+                          .watch(personnelFormValidatorProvider.notifier)
+                          .validateAll(widget.ctr);
                     }
                   },
                 ),
-                Text(
-                    'Initial and cataloger number will be used to generate Field ID.',
-                    style: Theme.of(context).textTheme.labelSmall),
-              ],
-            ),
-          ),
+                Visibility(
+                    visible: widget.ctr.isRegisterField,
+                    child: Column(children: [
+                      PersonnelInitialField(
+                        ctr: widget.ctr,
+                        onChanged: (value) {
+                          widget.ctr.initialCtr.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: widget.ctr.initialCtr.selection,
+                          );
+                          if (widget.isEditing) {
+                            _validateEditing();
+                          } else {
+                            ref
+                                .watch(personnelFormValidatorProvider.notifier)
+                                .validateInitial(widget.ctr.initialCtr.text,
+                                    widget.ctr.isRegisterField);
+                          }
+                        },
+                      ),
+                      CatalogerNumberField(
+                        ctr: widget.ctr,
+                        onChanged: (value) {
+                          if (widget.isEditing) {
+                            _validateEditing();
+                          } else {
+                            ref
+                                .watch(personnelFormValidatorProvider.notifier)
+                                .validateCollNum(
+                                    value, widget.ctr.isRegisterField);
+                          }
+                        },
+                      ),
+                    ]))
+              ])),
           Visibility(
             visible: _isShowMore || widget.ctr.noteCtr.text.isNotEmpty,
             child: TextField(
