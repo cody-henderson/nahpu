@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nahpu/services/database/project_queries.dart';
 import 'package:nahpu/services/providers/personnel.dart';
 import 'package:nahpu/services/providers/taxa.dart';
 import 'package:nahpu/services/collevent_services.dart';
@@ -25,25 +24,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const String tissueIDPrefixKey = 'tissueIDPrefix';
 const String tissueIDNumberKey = 'tissueIDNumber';
+const String projectFieldIDNumberKey = 'projectFieldIdNumber';
 
 class SpecimenServices extends AppServices {
   const SpecimenServices({required super.ref});
 
   Future<String> createSpecimen() async {
-    CatalogFmt catalogFmt = await ref.watch(catalogFmtNotifierProvider.future);
+    final CatalogFmt catalogFmt =
+        await ref.watch(catalogFmtNotifierProvider.future);
     final String specimenUuid = uuid;
-    final bool useProjectNumber = await ProjectQuery(dbAccess)
-            .projectUsesProjFieldNums(currentProjectUuid) ??
-        false;
-    final int? currentProjectNumber = useProjectNumber
-        ? await getSpecimenProjectNumber(currentProjectUuid)
-        : null;
+    final FieldIdMode fieldIdMode =
+        await ref.watch(fieldIdModeNotifierProvider.future);
+    String? currentProjectNumber;
+
+    if (fieldIdMode == FieldIdMode.project) {
+      currentProjectNumber =
+          await ProjectFieldIdServices(ref: ref).getNewNumber();
+    }
 
     await SpecimenQuery(dbAccess).createSpecimen(SpecimenCompanion(
       uuid: db.Value(specimenUuid),
       projectUuid: db.Value(currentProjectUuid),
       taxonGroup: db.Value(matchCatFmtToTaxonGroup(catalogFmt)),
-      projectFieldNumber: db.Value(currentProjectNumber),
+      projectFieldNumber: db.Value(int.tryParse(currentProjectNumber ?? '')),
     ));
 
     switch (catalogFmt) {
@@ -58,14 +61,6 @@ class SpecimenServices extends AppServices {
         break;
     }
     invalidateSpecimenList();
-
-    if (useProjectNumber) {
-      // Increment current project field number
-      ProjectServices(ref: ref).updateProject(
-          currentProjectUuid,
-          ProjectCompanion(
-              currentFieldNumber: db.Value(currentProjectNumber! + 1)));
-    }
 
     return specimenUuid;
   }
@@ -232,22 +227,6 @@ class SpecimenServices extends AppServices {
       return 0;
     } else {
       return currentFieldNum;
-    }
-  }
-
-  Future<int> getSpecimenProjectNumber(
-    String projectUuid,
-  ) async {
-    int? projectNumber =
-        await ProjectQuery(dbAccess).getCurrentProjectNumberByUuid(projectUuid);
-    return _getCurrentProjectNumber(projectNumber);
-  }
-
-  int _getCurrentProjectNumber(int? currentProjectNum) {
-    if (currentProjectNum == null) {
-      return 0;
-    } else {
-      return currentProjectNum;
     }
   }
 
@@ -548,6 +527,35 @@ class SpecimenSearchServices {
     final person = await CollPersonnelQuery(db)
         .searchCollectingPersonnel(matchedPersons, query);
     return person.map((e) => e.id).toList();
+  }
+}
+
+class ProjectFieldIdServices extends AppServices {
+  const ProjectFieldIdServices({required super.ref});
+
+  SharedPreferences get _prefs => ref.read(settingProvider);
+
+  Future<String> getNewNumber() async {
+    int? number = _getSettingNumber();
+    String numberString = getNumberString();
+    await incrementNumber(number ?? 0);
+    return numberString;
+  }
+
+  String getNumberString() {
+    return _getSettingNumber() == null ? '1' : _getSettingNumber().toString();
+  }
+
+  Future<void> incrementNumber(int number) async {
+    await setNumber((number + 1).toString());
+  }
+
+  Future<void> setNumber(String number) async {
+    await _prefs.setInt(projectFieldIDNumberKey, int.tryParse(number) ?? 1);
+  }
+
+  int? _getSettingNumber() {
+    return _prefs.getInt(projectFieldIDNumberKey);
   }
 }
 

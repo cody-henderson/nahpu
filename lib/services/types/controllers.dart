@@ -57,9 +57,6 @@ class ProjectFormCtrModel {
   ProjectFormCtrModel({
     required this.projectNameCtr,
     required this.descriptionCtr,
-    required this.usePersonalNumberCtr,
-    required this.useProjectNumberCtr,
-    required this.currentFieldNumberCtr,
     required this.pICtr,
     required this.locationCtr,
     required this.timeZoneCtr,
@@ -70,9 +67,6 @@ class ProjectFormCtrModel {
 
   TextEditingController projectNameCtr;
   TextEditingController descriptionCtr;
-  bool usePersonalNumberCtr;
-  bool useProjectNumberCtr;
-  TextEditingController currentFieldNumberCtr;
   TextEditingController pICtr;
   TextEditingController locationCtr;
   TextEditingController timeZoneCtr;
@@ -83,9 +77,6 @@ class ProjectFormCtrModel {
   factory ProjectFormCtrModel.empty() => ProjectFormCtrModel(
         projectNameCtr: TextEditingController(),
         descriptionCtr: TextEditingController(),
-        usePersonalNumberCtr: true,
-        useProjectNumberCtr: false,
-        currentFieldNumberCtr: TextEditingController(),
         pICtr: TextEditingController(),
         locationCtr: TextEditingController(),
         timeZoneCtr: TextEditingController(),
@@ -98,10 +89,6 @@ class ProjectFormCtrModel {
       ProjectFormCtrModel(
         projectNameCtr: TextEditingController(text: data?.name ?? ''),
         descriptionCtr: TextEditingController(text: data?.description ?? ''),
-        usePersonalNumberCtr: data?.usePersonalNumber ?? true,
-        useProjectNumberCtr: data?.useProjectNumber ?? false,
-        currentFieldNumberCtr: TextEditingController(
-            text: data?.currentFieldNumber?.toString() ?? ''),
         pICtr: TextEditingController(text: data?.principalInvestigator ?? ''),
         locationCtr: TextEditingController(text: data?.location ?? ''),
         timeZoneCtr: TextEditingController(text: data?.timeZone),
@@ -113,9 +100,6 @@ class ProjectFormCtrModel {
   void updateData(ProjectData data) {
     projectNameCtr.text = data.name;
     descriptionCtr.text = data.description ?? '';
-    usePersonalNumberCtr = data.useProjectNumber ?? true;
-    useProjectNumberCtr = data.useProjectNumber ?? false;
-    currentFieldNumberCtr.text = data.currentFieldNumber?.toString() ?? '';
     pICtr.text = data.principalInvestigator ?? '';
     locationCtr.text = data.location ?? '';
     timeZoneCtr.text = data.timeZone ?? '';
@@ -127,7 +111,6 @@ class ProjectFormCtrModel {
   void dispose() {
     projectNameCtr.dispose();
     descriptionCtr.dispose();
-    currentFieldNumberCtr.dispose();
     pICtr.dispose();
     locationCtr.dispose();
     timeZoneCtr.dispose();
@@ -387,9 +370,9 @@ class SpecimenFormCtrModel {
         museumIDCtr: TextEditingController(text: specimen.museumID ?? ''),
         persFieldNumberCtr:
             TextEditingController(text: specimen.fieldNumber?.toString() ?? ''),
-        speciesCtr: specimen.speciesID,
         projFieldNumberCtr: TextEditingController(
             text: specimen.projectFieldNumber?.toString() ?? ''),
+        speciesCtr: specimen.speciesID,
         prepDateCtr: DateEditingController(date: specimen.prepDate),
         prepTimeCtr: TimeEditingController(time: specimen.prepTime),
         collDateCtr: DateEditingController(date: specimen.collectionDate),

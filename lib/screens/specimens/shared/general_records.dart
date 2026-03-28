@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nahpu/screens/projects/personnel/new_personnel.dart';
-import 'package:nahpu/services/project_services.dart';
 import 'package:nahpu/services/providers/personnel.dart';
-import 'package:nahpu/services/providers/projects.dart';
+import 'package:nahpu/services/providers/settings.dart';
 import 'package:nahpu/services/providers/taxa.dart';
 import 'package:nahpu/services/types/controllers.dart';
 import 'package:flutter/material.dart';
@@ -412,95 +411,77 @@ class PersonnelRecordsState extends ConsumerState<PersonnelRecords> {
 
   @override
   Widget build(BuildContext context) {
-    final projectInfo = ref.watch(currProjInfoProvider);
-
-    return projectInfo.when(
-        data: (project) {
-          final usePersonalNumber = project.usePersonalNumber ?? true;
-          final useProjectNumber = project.useProjectNumber ?? false;
-          return CommonPadding(
-            child: Column(
-              children: [
-                (usePersonalNumber ||
-                        useProjectNumber ||
-                        widget.showMore ||
-                        widget.specimenCtr.museumIDCtr.text.isNotEmpty)
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: IdTile(
-                          specimenUuid: widget.specimenUuid,
-                          specimenCtr: widget.specimenCtr,
-                          catalogerUuid: widget.specimenCtr.catalogerCtr ?? '',
-                          showMore: widget.showMore,
-                          usePersonalNumber: usePersonalNumber,
-                          useProjectNumber: useProjectNumber,
-                        ))
-                    : const SizedBox.shrink(),
-                DropdownButtonFormField<String>(
-                    initialValue: widget.specimenCtr.catalogerCtr,
-                    isExpanded: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Cataloger',
-                      hintText: 'Choose a cataloger',
-                      hintStyle: TextStyle(overflow: TextOverflow.ellipsis),
-                    ),
-                    items: ref.watch(projectPersonnelProvider).when(
-                          data: (data) => data
-                              .where((element) => element.role == 'Cataloger')
-                              .map((e) => DropdownMenuItem(
-                                    value: e.uuid,
-                                    child:
-                                        CommonDropdownText(text: e.name ?? ''),
-                                  ))
-                              .toList(),
-                          loading: () => const [],
-                          error: (e, s) => const [],
-                        ),
-                    onChanged: (String? personnelUuid) async {
-                      _setPersonalFieldNumber(personnelUuid, usePersonalNumber);
-                    }),
-                DropdownButtonFormField<String>(
-                  initialValue: widget.specimenCtr.preparatorCtr,
-                  isExpanded: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Preparator',
-                    hintText: 'Choose a preparator (default is cataloger)',
-                    hintStyle: TextStyle(overflow: TextOverflow.ellipsis),
+    return CommonPadding(
+      child: Column(
+        children: [
+          IdTile(
+              specimenUuid: widget.specimenUuid,
+              specimenCtr: widget.specimenCtr,
+              catalogerUuid: widget.specimenCtr.catalogerCtr ?? '',
+              showMore: widget.showMore),
+          DropdownButtonFormField<String>(
+              initialValue: widget.specimenCtr.catalogerCtr,
+              isExpanded: true,
+              decoration: const InputDecoration(
+                labelText: 'Cataloger',
+                hintText: 'Choose a cataloger',
+                hintStyle: TextStyle(overflow: TextOverflow.ellipsis),
+              ),
+              items: ref.watch(projectPersonnelProvider).when(
+                    data: (data) => data
+                        .where((element) => element.role == 'Cataloger')
+                        .map((e) => DropdownMenuItem(
+                              value: e.uuid,
+                              child: CommonDropdownText(text: e.name ?? ''),
+                            ))
+                        .toList(),
+                    loading: () => const [],
+                    error: (e, s) => const [],
                   ),
-                  items: ref.watch(projectPersonnelProvider).when(
-                        data: (data) => data
-                            .where((element) =>
-                                element.role == 'Cataloger' ||
-                                element.role == 'Preparator only')
-                            .map((e) => DropdownMenuItem(
-                                  value: e.uuid,
-                                  child: CommonDropdownText(text: e.name ?? ''),
-                                ))
-                            .toList(),
-                        loading: () => const [],
-                        error: (e, s) => const [],
-                      ),
-                  onChanged: (String? uuid) {
-                    SpecimenServices(ref: ref).updateSpecimen(
-                      widget.specimenUuid,
-                      SpecimenCompanion(preparatorID: db.Value(uuid)),
-                    );
-                  },
-                )
-              ],
+              onChanged: (String? personnelUuid) async {
+                _setPersonalFieldNumber(personnelUuid);
+              }),
+          DropdownButtonFormField<String>(
+            initialValue: widget.specimenCtr.preparatorCtr,
+            isExpanded: true,
+            decoration: const InputDecoration(
+              labelText: 'Preparator',
+              hintText: 'Choose a preparator (default is cataloger)',
+              hintStyle: TextStyle(overflow: TextOverflow.ellipsis),
             ),
-          );
-        },
-        loading: () => const Text('Loading...'),
-        error: (error, stack) => Text('Error: $error'));
+            items: ref.watch(projectPersonnelProvider).when(
+                  data: (data) => data
+                      .where((element) =>
+                          element.role == 'Cataloger' ||
+                          element.role == 'Preparator only')
+                      .map((e) => DropdownMenuItem(
+                            value: e.uuid,
+                            child: CommonDropdownText(text: e.name ?? ''),
+                          ))
+                      .toList(),
+                  loading: () => const [],
+                  error: (e, s) => const [],
+                ),
+            onChanged: (String? uuid) {
+              SpecimenServices(ref: ref).updateSpecimen(
+                widget.specimenUuid,
+                SpecimenCompanion(preparatorID: db.Value(uuid)),
+              );
+            },
+          )
+        ],
+      ),
+    );
   }
 
-  Future<void> _setPersonalFieldNumber(
-      String? personnelUuid, bool usePersonalNumber) async {
-    if (personnelUuid != null && usePersonalNumber) {
+  Future<void> _setPersonalFieldNumber(String? personnelUuid) async {
+    if (personnelUuid != null) {
       final personnelData =
           await PersonnelServices(ref: ref).getPersonnelByUuid(personnelUuid);
-      int personalFieldNumber = await _getCurrentCollectorNumber(personnelUuid);
+      int personalFieldNumber =
+          await SpecimenServices(ref: ref).getSpecimenFieldNumber(
+        personnelUuid,
+      );
       setState(() {
         bool hasSelected = _selectedPersonnel.contains(personnelUuid);
         int? currentFieldNumber = personnelData.isRegisterField
@@ -531,14 +512,6 @@ class PersonnelRecordsState extends ConsumerState<PersonnelRecords> {
       });
     }
   }
-
-  Future<int> _getCurrentCollectorNumber(String personnelUuid) async {
-    int fieldNumber = await SpecimenServices(ref: ref).getSpecimenFieldNumber(
-      personnelUuid,
-    );
-
-    return fieldNumber;
-  }
 }
 
 class IdTile extends ConsumerWidget {
@@ -548,239 +521,205 @@ class IdTile extends ConsumerWidget {
     required this.specimenCtr,
     required this.catalogerUuid,
     required this.showMore,
-    required this.usePersonalNumber,
-    required this.useProjectNumber,
   });
 
   final SpecimenFormCtrModel specimenCtr;
   final bool showMore;
   final String specimenUuid;
   final String catalogerUuid;
-  final bool usePersonalNumber;
-  final bool useProjectNumber;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Visibility(
-      visible: useProjectNumber ||
-          (usePersonalNumber && catalogerUuid != '') ||
-          showMore ||
-          specimenCtr.museumIDCtr.text.isNotEmpty,
-      child: CommonIDForm(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Visibility(
-                visible: showMore || specimenCtr.museumIDCtr.text.isNotEmpty,
-                child: CommonTextField(
-                  controller: specimenCtr.museumIDCtr,
-                  labelText: 'Museum ID',
-                  hintText: 'Enter museum ID (if applicable)',
-                  isLastField: true,
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      SpecimenServices(ref: ref).updateSpecimenSkipInvalidation(
-                        specimenUuid,
-                        SpecimenCompanion(
-                          museumID: db.Value(value),
-                        ),
-                      );
-                    }
-                  },
-                ),
+    final fieldIdModeProvider = ref.watch(fieldIdModeNotifierProvider);
+
+    return fieldIdModeProvider.when(
+        data: (fieldIdMode) {
+          final showIdArea = (fieldIdMode == FieldIdMode.project) ||
+              (fieldIdMode == FieldIdMode.personnel && catalogerUuid != '') ||
+              showMore ||
+              specimenCtr.museumIDCtr.text.isNotEmpty;
+
+          return Visibility(
+            visible: showIdArea,
+            child: CommonIDForm(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Visibility(
+                      visible:
+                          showMore || specimenCtr.museumIDCtr.text.isNotEmpty,
+                      child: CommonTextField(
+                        controller: specimenCtr.museumIDCtr,
+                        labelText: 'Museum ID',
+                        hintText: 'Enter museum ID (if applicable)',
+                        isLastField: true,
+                        onChanged: (String? value) {
+                          if (value != null) {
+                            SpecimenServices(ref: ref)
+                                .updateSpecimenSkipInvalidation(
+                              specimenUuid,
+                              SpecimenCompanion(
+                                museumID: db.Value(value),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  SpecimenIdTile(
+                    specimenUuid: specimenUuid,
+                    specimenCtr: specimenCtr,
+                    catalogerUuid: catalogerUuid,
+                    fieldIdMode: fieldIdMode,
+                  ),
+                ],
               ),
             ),
-            SpecimenIdTile(
-              specimenUuid: specimenUuid,
-              specimenCtr: specimenCtr,
-              catalogerUuid: catalogerUuid,
-              usePersonalNumber: usePersonalNumber,
-              useProjectNumber: useProjectNumber,
-            ),
-          ],
-        ),
-      ),
-    );
+          );
+        },
+        loading: () => const Text('Loading...'),
+        error: (error, stack) => Text('Error: $error'));
   }
 }
 
 class SpecimenIdTile extends ConsumerWidget {
-  const SpecimenIdTile({
+  const SpecimenIdTile(
+      {super.key,
+      required this.specimenUuid,
+      required this.specimenCtr,
+      required this.catalogerUuid,
+      required this.fieldIdMode});
+
+  final SpecimenFormCtrModel specimenCtr;
+  final String specimenUuid;
+  final String catalogerUuid;
+  final FieldIdMode fieldIdMode;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showPersonnelFieldId =
+        fieldIdMode == FieldIdMode.personnel && catalogerUuid != '';
+    final showProjectFieldId = fieldIdMode == FieldIdMode.project;
+
+    if (showPersonnelFieldId) {
+      return PersonnelFieldId(
+          specimenCtr: specimenCtr,
+          specimenUuid: specimenUuid,
+          catalogerUuid: catalogerUuid);
+    } else if (showProjectFieldId) {
+      return ProjectFieldId(
+        specimenCtr: specimenCtr,
+        specimenUuid: specimenUuid,
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+}
+
+class PersonnelFieldId extends ConsumerWidget {
+  const PersonnelFieldId({
     super.key,
     required this.specimenUuid,
     required this.specimenCtr,
     required this.catalogerUuid,
-    required this.usePersonalNumber,
-    required this.useProjectNumber,
   });
 
   final SpecimenFormCtrModel specimenCtr;
   final String specimenUuid;
   final String catalogerUuid;
-  final bool usePersonalNumber;
-  final bool useProjectNumber;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final personnelInfo = ref.watch(personnelNameProvider(catalogerUuid));
-    return Column(children: [
-      Visibility(
-        visible: (usePersonalNumber && catalogerUuid != ''),
-        child: personnelInfo.when(
-            data: (personnelInfo) => ListTile(
-                  title: Text(_fieldIdString(
-                      personnelInfo, specimenCtr.persFieldNumberCtr.text)),
-                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Visibility(
-                      visible: !personnelInfo.isRegisterField,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.person,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditPersonnelForm(
-                                        personnelData: personnelInfo,
-                                      )));
-                        },
-                      ),
+    return ref.watch(personnelNameProvider(catalogerUuid)).when(
+        data: (personnelInfo) => ListTile(
+              title: Text(_fieldIdString(
+                  personnelInfo, specimenCtr.persFieldNumberCtr.text)),
+              trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                Visibility(
+                  visible: !personnelInfo.isRegisterField,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.person,
                     ),
-                    Visibility(
-                      visible: personnelInfo.isRegisterField,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.edit_outlined,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Edit field number'),
-                                content: TextField(
-                                  controller: specimenCtr.persFieldNumberCtr,
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Field number',
-                                    hintText: 'Enter field number',
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      int fieldNumber = int.parse(
-                                          specimenCtr.persFieldNumberCtr.text);
-                                      int nextFieldNumber = fieldNumber + 1;
-                                      await PersonnelServices(ref: ref)
-                                          .updatePersonnelEntry(
-                                              catalogerUuid,
-                                              PersonnelCompanion(
-                                                  currentFieldNumber: db.Value(
-                                                      nextFieldNumber)));
-                                      await SpecimenServices(ref: ref)
-                                          .updateSpecimen(
-                                        specimenUuid,
-                                        SpecimenCompanion(
-                                          fieldNumber: db.Value(
-                                            fieldNumber,
-                                          ),
-                                        ),
-                                      );
-
-                                      if (context.mounted) {
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: const Text('Save'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    )
-                  ]),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditPersonnelForm(
+                                    personnelData: personnelInfo,
+                                  )));
+                    },
+                  ),
                 ),
-            loading: () => const Text('Loading...'),
-            error: (error, stack) => Text('Error: $error')),
-      ),
-      Visibility(
-        visible: useProjectNumber,
-        child: ListTile(
-          title: Text(
-            'Project ID: ${specimenCtr.projFieldNumberCtr.text}',
-          ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.edit_outlined,
-              color: Theme.of(context).disabledColor,
-            ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('Edit project number'),
-                    content: TextField(
-                      controller: specimenCtr.projFieldNumberCtr,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Project number',
-                        hintText: 'Enter project number',
-                      ),
+                Visibility(
+                  visible: personnelInfo.isRegisterField,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.edit_outlined,
+                      color: Theme.of(context).disabledColor,
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          int projectNumber =
-                              int.parse(specimenCtr.projFieldNumberCtr.text);
-                          int nextProjectNumber = projectNumber + 1;
-                          ProjectServices(ref: ref).updateProject(
-                              await ref.read(projectUuidProvider),
-                              ProjectCompanion(
-                                  currentFieldNumber:
-                                      db.Value(nextProjectNumber)));
-                          await SpecimenServices(ref: ref).updateSpecimen(
-                            specimenUuid,
-                            SpecimenCompanion(
-                              projectFieldNumber: db.Value(
-                                projectNumber,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Edit field number'),
+                            content: TextField(
+                              controller: specimenCtr.persFieldNumberCtr,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Field number',
+                                hintText: 'Enter field number',
                               ),
                             ),
-                          );
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  int fieldNumber = int.parse(
+                                      specimenCtr.persFieldNumberCtr.text);
+                                  int nextFieldNumber = fieldNumber + 1;
+                                  await PersonnelServices(ref: ref)
+                                      .updatePersonnelEntry(
+                                          catalogerUuid,
+                                          PersonnelCompanion(
+                                              currentFieldNumber:
+                                                  db.Value(nextFieldNumber)));
+                                  await SpecimenServices(ref: ref)
+                                      .updateSpecimen(
+                                    specimenUuid,
+                                    SpecimenCompanion(
+                                      fieldNumber: db.Value(
+                                        fieldNumber,
+                                      ),
+                                    ),
+                                  );
 
-                          if (context.mounted) {
-                            Navigator.pop(context);
-                          }
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: const Text('Save'),
+                              ),
+                            ],
+                          );
                         },
-                        child: const Text('Save'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ),
-      )
-    ]);
+                      );
+                    },
+                  ),
+                )
+              ]),
+            ),
+        loading: () => const Text('Loading...'),
+        error: (error, stack) => Text('Error: $error'));
   }
 
   String _fieldIdString(PersonnelData personnelInfo, String currentFieldNum) {
@@ -789,6 +728,74 @@ class SpecimenIdTile extends ConsumerWidget {
     } else {
       return 'Field ID: (cataloger not setup for field numbers)';
     }
+  }
+}
+
+class ProjectFieldId extends ConsumerWidget {
+  const ProjectFieldId({
+    super.key,
+    required this.specimenUuid,
+    required this.specimenCtr,
+  });
+
+  final SpecimenFormCtrModel specimenCtr;
+  final String specimenUuid;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+        title: Text('Field ID: ${specimenCtr.projFieldNumberCtr.text}'),
+        trailing: IconButton(
+            icon: Icon(
+              Icons.edit_outlined,
+              color: Theme.of(context).disabledColor,
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Edit field number'),
+                      content: TextField(
+                        controller: specimenCtr.projFieldNumberCtr,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Field number',
+                          hintText: 'Enter field number',
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            int fieldNumber =
+                                int.parse(specimenCtr.projFieldNumberCtr.text);
+                            await ProjectFieldIdServices(ref: ref)
+                                .setNumber((fieldNumber + 1).toString());
+                            await SpecimenServices(ref: ref).updateSpecimen(
+                              specimenUuid,
+                              SpecimenCompanion(
+                                projectFieldNumber: db.Value(
+                                  fieldNumber,
+                                ),
+                              ),
+                            );
+
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: const Text('Save'),
+                        ),
+                      ],
+                    );
+                  });
+            }));
   }
 }
 

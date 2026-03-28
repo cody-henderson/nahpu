@@ -117,9 +117,6 @@ class Database extends _$Database {
 
     // Enhanced specimen ID options
     await m.addColumn(personnel, personnel.isRegisterField);
-    await m.addColumn(project, project.usePersonalNumber);
-    await m.addColumn(project, project.useProjectNumber);
-    await m.addColumn(project, project.currentFieldNumber);
     await m.addColumn(specimen, specimen.projectFieldNumber);
   }
 

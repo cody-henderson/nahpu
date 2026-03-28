@@ -113,58 +113,6 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
                 !widget.isEditing
                     ? const TaxonGroupFields()
                     : const SizedBox.shrink(),
-                const SizedBox(height: 8),
-                Align(
-                    alignment: AlignmentGeometry.topStart,
-                    child: Text('Specimen registration numbers',
-                        style: Theme.of(context).textTheme.bodyLarge)),
-                SwitchListTile(
-                    title: Text('Personal field number',
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    value: widget.projectCtr.usePersonalNumberCtr,
-                    onChanged: (bool value) {
-                      setState(() {
-                        widget.projectCtr.usePersonalNumberCtr = value;
-                      });
-                      _validateAll();
-                    }),
-                SwitchListTile(
-                  title: Text('Project field number',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  value: widget.projectCtr.useProjectNumberCtr,
-                  onChanged: (bool value) {
-                    setState(() {
-                      widget.projectCtr.useProjectNumberCtr = value;
-                    });
-                    _validateAll();
-                  },
-                ),
-                Visibility(
-                  visible: widget.projectCtr.useProjectNumberCtr,
-                  child: Column(children: [
-                    ProjectFormField(
-                        controller: widget.projectCtr.currentFieldNumberCtr,
-                        labelText: 'General field number*',
-                        hintText: '1234',
-                        keyboardType: TextInputType.number,
-                        errorText: ref.watch(projectFormValidatorProvider).when(
-                              data: (data) => data.currentFieldNumber.errMsg,
-                              loading: () => null,
-                              error: (e, s) => null,
-                            ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'[0-9]+'),
-                          )
-                        ],
-                        onChanged: (_) async {
-                          _validateAll();
-                        }),
-                    Text(
-                        'General field number will be used to generate specimen project IDs.',
-                        style: Theme.of(context).textTheme.labelSmall),
-                  ]),
-                ),
                 Visibility(
                   visible: _showMore ||
                       widget.projectCtr.locationCtr.text.isNotEmpty,
@@ -272,15 +220,11 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
   Future<void> _validateAll() async {
     if (widget.isEditing) {
       ref.watch(projectFormValidatorProvider.notifier).validateOnEditing(
-          initialProjectName,
-          widget.projectCtr.projectNameCtr.text,
-          widget.projectCtr.currentFieldNumberCtr.text,
-          widget.projectCtr.useProjectNumberCtr);
+          initialProjectName, widget.projectCtr.projectNameCtr.text);
     } else {
-      ref.watch(projectFormValidatorProvider.notifier).validateOnCreate(
-          widget.projectCtr.projectNameCtr.text,
-          widget.projectCtr.currentFieldNumberCtr.text,
-          widget.projectCtr.useProjectNumberCtr);
+      ref
+          .watch(projectFormValidatorProvider.notifier)
+          .validateOnCreate(widget.projectCtr.projectNameCtr.text);
     }
   }
 
@@ -314,11 +258,7 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
     final projectData = ProjectCompanion(
       uuid: db.Value(widget.projectUuid),
       name: db.Value(widget.projectCtr.projectNameCtr.text),
-      usePersonalNumber: db.Value(widget.projectCtr.usePersonalNumberCtr),
-      useProjectNumber: db.Value(widget.projectCtr.useProjectNumberCtr),
       description: db.Value(widget.projectCtr.descriptionCtr.text),
-      currentFieldNumber:
-          db.Value(int.tryParse(widget.projectCtr.currentFieldNumberCtr.text)),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
       timeZone: db.Value(widget.projectCtr.timeZoneCtr.text),
@@ -335,10 +275,6 @@ class ProjectFormState extends ConsumerState<ProjectForm> {
     final projectData = ProjectCompanion(
       name: db.Value(widget.projectCtr.projectNameCtr.text),
       description: db.Value(widget.projectCtr.descriptionCtr.text),
-      usePersonalNumber: db.Value(widget.projectCtr.usePersonalNumberCtr),
-      useProjectNumber: db.Value(widget.projectCtr.useProjectNumberCtr),
-      currentFieldNumber:
-          db.Value(int.tryParse(widget.projectCtr.currentFieldNumberCtr.text)),
       principalInvestigator: db.Value(widget.projectCtr.pICtr.text),
       location: db.Value(widget.projectCtr.locationCtr.text),
       timeZone: db.Value(widget.projectCtr.timeZoneCtr.text),
