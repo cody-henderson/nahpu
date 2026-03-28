@@ -281,7 +281,8 @@ class SpecimenFormCtrModel {
     required this.idMethodCtr,
     required this.catalogerCtr,
     required this.museumIDCtr,
-    required this.fieldNumberCtr,
+    required this.persFieldNumberCtr,
+    required this.projFieldNumberCtr,
     required this.collEventIDCtr,
     required this.multipleCollectorCtr,
     required this.collPersonnelCtr,
@@ -314,7 +315,8 @@ class SpecimenFormCtrModel {
   int? coordinateCtr;
   TextEditingController idMethodCtr;
   TextEditingController museumIDCtr;
-  TextEditingController fieldNumberCtr;
+  TextEditingController persFieldNumberCtr;
+  TextEditingController projFieldNumberCtr;
   DateEditingController prepDateCtr;
   TimeEditingController prepTimeCtr;
   DateEditingController collDateCtr;
@@ -335,7 +337,8 @@ class SpecimenFormCtrModel {
         relativeTimeCtr: null,
         collMethodCtr: null,
         coordinateCtr: null,
-        fieldNumberCtr: TextEditingController(),
+        persFieldNumberCtr: TextEditingController(),
+        projFieldNumberCtr: TextEditingController(),
         speciesCtr: null,
         idConfidenceCtr: null,
         idMethodCtr: TextEditingController(),
@@ -365,8 +368,10 @@ class SpecimenFormCtrModel {
         idConfidenceCtr: specimen.iDConfidence,
         idMethodCtr: TextEditingController(text: specimen.iDMethod ?? ''),
         museumIDCtr: TextEditingController(text: specimen.museumID ?? ''),
-        fieldNumberCtr:
+        persFieldNumberCtr:
             TextEditingController(text: specimen.fieldNumber?.toString() ?? ''),
+        projFieldNumberCtr: TextEditingController(
+            text: specimen.projectFieldNumber?.toString() ?? ''),
         speciesCtr: specimen.speciesID,
         prepDateCtr: DateEditingController(date: specimen.prepDate),
         prepTimeCtr: TimeEditingController(time: specimen.prepTime),
@@ -385,7 +390,8 @@ class SpecimenFormCtrModel {
   void dispose() {
     museumIDCtr.dispose();
     idMethodCtr.dispose();
-    fieldNumberCtr.dispose();
+    persFieldNumberCtr.dispose();
+    projFieldNumberCtr.dispose();
     prepDateCtr.dispose();
     prepTimeCtr.dispose();
     collDateCtr.dispose();
@@ -919,16 +925,16 @@ class PersonnelFormCtrModel {
   bool isRegisterField;
 
   factory PersonnelFormCtrModel.empty() => PersonnelFormCtrModel(
-      nameCtr: TextEditingController(),
-      initialCtr: TextEditingController(),
-      emailCtr: TextEditingController(),
-      phoneCtr: TextEditingController(),
-      affiliationCtr: TextEditingController(),
-      roleCtr: null,
-      collectorNumCtr: TextEditingController(),
-      photoPathCtr: TextEditingController(),
-      noteCtr: TextEditingController(),
-      isRegisterField: true,
+        nameCtr: TextEditingController(),
+        initialCtr: TextEditingController(),
+        emailCtr: TextEditingController(),
+        phoneCtr: TextEditingController(),
+        affiliationCtr: TextEditingController(),
+        roleCtr: null,
+        collectorNumCtr: TextEditingController(),
+        photoPathCtr: TextEditingController(),
+        noteCtr: TextEditingController(),
+        isRegisterField: true,
       );
 
   factory PersonnelFormCtrModel.fromData(PersonnelData personnel) =>
