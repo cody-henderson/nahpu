@@ -112,8 +112,6 @@ class SharedPref {
   KdlNode createKDLNode() {
     dynamic args;
 
-    print(key);
-
     switch (type) {
       case PrefType.string:
         args = [KdlString(value ?? defaultValue.toString())];

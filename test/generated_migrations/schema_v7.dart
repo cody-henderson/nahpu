@@ -23,23 +23,6 @@ class Project extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
-  late final GeneratedColumn<bool> usePersonalNumber = GeneratedColumn<bool>(
-      'usePersonalNumber', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      $customConstraints: 'DEFAULT 1',
-      defaultValue: const CustomExpression('1'));
-  late final GeneratedColumn<bool> useProjectNumber = GeneratedColumn<bool>(
-      'useProjectNumber', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      $customConstraints: 'DEFAULT 0',
-      defaultValue: const CustomExpression('0'));
-  late final GeneratedColumn<int> currentFieldNumber = GeneratedColumn<int>(
-      'currentFieldNumber', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: '');
   late final GeneratedColumn<String> principalInvestigator =
       GeneratedColumn<String>('principalInvestigator', aliasedName, true,
           type: DriftSqlType.string,
@@ -80,9 +63,6 @@ class Project extends Table with TableInfo {
         uuid,
         name,
         description,
-        usePersonalNumber,
-        useProjectNumber,
-        currentFieldNumber,
         principalInvestigator,
         location,
         timeZone,
