@@ -29,11 +29,12 @@ const int kSchemaVersion = 7;
   include: {'tables.drift'},
 )
 class Database extends _$Database {
-  Database() : super(_openConnection());
+  Database() : super(_openConnection(logStatements: true));
 
   Database.forTesting(DatabaseConnection super.connection);
-
   Database.forMigrationTesting(super.e);
+  Database.forMerging(File dbFile)
+      : super(_openConnection(dBFile: dbFile, logStatements: false));
 
   @override
   int get schemaVersion => kSchemaVersion;
@@ -68,7 +69,7 @@ class Database extends _$Database {
         await _migrateFromVersion5(m);
       }
 
-      if (from < 7) {
+      if (from < 7 && to >= 7) {
         await _migrateFromVersion6(m);
       }
     }, beforeOpen: (details) async {
@@ -226,13 +227,14 @@ class Database extends _$Database {
   }
 }
 
-LazyDatabase _openConnection() {
+LazyDatabase _openConnection({File? dBFile, required bool logStatements}) {
   return LazyDatabase(() async {
-    final file = await dBPath;
+    final file = dBFile ?? await dBPath;
     if (kDebugMode) {
       print('App database path: ${file.path}');
     }
-    return NativeDatabase.createInBackground(file, logStatements: true);
+    return NativeDatabase.createInBackground(file,
+        logStatements: logStatements);
   });
 }
 

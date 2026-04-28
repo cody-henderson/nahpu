@@ -91,6 +91,11 @@ dev_dependencies:
   riverpod_generator: ^2.3.7
   integration_test:
     sdk: flutter
+  nahpu_data:
+    git:
+      url: https://github.com/nahpu/nahpu-data.git
+      ref: v0.0.2-dev # pin to a specific tag
+  collection: ^1.19.1
 
 flutter_icons:
   ios: true

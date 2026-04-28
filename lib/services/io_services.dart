@@ -147,11 +147,15 @@ const String mediaDir = 'media';
 const String nahpuTempDir = 'NahpuTemp';
 
 class AppServices {
-  const AppServices({required this.ref});
+  const AppServices({required this.ref, this.dbFile});
 
   final WidgetRef ref;
+  final File? dbFile;
 
   Database get dbAccess => ref.read(databaseProvider);
+
+  Database get dbAccessFromPath =>
+      ref.read(databaseFromPathProvider(dbFile: dbFile!));
 
   String get currentProjectUuid => ref.read(projectUuidProvider);
 
