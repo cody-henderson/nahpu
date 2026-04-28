@@ -1,0 +1,19 @@
+[
+    {
+        "id": 1,
+        "siteID": "Site 1",
+        "projectUuid": "2cb045ff-1930-43c7-a66c-499188d6e841",
+        "leadStaffId": null,
+        "siteType": null,
+        "country": null,
+        "stateProvince": null,
+        "county": null,
+        "municipality": null,
+        "mediaID": null,
+        "locality": null,
+        "remark": null,
+        "habitatType": null,
+        "habitatCondition": null,
+        "habitatDescription": null
+    }
+]

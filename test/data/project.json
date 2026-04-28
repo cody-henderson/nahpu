@@ -1,0 +1,14 @@
+[
+    {
+        "uuid": "893a75c0-3d94-11f1-b9f0-d99437ded2dd",
+        "name": "Project B",
+        "description": "Another empty project for merge testing",
+        "principalInvestigator": null,
+        "location": null,
+        "timeZone": null,
+        "startDate": "2022-01-02",
+        "endDate": "2022-06-02",
+        "created": "2022-01-02 00:00:00",
+        "lastAccessed": "2022-06-02 23:59:99"
+    }
+]
